@@ -1,0 +1,9 @@
+### AXES
+# default face and edge color, default tick sizes,
+# default fontsizes for ticklabels, and so on.  See
+# http://matplotlib.org/api/axes_api.html#module-matplotlib.axes
+axes.grid         : True
+ 
+### FIGURE
+# See http://matplotlib.org/api/figure_api.html#matplotlib.figure.Figure 
+figure.dpi       : 300
