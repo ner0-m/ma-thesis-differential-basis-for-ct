@@ -1,0 +1,39 @@
+\chapter{elsa}
+
+So much implementation design
+
+\chapter{Projector}
+
+There are a couple of basic principles on how projectors for X-ray attentuation CT work.
+The most common ones are \textit{ray driven}, \textit{voxel driven}, \textit{distance driven},
+or using \textit{separable footsprints}.
+
+
+\section{Ray driven}
+ 
+Siddon \cite{siddon_fast_1985}, Joseph \cite{joseph_improved_1982}, with improvments
+by \cite{jacobs_fast_1998}, \cite{christiaens_fast_1999}, \cite{zhao_fast_2004} and \cite{gao_fast_2012}.
+
+\section{Voxel driven}
+
+\enquote{The pixel-driven forward projection is rarely used because it tends to introduce
+high-frequency artifacts to the sinogram. If the detector element size is much smaller than the
+pixel element size, there is a danger to have detector elements in which no value is written. In a
+similar manner, in the pixel-driven backprojection, each pixel element is updated based on the value
+which is obtained from the neighboring detector elements, typically using linear interpolation.}
+\cite{levakhina_three-dimensional_2014}
+
+Introduced by \cite{peters_algorithms_1981}, with improved interpolation by \cite{harauz_interpolation_1983}
+
+\section{Distance driven}
+ 
+Introduced by \cite{de_man_distance-driven_2002}, and extended to 3D by \cite{de_man_distance-driven_2004}
+
+\section{Separable footprints}
+
+Improved over distance driven projector, introducted by \cite{long_3d_2010} \cite{long_3d_nodate}.
+
+\chapter{Experiments}
+
+How does it compare
+

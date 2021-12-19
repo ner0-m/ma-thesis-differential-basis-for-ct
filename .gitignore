@@ -162,6 +162,7 @@ cython_debug/
 *.sav
 *.swp
 *.toc
+*.tdo
 
 *.run.xml
 *-blx.bib

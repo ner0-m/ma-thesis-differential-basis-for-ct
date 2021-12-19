@@ -1,0 +1,38 @@
+\begin{titlepage}
+    % \vspace*{5cm}
+    \makeatletter
+    \begin{center}
+        % Let's put the TUM logo here
+        \includegraphics[height=20mm]{figures/logos/tum_logo.png}\\[0.5cm]
+        % Department
+        \begin{Huge}
+            \MakeUppercase{\getFaculty}
+        \end{Huge}\\[0.5cm]
+        % University
+        \begin{large}
+            \MakeUppercase{\getUniversity}
+        \end{large}\\[2cm]
+        % Type of thesis
+        \begin{Large}
+            \getDoctype%
+        \end{Large}\\[1.5cm]
+        %
+        \begin{Huge}
+            \@title\par
+        \end{Huge}\\[1cm]
+        %
+        \begin{Huge}
+            \texttt{\getTitleGer{}}\par
+        \end{Huge}\\[1.5cm]
+        %
+        \begin{tabular}{l l}
+            Author:          & \getAuthor{} \\
+            Supervisor:      & \getSupervisor{} \\
+            Submission Date: & \getSubmissionDate{} \\
+        \end{tabular}
+        % Let's inmclude the Informatics logo as well
+        \vfill
+        \includegraphics[height=20mm]{figures/logos/info_logo.png}\\
+    \end{center}
+    \makeatother
+\end{titlepage}

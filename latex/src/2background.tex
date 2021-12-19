@@ -1,0 +1,196 @@
+\chapter{Notation}
+
+This is my notation used thourgh the thesis
+
+\chapter{Inverse Problems}
+
+\section{Applications}
+ 
+\subsection{X-ray Attenuation CT}
+
+How does X-ray Attenuation CT work
+
+\subsection{Phase Contrast CT}
+
+How does phase contrast ct work
+
+\section{Solving Inverse Problems}
+ 
+\subsection{ART}
+
+ART and derivatives
+
+\subsection{CG}
+
+CG and such
+ 
+\subsection{First-order methods}
+
+First orther methods such as Gradient Descent and it's derivatives
+
+\section{Regularization}
+
+\subsection{Tikonov}
+
+How does tikonov reg wwork
+
+\subsection{TV Regularization}
+
+This should also work
+
+\chapter{Basis}
+
+Explain basis
+
+\section{Series expansion}
+
+Before we looks closely at different basis functions, we need a couple of definitions to concentrate
+on the different basis functions. So far, the inverse problems discussed are treated mostly in a
+continuous fashion, i.e. at no point we look at problems arising from discretization.
+
+\begin{definition}[Signal]
+    \label{def:signal}
+    Let $f: \mathbb{R}^n \to \mathbb{R}$ be a $n$-dimensional continuous function, whose support is 
+    bounded. We'll refer to it as a $n$-dimensional signal. And often it will be refered to as signal, 
+    without the special mention of $n$-dimensional.
+
+    In the special case of $n=2$, it is called an \textit{image} (following \cite{herman_basis_2015})
+    and in case of $n=3$, it is called a $volume$.
+\end{definition}
+\todo{Move to other section, it doesn't fit here quite right}
+
+Remember the functions, we wish to reconstruct are of the from as defined in \ref{def:signal}.
+However, these are continuous and therefore not representable by any digital computer.
+We seek to find a permissible representation $\hat{f}$ of the signal $f$ \cite{herman_basis_2015}.
+
+\begin{definition}[Permissible representation]
+    \label{def:permissible_representation}
+    Let $N \in \mathbb{N}$ be a positive integer and $\varphi_n$ a set basis function for 
+    $1 \leq n \leq N$, then the signal $f$ can be approximated as a linear combinations
+    of these basis functions and the coefficients $c_n$:
+    \[ \hat{f}(x) = \sum_{k=1}^{N} c_k \varphi_k(x) \] 
+
+    For our purposes, we assume the function lies on a regular spaced discrete grid. Then, let
+    $\varphi$ be a zero centered symmetrical basis function, $\bm{k} \in \mathbb{Z}^n$ be the
+    $n$-dimensional index a grid cell, and $x_{\bm{k}} \in \mathbb{R}^n$ the coordinate of the 
+    $\bm{k}$-th grid cell. Then, the previous equation can be reformulated:
+    \[ \hat{f}(x) = \sum_{\bm{k} \in \mathbb{Z}^n} c_{\bm{k}} \varphi(x - x_{\bm{k}}) \] 
+    This definition follows the notation given in \cite{momey_new_2011}.
+\end{definition}
+
+From this, it is quite obvious how important the choise of basis functions are. 
+A suboptimal representation, will yield undesired results. In \cite{nilchian_optimized_2015}, 4 
+properties a basis functions should satisfy are proposed. These are:
+\begin{itemize}
+    \item Riesz Basis
+    \item Partition Of Unity
+    \item Compact Support
+    \item Isotropy
+\end{itemize}
+
+Similar properties are stated in \cite{hanson_local_1985}.
+
+\subsubsection{Riesz Basis}
+
+\todo[inline]{Explain Riesz Basis, find definition of it and cite it}
+
+\cite{hanson_local_1985} formulates a similar requierment, however states it less restrictive. It is
+states as a requierment for strong linear independence, rather than a unique representation.
+ 
+\paragraph{Partition of Unity}
+ 
+Some function $g$, fulfills the property partition-of-unity if
+\begin{itemize}
+    \item $g: \mathbb{R}^n \to [0, 1]$, i.e. it $g$ maps into the unit interval
+    \item $\sum_{\bm{k} \in \mathbb{Z}^n} g(x + k) = 1 \; \forall x \in \mathbb{R}^n$
+\end{itemize}
+Given the basis fulfills this property, the error of approximation converges to zero, with sampling 
+step $\Delta$ going to zero \cite{nilchian_optimized_2015}. Formally
+\begin{equation}
+    \lim_{\Delta \to 0} \norm{f - \hat{f}}_{L_2} = 0
+\end{equation}
+\todo[inline]{define and explain the constraints required here}
+
+This requirement is close to the property power of approximation and fidelity of visual
+appearance in \cite{hanson_local_1985}.
+
+\paragraph{Compact support}
+
+The compact support is a rather practical requierment. In order to reduce the computational cost,
+the function should be compact. Phrased differently, the smaller the support, fewer evaluations
+for a given point are required, i.e. the number of zero elements in $c_{\bm{k}}$ grows with shrinking
+support.
+
+On the other hand, given a function without compact support, such as the gaussian.
+\insertref{assumption about gaussian}
+
+\paragraph{Isotropy}
+
+Isotropy is again a practical requierment. If a basis function is isotropic, it is projections
+do not depend on the direction or angle. This greatly simplifies the implementation and improves efficiency.
+
+Both compact supoort and isotropy are practical requierments to fulfill the requierments of
+efficient computation of forward and backward projection and implementation of reconstruction constraints
+by \cite{hanson_local_1985}.
+
+\subsection{Series expansion under the Radon transform}
+
+\todo[inline]{Write up \cite{nilchian_optimized_2015} to get to matrix notation}
+
+\section{Voxels}
+
+\section{Blobs}
+
+What ware spherically semmetrical basis elements (blobs)
+
+Very important literature
+\cite{lewitt_alternatives_1992}
+\cite{matej_practical_1996}
+ 
+\section{B-Splines}
+
+B-Splines have been used in multiple fields. \insertref{Find some different fields}.
+
+\begin{definition}[Recusrive B-Spline]
+    \label{def:bspline}
+    The centered B-Spline of degree $d$ and of width $\Delta$ is given by
+    \begin{align*}
+        \beta_\Delta^0(x) &= \mu(x) = 
+            \begin{cases}
+                \frac{1}{\Delta}, & \text{if } x \in [-\frac{\Delta}{2}, \frac{\Delta}{2}]\\
+                0,           & \text{otherwise}
+            \end{cases} \\
+           \beta_\Delta^d(x) &= \beta_\Delta^0 * \beta_\Delta^{d-1}(x) = 
+               \underbrace{\beta_\Delta^0 * \dots * \beta_\Delta^0(x)}_{d+1 \text{concolution terms}}
+    \end{align*}
+    where $\mu(x)$ is the step function centered around 0. \todo[inline]{I'm not sure if this is sound}
+
+    The zero-dimensional B-Spline, is the normalized unit impulse of width $\Delta$. And the 
+    $d$-dimensional B-Spline is just the $d+1$ fold convolution of the normalized unit impulses
+    \cite{horbelt_discretization_2002}.
+
+    Note that
+    \[ \beta_\Delta^d(x) = \frac{1}{\Delta} \beta_1^d(\frac{x}{\Delta}) \]
+    therefore, if no specific subscript is mentioned, the B-Spline with $\Delta = 1$ is implied.
+
+    In \cite{unser_fast_1991}, a non-recursive definition of the unit width B-Spline is given as:
+    \[ \beta^d = \sum_{j=0}^{n+1} \frac{(-1)^j}{n!} \binom{n+1}{j}(x - j)\mu(x - j) \] 
+\end{definition}
+
+B-Splines have a couple of really attractive properties. B-Splines are the shortest and smoothest
+scaling functions for a given order of approximation \cite{momey_b-spline_2012}. This
+are close to a Gaussian function,
+with a sufficiently large $d$ \cite{momey_b-spline_2012}, all while preserving compactness.
+
+
+\cite{unser_b-spline_1993}
+\cite{unser_b-spline_1993-1}
+\cite{unser_fast_1991}
+\cite{briand_theory_2018}
+ 
+\section{Box splines}
+
+What are box splines
+
+\cite{entezari_box_2012}
+\cite{de_boor_box_1993}

@@ -1,0 +1,351 @@
+\documentclass{mimosis}
+
+\usepackage{metalogo}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Some of my favourite personal adjustments
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% These are the adjustments that I consider necessary for typesetting
+% a nice thesis. However, they are *not* included in the template, as
+% I do not want to force you to use them.
+
+% This ensures that I am able to typeset bold font in table while still aligning the numbers
+% correctly.
+\usepackage{etoolbox}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Colors
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\definecolor{kelly_green}         {RGB}{ 76, 187, 23}
+\definecolor{international_orange}{RGB}{255,  79,  0}
+\definecolor{venetian_red}        {RGB}{200,   8, 21}
+
+\definecolor{amber}     {RGB}{255,191,  0}
+\definecolor{burgundy}  {RGB}{144,  0, 32}
+\definecolor{cardinal}     {RGB}{247, 118, 142}
+% \definecolor{cardinal}  {RGB}{196, 30, 58}
+\definecolor{deep-azure}{RGB}{ 10, 50, 94}
+\definecolor{mahogany}  {RGB}{192, 64,  0}
+\definecolor{malory-red}{RGB}{192, 46, 16}
+\definecolor{sky}       {RGB}{ 62, 93,240}
+\definecolor{teal}      {RGB}{  0,128,128}
+\definecolor{tyrian}    {RGB}{102,  2, 60}
+\definecolor{yale}      {RGB}{ 70,130,180}
+
+\definecolor{quality-high}  {RGB}{ 70,130,180}
+\definecolor{quality-medium}{RGB}{255,191,  0}
+\definecolor{quality-low}   {RGB}{196, 30, 58}
+%
+% Colour for Part numbers
+%
+\renewcommand*{\partformat}{%
+  \textcolor{cardinal}{Part \thepart}\autodot\enskip%
+}
+ 
+%
+% Colour for section numbers
+%
+\renewcommand*{\sectionformat}{%
+  \textcolor{cardinal}{\thesection}\autodot\enskip%
+}
+
+%
+% Colour for subsection numbers
+%
+\renewcommand*{\subsectionformat}{%
+  \textcolor{cardinal}{\thesubsection}\autodot\enskip%
+}
+
+%
+% Colour for subsubsection numbers
+%
+\renewcommand*{\subsubsectionformat}{%
+  \textcolor{cardinal}{\thesubsubsection}\autodot\enskip%
+}
+
+%ornamet
+\newcommand{\ornament}{%
+  \begin{center}
+    \large\textcolor{cardinal}{\ding{70}}
+  \end{center}
+}
+ 
+\pagecolor[RGB]{26,27,38}
+\color[RGB]{192, 202, 245}
+
+% \pagecolor[RGB]{213, 214, 219} 
+% \color[RGB]{52, 59, 88}
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Hyperlinks & bookmarks
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[%
+  colorlinks = true,
+  citecolor  = cardinal,
+  linkcolor  = cardinal,
+  urlcolor   = ,
+  unicode,
+  ]{hyperref}
+
+\usepackage{bookmark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TODO notes
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
+\setuptodonotes{noshadow, color=amber}
+
+% If a ref is missing
+\newcommand{\insertref}[1]{\todo[color=green!40]{MISSING REF: #1}}
+\newcommand{\inlinetodo}[1]{\todo[inline]{#1}}
+\newcommand{\missingfig}[1]{\missingfigure[figcolor=white]{#1}}
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Math relatex settings
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newtheorem{definition}{Definition}[section]
+ 
+\usepackage{mathtools}
+% Define \abs
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}%
+
+% Define \norm
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Bibliography
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% I like the bibliography to be extremely plain, showing only a numeric
+% identifier and citing everything in simple brackets. The first names,
+% if present, will be initialized. DOIs and URLs will be preserved.
+
+\usepackage[%
+  autocite     = plain,
+  backend      = biber,
+  doi          = true,
+  url          = true,
+  giveninits   = true,
+  hyperref     = true,
+  maxbibnames  = 99,
+  maxcitenames = 99,
+  sortcites    = true,
+  style        = numeric,
+  ]{biblatex}
+
+\input{bibliography-mimosis}
+\addbibresource{bibliography.bib}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Fonts
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\ifxetexorluatex
+  \usepackage{unicode-math}
+  \setmainfont{IBM Plex Serif}
+  % \setmainfont{Libre Baskerville}
+  \setsansfont{IBM Plex Sans}
+  \setmonofont{IBM Plex Mono}
+\else
+  \usepackage[lf]{ebgaramond}
+  \usepackage[oldstyle,scale=0.7]{sourcecodepro}
+  \singlespacing
+\fi
+
+\newacronym[description={Principal component analysis}]{PCA}{PCA}{principal component analysis}
+\newacronym                                            {SNF}{SNF}{Smith normal form}
+\newacronym[description={Topological data analysis}]   {TDA}{TDA}{topological data analysis}
+
+\newglossaryentry{LaTeX}{%
+  name        = {\LaTeX},
+  description = {A document preparation system},
+  sort        = {LaTeX},
+}
+
+\newglossaryentry{Real numbers}{%
+  name        = {$\real$},
+  description = {The set of real numbers},
+  sort        = {Real numbers},
+}
+
+\makeindex
+\makeglossaries
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Ordinals
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\makeatletter
+\@ifundefined{st}{%
+  \newcommand{\st}{\textsuperscript{\textup{st}}\xspace}
+}{}
+\@ifundefined{rd}{%
+  \newcommand{\rd}{\textsuperscript{\textup{rd}}\xspace}
+}{}
+\@ifundefined{nd}{%
+  \newcommand{\nd}{\textsuperscript{\textup{nd}}\xspace}
+}{}
+\makeatother
+
+\renewcommand{\th}{\textsuperscript{\textup{th}}\xspace}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Incipit
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% General Information about my thesis
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand*{\getUniversity}{Technische Universität München}
+\newcommand*{\getTitleEng}{Differentiable Basis for Computed Tomography}
+\newcommand*{\getTitleGer}{Differenzierbare Basis für Computer Tomographie}
+\newcommand*{\getFaculty}{Department of Informatics}
+\newcommand*{\getDoctype}{Master's Thesis in Data Engineering and Analytics}
+\newcommand*{\getSupervisor}{PD Dr. rer. nat. Tobias Lasser}
+\newcommand*{\getAdvisor}{Advisor}
+\newcommand*{\getAuthor}{David Frank}
+\newcommand*{\getSubmissionDate}{15.06.2021}
+\newcommand*{\getSubmissionLocation}{Munich}
+
+
+\title{\texttt{\getTitleEng}}
+\subtitle{Some subtitle}
+\author{\getAuthor{}}
+
+\begin{document}
+
+\frontmatter
+  \input{pages/cover_title}
+  \input{pages/disclaimer}
+  \input{pages/acknowledgments}
+  \input{pages/abstract}
+
+  \tableofcontents
+
+\mainmatter
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % List of TODOs
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \todototoc
+  \listoftodos
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Introduction
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \part[Introduction]{%
+    Introduction\\
+    %
+    \vspace{1cm}
+    %
+    \begin{minipage}[l]{\textwidth}
+    %
+    \textnormal{%
+      \normalsize
+      %
+      \begin{singlespace*}
+        \onehalfspacing
+        %
+        You can also use parts in order to partition your great work
+        into larger `chunks'. This involves some manual adjustments in
+        terms of the layout, though.
+      \end{singlespace*}
+    }
+    \end{minipage}
+  }
+
+  \input{src/1introduction}
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Background
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \part[Foundation]{%
+      Foundation\\
+      %
+      \vspace{1cm}
+      %
+      \begin{minipage}[l]{\textwidth}
+          %
+          \textnormal{%
+              \normalsize
+              %
+              \begin{singlespace*}
+                  \onehalfspacing
+                  %
+                  In this part, all of the necessary theory is presented.
+              \end{singlespace*}
+              }
+      \end{minipage}
+      }
+
+      \input{src/2background}
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Implementation
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \part[Practical]{%
+      Practical\\
+      %
+      \vspace{1cm}
+      %
+      \begin{minipage}[l]{\textwidth}
+          %
+          \textnormal{%
+              \normalsize
+              %
+              \begin{singlespace*}
+                  \onehalfspacing
+                  %
+                  After all the theory, let's focus on practical notions of previously stated
+                  theory. Parts, which can be a little messier than the theory makes us believe.
+              \end{singlespace*}
+              }
+      \end{minipage}
+      }
+
+      \input{src/3implementation}
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Conclusion
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \part[Conclusion]{%
+      Conclusion\\
+      %
+      \vspace{1cm}
+      %
+      \begin{minipage}[l]{\textwidth}
+          %
+          \textnormal{%
+              \normalsize
+              %
+              \begin{singlespace*}
+                  \onehalfspacing
+                  %
+                  Now we wrap it all up
+              \end{singlespace*}
+              }
+      \end{minipage}
+      }
+
+      \input{src/4conclusion}
+% This ensures that the subsequent sections are being included as root
+% items in the bookmark structure of your PDF reader.
+\bookmarksetup{startatroot}
+\backmatter
+
+  \begingroup
+    \let\clearpage\relax
+    \glsaddall
+    \printglossary[type=\acronymtype]
+    \newpage
+    \printglossary
+  \endgroup
+
+  \printindex
+  \printbibliography
+
+\end{document}
