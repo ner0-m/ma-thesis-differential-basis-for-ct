@@ -16,6 +16,8 @@ How does phase contrast ct work
 
 \section{Solving Inverse Problems}
  
+something
+
 \subsection{ART}
 
 ART and derivatives
@@ -65,16 +67,16 @@ We seek to find a permissible representation $\hat{f}$ of the signal $f$ \cite{h
 
 \begin{definition}[Permissible representation]
     \label{def:permissible_representation}
-    Let $N \in \mathbb{N}$ be a positive integer and $\varphi_n$ a set basis function for 
+    Let $N \in \mathbb{N}$ be a positive integer and $\varphi_n$ a set basis function for
     $1 \leq n \leq N$, then the signal $f$ can be approximated as a linear combinations
     of these basis functions and the coefficients $c_n$:
-    \[ \hat{f}(x) = \sum_{k=1}^{N} c_k \varphi_k(x) \] 
+    \[ \hat{f}(x) = \sum_{k=1}^{N} c_k \varphi_k(x) \]
 
     For our purposes, we assume the function lies on a regular spaced discrete grid. Then, let
-    $\varphi$ be a zero centered symmetrical basis function, $\bm{k} \in \mathbb{Z}^n$ be the
-    $n$-dimensional index a grid cell, and $x_{\bm{k}} \in \mathbb{R}^n$ the coordinate of the 
-    $\bm{k}$-th grid cell. Then, the previous equation can be reformulated:
-    \[ \hat{f}(x) = \sum_{\bm{k} \in \mathbb{Z}^n} c_{\bm{k}} \varphi(x - x_{\bm{k}}) \] 
+    $\varphi$ be a zero centered symmetrical basis function, $\symbfit{k} \in \mathbb{Z}^n$ be the
+    $n$-dimensional index a grid cell, and $x_{\symbfit{k}} \in \mathbb{R}^n$ the coordinate of the
+    $\symbfit{k}$-th grid cell. Then, the previous equation can be reformulated:
+    \[ \hat{f}(x) = \sum_{\symbfit{k} \in \mathbb{Z}^n} c_{\symbfit{k}} \varphi(x - x_{\symbfit{k}}) \]
     This definition follows the notation given in \cite{momey_new_2011}.
 \end{definition}
 
@@ -102,7 +104,7 @@ states as a requierment for strong linear independence, rather than a unique rep
 Some function $g$, fulfills the property partition-of-unity if
 \begin{itemize}
     \item $g: \mathbb{R}^n \to [0, 1]$, i.e. it $g$ maps into the unit interval
-    \item $\sum_{\bm{k} \in \mathbb{Z}^n} g(x + k) = 1 \; \forall x \in \mathbb{R}^n$
+    \item $\sum_{\symbfit{k} \in \mathbb{Z}^n} g(x + k) = 1 \; \forall x \in \mathbb{R}^n$
 \end{itemize}
 Given the basis fulfills this property, the error of approximation converges to zero, with sampling 
 step $\Delta$ going to zero \cite{nilchian_optimized_2015}. Formally
@@ -118,7 +120,7 @@ appearance in \cite{hanson_local_1985}.
 
 The compact support is a rather practical requierment. In order to reduce the computational cost,
 the function should be compact. Phrased differently, the smaller the support, fewer evaluations
-for a given point are required, i.e. the number of zero elements in $c_{\bm{k}}$ grows with shrinking
+    for a given point are required, i.e. the number of zero elements in $c_{\symbfit{k}}$ grows with shrinking
 support.
 
 On the other hand, given a function without compact support, such as the gaussian.

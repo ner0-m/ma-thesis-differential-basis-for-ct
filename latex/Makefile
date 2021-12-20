@@ -1,7 +1,7 @@
-.PHONY: clean
+.PHONY: clean all watch
 
-build:
-	latexmk -interaction=nonstopmode
+all:
+	latexmk -pdf -xelatex -interaction=nonstopmode main.tex
 	 
 watch:
 	latexmk -pvc -interaction=nonstopmode
