@@ -1,10 +1,10 @@
 .PHONY: clean all watch
 
 all:
-	latexmk -pdf -xelatex -interaction=nonstopmode main.tex
+	latexmk -pdf -xelatex -interaction=nonstopmode --outdir=build main.tex
 	 
 watch:
-	latexmk -pvc -interaction=nonstopmode
+	latexmk -pvc -pdf -xelatex -interaction=nonstopmode --outdir=build main.tex
 
 clean:
-	latexmk -c
+	latexmk -C

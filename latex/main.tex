@@ -25,7 +25,6 @@
 \definecolor{amber}     {RGB}{255,191,  0}
 \definecolor{burgundy}  {RGB}{144,  0, 32}
 \definecolor{cardinal}     {RGB}{247, 118, 142}
-% \definecolor{cardinal}  {RGB}{196, 30, 58}
 \definecolor{deep-azure}{RGB}{ 10, 50, 94}
 \definecolor{mahogany}  {RGB}{192, 64,  0}
 \definecolor{malory-red}{RGB}{192, 46, 16}
@@ -72,12 +71,19 @@
   \end{center}
 }
  
-\pagecolor[RGB]{26,27,38}
-\color[RGB]{192, 202, 245}
+% \pagecolor[RGB]{26,27,38}
+% \color[RGB]{192, 202, 245}
 
-% \pagecolor[RGB]{213, 214, 219} 
+% \pagecolor[RGB]{213, 214, 219}
 % \color[RGB]{52, 59, 88}
- 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Sectioning of thesis
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\setcounter{secnumdepth}{\subsubsectionnumdepth}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Hyperlinks & bookmarks
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -148,7 +154,6 @@
 \ifxetexorluatex
   \usepackage{unicode-math}
   \setmainfont{IBM Plex Serif}
-  % \setmainfont{Libre Baskerville}
   \setsansfont{IBM Plex Sans}
   \setmonofont{IBM Plex Mono}
 \else
@@ -214,7 +219,8 @@
 
 
 \title{\texttt{\getTitleEng}}
-\subtitle{Some subtitle}
+\subtitle{\texttt{\getTitleGer}}
+
 \author{\getAuthor{}}
 
 \begin{document}
