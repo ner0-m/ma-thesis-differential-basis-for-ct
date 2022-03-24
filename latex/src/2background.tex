@@ -1,29 +1,298 @@
-\chapter{Notation}
+\chapter{Notation and Terminology}
 
 This is my notation used thourgh the thesis
 
-\chapter{Tomographic reconstruction}
+\chapter{Imaging Modalities}
 
-\section{Applications}
- 
-How different imaging modalities work, and why they are useful
+A large number of different fields boil down to a very similar problem statement. Based on a given
+measurement, how can one retrieve the original measured object, assuming the projection process is
+known \cite{herman_basis_2015}. This is presicly, the definition of reconstruction used throughout
+this thesis.
 
-\subsection{X-ray Attenuation CT}
+These fields include but are not limited to variation methods in imaging (e.g. image denoising,
+impainting, super resolution and more \insertref{find reference for each}), X-ray attenuation
+computed tomography, Phase-Contrast computed tomography, ligth-field tomography, electron
+microscopic \insertref{find references}, and many more.
 
-\subsection{Phase Contrast CT}
+All of these problems are part of the class of so called \textit{inverse problems}. Inverse problems
+in turn are again part of the so called \textit{ill-posed problems}. Following the definition of
+Hadamard, \insertref{properly cite Hadamard, J. (1902) Sur les Problèmes aux Dérivées Partielles et
+Leur Signification Physique. Princeton University Bulletin, 13, 49-52.} a problem is well posed if
+all of the following properties are fulfilled:
 
-\subsection{Anisotropic X-ray Dark-field Tomography}
+\begin{itemize}
+    \item \textbf{Existence}: The problem has a solution.
+    \item \textbf{Uniqueness}: The solution is the only solution.
+    \item \textbf{Stability}: The solution depends continuously on the data.
+\end{itemize}
 
-\subsection{Light Field Microscopy}
+A problem, which fulfills all of the above is referred to as \textit{well-posed}. If any doesn't
+hold it's called \textit{ill-posed}. The classes of problems referred to above, are basically all
+ill-posed.
 
-\section{Solving Inverse Problems}
- 
-\subsection{Analytical Reconstruction}
+\paragraph{Existence}
+
+If a problem does not have any solution, a reformulation can often yields a desired result. Instead
+of the original problem statement, the equivalent least squares problem can be solved to find a
+unique solution. \todo{find a nice example, see \cite{Hansen_discrete_2010}}
+
+\paragraph{Uniqueness}
+
+If a problem has multiple - or infinitely many solutions - more requirements or preconditions can be
+added, to narrow down the number of possible solutions. \todo{find a nice example, see
+\cite{Hansen_discrete_2010}}
+
+\paragraph{Stability}
+
+This condition is quite critical. As a violation of stability can basically mean, a small
+perturbation or change in the data will result in arbitrarily large changes in the result. Again a
+reformulation can help out. Usually, one adds some for of regularisation to stabilize the results.
+\todo{find a nice example, see \cite{Hansen_discrete_2010}}
+
+The specific field of tomographic reconstruction deals with the challenge to reconstruction an
+image, from a finite set of projections. Specifically, most of the applications considered are
+projections from X-ray sources. However, we will also look at Light field microscopy.
+
+The common ground for all tomographic reconstruction is the Radon transform \insertref{Radon
+Transform}, or it's closely related transformations as the X-ray transform \insertref{X-ray
+transform}. The Radon transform will be properly introduced in \insertref{Def Radon transform}.
+
+The remainder of this chapter will introduce a variety of different imaging modalities and their
+applications. This will serve as a motivation for developments in the different fields. This should
+also help to gain an intuition for the mathematical introduction and definitions in the following
+chapters.
+
+Physical details will not be discussed, as they are beyond the scope of this thesis. Rather, they
+will be striped down and simplified to what is necessary and useful for the scope of this thesis.
+However, as much as possible, resources for the interested reader are cited in the corresponding
+sections.
+
+\todo{Cite (medical) applications for each method}
+
+\section{X-ray Attenuation CT}
+
+\todo{First X-ray CT stuff, Look into stuff without cutting it open}
+
+Narrowing our observations to a single X-ray going through a 2 dimensional object, which we wish to
+examinate from the inside. For now, consider the X-ray going in a straight line \(L\). The
+attenuation of the X-ray along this path is based on the Beer-Lambert law \cite{buzug_computed_2008}:
+
+\begin{equation}
+    \label{eq:beer-Lambert-law}
+    - \ln \frac{I}{I_0} = \int_L \mu (x) dx
+\end{equation}
+
+where the integral along the path \(L\) is referred to as the line integral.
+\(\mu \colon \mathbb{R}^2 \to \mathbb{R}\) denotes the linear attenuation cofficients, \(I_0\)
+the initial intensity of the beam (i.e. without any object between the source and the detector).
+
+The challenge for X-ray attenuation CT is to reconstruct the function \(\mu\).
+
+\section{Phase-Contrast CT}
+
+Though, attenuation is the predominant X-ray based imaging method, other methods take other physical
+properties of X-rays into account, such as diffraction, refraction and scattering.
+
+As the name suggest, Phase-contrast X-ray CT considers the phase shift of the X-rays going through
+an object.
+
+\section{Anisotropic X-ray Dark-field Tomography}
+
+Once one takes also
+
+\section{Light Field Microscopy}
+
+Lastly, a field not based on X-rays.
+
+
+
+\chapter{Tomographic Reconstruction}
+
+This chapter will be devoted to lay a common notation for the remainder of this thesis. First,
+a couple of basic definitions will be presented.
+
+\begin{definition}[Image]
+    \label{def:image}
+    Let \(f\colon \mathbb{R}^n \to \mathbb{R}\) be a \(n\)-dimensional continuous function, whose support is
+    bounded. It is referd to it as a \(n\)-dimensional image. And often it will be referred to as image,
+    without the special mention of \(n\)-dimensional.
+\end{definition}
+
+In the special case of \(n=2\), it is called an \textit{2-dimensional image} or just
+\textit{2D image}. However, if from the context, the \(2\)-dimensional is obvious, it will still be
+referred to as image. In case of \(n=3\), it is called a \textit{volume}.
+
+\section{Radon transform}
+
+First talk about the radon transform, it's properties and it's related transformations,
+such as the X-ray transform.
+
+Then later, we can say that the Radon transform of an image only acts on the basis functions.
+
+\section{Image Representation}
+
+Images as defined in \ref{def:image}, are continuous functions. However, one wishes to use computers
+to solve the reconstruction tasks and computers are inherently discrete. Hence, one wishes to
+represent an image in a discrete fashion.
+
+\begin{definition}[Permissible representation]
+    \label{def:permissible_representation}
+    Let \(N \in \mathbb{N}\) be a positive integer and \(\varphi_n\) a set basis function for
+    \(1 \leq n \leq N\), then the signal \(f\) can be approximated as a linear combinations
+    of these basis functions and the coefficients \(c_n\):
+    \[ \hat{f}(x) = \sum_{k=1}^{N} c_k \varphi_k(x) \]
+\end{definition}
+
+For our purposes, we assume the function lies on a regular spaced discrete grid. Then, let
+\(\varphi\) be a zero centered symmetrical basis function, \(\symbfit{k} \in \mathbb{Z}^n\) be the
+\(n\)-dimensional index of a grid cell, and \(x_{\symbfit{k}} \in \mathbb{R}^n\) the center coordinate
+of the \(\symbfit{k}\)-th grid cell. Then, the previous equation can be reformulated:
+\[ \hat{f}(x) = \sum_{\symbfit{k} \in \mathbb{Z}^n} c_{\symbfit{k}} \varphi(x - x_{\symbfit{k}}) \]
+This definition follows the notation given in \cite{momey_new_2011}.
+
+
+Now, if one applies the Radon transformation to the discretized image: \todo{generalize to all
+linear physical models}
+\[ \mathscr{R}\hat{f}(x) = \mathscr{R}\left( \sum_{\symbfit{k} \in \mathbb{Z}^n} c_{\symbfit{k}} \varphi(x -
+x_{\symbfit{k}}) \right) \]
+Due to the linearity of the Radon Transform this is equivalent to
+\[ \mathscr{R}\hat{f}(x) =  \sum_{\symbfit{k} \in \mathbb{Z}^n} c_{\symbfit{k}}\mathscr{R}\left( \varphi(x -
+x_{\symbfit{k}}) \right) \]
+i.e. the Radon transformation of the image, only act upon the basis function. Hence, it is
+sufficient to study, how the Radon transformation acts upon the individual basis function.
+
+Note that this holds for any linear physical model. Most notably, for the content of this
+thesis, this holds for the X-ray transform. But it is also true for the physical models behind
+the applications discussed in the previous chapter.
+
+\subsection{Properties of Basis Function}
+
+\todo{maybe remove this section}
+
+From this it is evident, that the choice of basis function is crucial for the accuracy of the
+discretized image. A suboptimal representation, will yield undesired results. In
+\cite{nilchian_optimized_2015}, 4 properties a basis functions should satisfy are proposed. These are:
+\begin{itemize}
+    \item Riesz Basis
+    \item Partition Of Unity
+    \item Compact Support
+    \item Isotropy
+\end{itemize}
+Similar properties are stated in \cite{hanson_local_1985}.
+
+\paragraph{Riesz Basis}
+
+\cite{hanson_local_1985} formulates a similar requirement, however states it less restrictive. It is
+states as a requirement for strong linear independence, rather than a unique representation.
+
+\todo{Explain Riesz Basis, find definition of it and cite it}
+
+\paragraph{Partition of Unity}
+
+Some function \(g\), fulfills the property partition-of-unity if
+\begin{itemize}
+    \item \(g: \mathbb{R}^n \to [0, 1]\), i.e. it \(g\) maps into the unit interval
+    \item \(\sum_{\symbfit{k} \in \mathbb{Z}^n} g(x + k) = 1 \; \forall x \in \mathbb{R}^n\)
+\end{itemize}
+
+Given the basis fulfills this property, the error of approximation converges to zero, with sampling
+step \(\Delta\) going to zero \cite{nilchian_optimized_2015}. Formally
+\[ \lim_{\Delta \to 0} \norm{f - \hat{f}}_{L_2} = 0 \]
+
+\todo{define and explain the constraints required here}
+
+This requirement is close to the property power of approximation and fidelity of visual
+appearance in \cite{hanson_local_1985}.
+
+\paragraph{Compact support}
+
+The compact support is a rather practical requirement. In order to reduce the computational cost,
+the function should be compact. Phrased differently, the smaller the support, fewer evaluations for
+a given point are required, i.e. the number of zero elements in \(c_{\symbfit{k}}\) grows with
+shrinking support.
+
+\insertref{assumption about gaussian}
+On the other hand, given a function without compact support, such as the gaussian.
+
+\paragraph{Isotropy}
+
+Isotropy is again a practical requirement. If a basis function is isotropic, it is projections do
+not depend on the direction or angle. This greatly simplifies the implementation and improves
+efficiency.
+
+Both compact supoort and isotropy are practical requirement to fulfill the requirements of efficient
+computation of forward and backward projection and implementation of reconstruction constraints by
+\cite{hanson_local_1985}.
+
+A couple of choices for different basis functions are discussed in this section. First, the most
+common choice in the pixel basis function is presented. Then a closer look at two alternatives in
+spherically symmetric basis functions (from now on referred to \textit{blobs}), and B-Splines.
+
+\subsection{Pixel Basis}
+
+
+
+\subsection{Blob Basis}
+
+What ware spherically semmetrical basis elements (blobs)
+
+Very important literature
+\cite{lewitt_alternatives_1992}
+\cite{matej_practical_1996}
+
+\subsection{B-Spline Basis}
+
+B-Splines have been used in multiple fields. \insertref{Find some different fields}.
+
+\begin{definition}[Recursive B-Spline]
+    \label{def:bspline}
+    The centered B-Spline of degree $d$ and of width $\Delta$ is given by
+    \begin{align*}
+        \beta_\Delta^0(x) &= \mu(x) =
+            \begin{cases}
+                \frac{1}{\Delta}, & \text{if } x \in [-\frac{\Delta}{2}, \frac{\Delta}{2}]\\
+                0,           & \text{otherwise}
+            \end{cases} \\
+           \beta_\Delta^d(x) &= \beta_\Delta^0 * \beta_\Delta^{d-1}(x) =
+               \underbrace{\beta_\Delta^0 * \dots * \beta_\Delta^0(x)}_{d+1 \text{concolution terms}}
+    \end{align*}
+    where $\mu(x)$ is the step function centered around 0. \todo[inline]{I'm not sure if this is sound}
+
+    The zero-dimensional B-Spline, is the normalized unit impulse of width $\Delta$. And the
+    $d$-dimensional B-Spline is just the $d+1$ fold convolution of the normalized unit impulses
+    \cite{horbelt_discretization_2002}.
+
+    Note that
+    \[ \beta_\Delta^d(x) = \frac{1}{\Delta} \beta_1^d(\frac{x}{\Delta}) \]
+    therefore, if no specific subscript is mentioned, the B-Spline with $\Delta = 1$ is implied.
+
+    In \cite{unser_fast_1991}, a non-recursive definition of the unit width B-Spline is given as:
+    \[ \beta^d = \sum_{j=0}^{n+1} \frac{(-1)^j}{n!} \binom{n+1}{j}(x - j)\mu(x - j) \]
+\end{definition}
+
+B-Splines have a couple of really attractive properties. B-Splines are the shortest and smoothest
+scaling functions for a given order of approximation \cite{momey_b-spline_2012}. This
+are close to a Gaussian function,
+with a sufficiently large $d$ \cite{momey_b-spline_2012}, all while preserving compactness.
+
+\cite{unser_b-spline_1993}
+\cite{unser_b-spline_1993-1}
+\cite{unser_fast_1991}
+\cite{briand_theory_2018}
+
+\subsection{Box splines}
+
+What are box splines
+
+\cite{entezari_box_2012}
+\cite{de_boor_box_1993}
+
+\section{Analytical Reconstruction}
 something
 
-\subsection{Iterative Reconstruction}
+\section{Iterative Reconstruction}
 
-\subsubsection{ART}
+\subsection{ART}
 
 \begin{listing}
     \begin{minted}{cpp}
@@ -45,116 +314,25 @@ np.linspace(0, 1)
 
 ART and derivatives
 
-\subsubsection{CG}
+\subsection{CG}
 
 CG and such
- 
-\subsubsection{First-order methods}
+
+\subsection{First-order methods}
 
 First orther methods such as Gradient Descent and it's derivatives
 
-\subsection{Regularization}
+\section{Regularization}
 
-\subsubsection{Tikonov}
+\subsection{Tikonov}
 
-\subsubsection{LASSO L1}
+\subsection{LASSO L1}
 
-\subsubsection{TV Regularization}
+\subsection{TV Regularization}
 
 \chapter{Basis}
 
 Explain basis, and why they are useful
-
-\section{Series expansion}
-
-Before we looks closely at different basis functions, we need a couple of definitions to concentrate
-on the different basis functions. So far, the inverse problems discussed are treated mostly in a
-continuous fashion, i.e. at no point we look at problems arising from discretization.
-
-\begin{definition}[Signal]
-    \label{def:signal}
-    Let $f: \mathbb{R}^n \to \mathbb{R}$ be a $n$-dimensional continuous function, whose support is 
-    bounded. We'll refer to it as a $n$-dimensional signal. And often it will be refered to as signal, 
-    without the special mention of $n$-dimensional.
-
-    In the special case of $n=2$, it is called an \textit{image} (following \cite{herman_basis_2015})
-    and in case of $n=3$, it is called a $volume$.
-\end{definition}
-\todo{Move to other section, it doesn't fit here quite right}
-
-Remember the functions, we wish to reconstruct are of the from as defined in \ref{def:signal}.
-However, these are continuous and therefore not representable by any digital computer.
-We seek to find a permissible representation $\hat{f}$ of the signal $f$ \cite{herman_basis_2015}.
-
-\begin{definition}[Permissible representation]
-    \label{def:permissible_representation}
-    Let $N \in \mathbb{N}$ be a positive integer and $\varphi_n$ a set basis function for
-    $1 \leq n \leq N$, then the signal $f$ can be approximated as a linear combinations
-    of these basis functions and the coefficients $c_n$:
-    \[ \hat{f}(x) = \sum_{k=1}^{N} c_k \varphi_k(x) \]
-
-    For our purposes, we assume the function lies on a regular spaced discrete grid. Then, let
-    $\varphi$ be a zero centered symmetrical basis function, $\symbfit{k} \in \mathbb{Z}^n$ be the
-    $n$-dimensional index a grid cell, and $x_{\symbfit{k}} \in \mathbb{R}^n$ the coordinate of the
-    $\symbfit{k}$-th grid cell. Then, the previous equation can be reformulated:
-    \[ \hat{f}(x) = \sum_{\symbfit{k} \in \mathbb{Z}^n} c_{\symbfit{k}} \varphi(x - x_{\symbfit{k}}) \]
-    This definition follows the notation given in \cite{momey_new_2011}.
-\end{definition}
-
-From this, it is quite obvious how important the choise of basis functions are. 
-A suboptimal representation, will yield undesired results. In \cite{nilchian_optimized_2015}, 4 
-properties a basis functions should satisfy are proposed. These are:
-\begin{itemize}
-    \item Riesz Basis
-    \item Partition Of Unity
-    \item Compact Support
-    \item Isotropy
-\end{itemize}
-
-Similar properties are stated in \cite{hanson_local_1985}.
-
-\subsubsection{Riesz Basis}
-
-\todo[inline]{Explain Riesz Basis, find definition of it and cite it}
-
-\cite{hanson_local_1985} formulates a similar requierment, however states it less restrictive. It is
-states as a requierment for strong linear independence, rather than a unique representation.
- 
-\paragraph{Partition of Unity}
- 
-Some function $g$, fulfills the property partition-of-unity if
-\begin{itemize}
-    \item $g: \mathbb{R}^n \to [0, 1]$, i.e. it $g$ maps into the unit interval
-    \item $\sum_{\symbfit{k} \in \mathbb{Z}^n} g(x + k) = 1 \; \forall x \in \mathbb{R}^n$
-\end{itemize}
-Given the basis fulfills this property, the error of approximation converges to zero, with sampling 
-step $\Delta$ going to zero \cite{nilchian_optimized_2015}. Formally
-\begin{equation}
-    \lim_{\Delta \to 0} \norm{f - \hat{f}}_{L_2} = 0
-\end{equation}
-\todo[inline]{define and explain the constraints required here}
-
-This requirement is close to the property power of approximation and fidelity of visual
-appearance in \cite{hanson_local_1985}.
-
-\paragraph{Compact support}
-
-The compact support is a rather practical requierment. In order to reduce the computational cost,
-the function should be compact. Phrased differently, the smaller the support, fewer evaluations
-    for a given point are required, i.e. the number of zero elements in $c_{\symbfit{k}}$ grows with shrinking
-support.
-
-On the other hand, given a function without compact support, such as the gaussian.
-\insertref{assumption about gaussian}
-
-\paragraph{Isotropy}
-
-Isotropy is again a practical requierment. If a basis function is isotropic, it is projections
-do not depend on the direction or angle. This greatly simplifies the implementation and improves efficiency.
-
-Both compact supoort and isotropy are practical requierments to fulfill the requierments of
-efficient computation of forward and backward projection and implementation of reconstruction constraints
-by \cite{hanson_local_1985}.
 
 \subsection{Series expansion under the Radon transform}
 
@@ -164,56 +342,5 @@ by \cite{hanson_local_1985}.
 
 \section{Blobs}
 
-What ware spherically semmetrical basis elements (blobs)
 
-Very important literature
-\cite{lewitt_alternatives_1992}
-\cite{matej_practical_1996}
- 
 \section{B-Splines}
-
-B-Splines have been used in multiple fields. \insertref{Find some different fields}.
-
-\begin{definition}[Recusrive B-Spline]
-    \label{def:bspline}
-    The centered B-Spline of degree $d$ and of width $\Delta$ is given by
-    \begin{align*}
-        \beta_\Delta^0(x) &= \mu(x) = 
-            \begin{cases}
-                \frac{1}{\Delta}, & \text{if } x \in [-\frac{\Delta}{2}, \frac{\Delta}{2}]\\
-                0,           & \text{otherwise}
-            \end{cases} \\
-           \beta_\Delta^d(x) &= \beta_\Delta^0 * \beta_\Delta^{d-1}(x) = 
-               \underbrace{\beta_\Delta^0 * \dots * \beta_\Delta^0(x)}_{d+1 \text{concolution terms}}
-    \end{align*}
-    where $\mu(x)$ is the step function centered around 0. \todo[inline]{I'm not sure if this is sound}
-
-    The zero-dimensional B-Spline, is the normalized unit impulse of width $\Delta$. And the 
-    $d$-dimensional B-Spline is just the $d+1$ fold convolution of the normalized unit impulses
-    \cite{horbelt_discretization_2002}.
-
-    Note that
-    \[ \beta_\Delta^d(x) = \frac{1}{\Delta} \beta_1^d(\frac{x}{\Delta}) \]
-    therefore, if no specific subscript is mentioned, the B-Spline with $\Delta = 1$ is implied.
-
-    In \cite{unser_fast_1991}, a non-recursive definition of the unit width B-Spline is given as:
-    \[ \beta^d = \sum_{j=0}^{n+1} \frac{(-1)^j}{n!} \binom{n+1}{j}(x - j)\mu(x - j) \] 
-\end{definition}
-
-B-Splines have a couple of really attractive properties. B-Splines are the shortest and smoothest
-scaling functions for a given order of approximation \cite{momey_b-spline_2012}. This
-are close to a Gaussian function,
-with a sufficiently large $d$ \cite{momey_b-spline_2012}, all while preserving compactness.
-
-
-\cite{unser_b-spline_1993}
-\cite{unser_b-spline_1993-1}
-\cite{unser_fast_1991}
-\cite{briand_theory_2018}
- 
-\section{Box splines}
-
-What are box splines
-
-\cite{entezari_box_2012}
-\cite{de_boor_box_1993}
