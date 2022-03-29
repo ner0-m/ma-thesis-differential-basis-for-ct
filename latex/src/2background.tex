@@ -1,8 +1,8 @@
-\chapter{Notation and Terminology}
+\chapter{Notation and Terminology}\label{chap:notation}
 
 This is my notation used thourgh the thesis
 
-\chapter{Imaging Modalities}
+\chapter{Imaging Modalities}\label{chap:imaging_modalities}
 
 A large number of different fields boil down to a very similar problem statement. Based on a given
 measurement, how can one retrieve the original measured object, assuming the projection process is
@@ -69,7 +69,7 @@ sections.
 
 \todo{Cite (medical) applications for each method}
 
-\section{X-ray Attenuation CT}
+\section{X-ray Attenuation CT}\label{sec:xray_attenuation_ct}
 
 \todo{First X-ray CT stuff, Look into stuff without cutting it open}
 
@@ -88,7 +88,7 @@ the initial intensity of the beam (i.e. without any object between the source an
 
 The challenge for X-ray attenuation CT is to reconstruct the function \(\mu\).
 
-\section{Phase-Contrast CT}
+\section{Phase-Contrast CT}\label{sec:phasecontrast_ct}
 
 Though, attenuation is the predominant X-ray based imaging method, other methods take other physical
 properties of X-rays into account, such as diffraction, refraction and scattering.
@@ -105,16 +105,16 @@ Read and incorporate:
 \end{itemize}
 
 
-\section{Anisotropic X-ray Dark-field Tomography}
+\section{Anisotropic X-ray Dark-field Tomography}\label{sec:axdt}
 
 Once one takes also
 
-\section{Light Field Microscopy}
+\section{Light Field Microscopy}\label{sec:lightfield_microscopy}
 
 Lastly, a field not based on X-rays.
 
 
-\chapter{Radon Transform and its related transform}
+\chapter{Radon Transform and its related transform}\label{chap:radon_transform_and_related}
 
 In the previous chapter, the notion of the inverse problem was introduced. There, based on a given
 measurement one tries to reconstruct the original quantity, based on a given model. This chapter is
@@ -152,7 +152,7 @@ This is a very general definition. This is useful to mathematically model a wide
 different applications. In fact, all of the applications in the previous chapter, can be modeled
 using this general definition. And there are many more, which can be modeled this way.
 
-\section{Radon Transform}
+\section{Radon Transform}\label{sec:radon_transform}
 
 Looking at the previously stated Beer Lambert law for attenuation CT \autoref{eq:beer-Lambert-law}.
 One can see, that the measured values, are somehow related to a line integral. The mathematical
@@ -185,11 +185,11 @@ Of further interest to us is the first derivative of the Radon transform.
 
 \todo{fourier slice theorem and such should go here?}
 
-\section{X-ray Transform}
+\section{X-ray Transform}\label{sec:xray_transform}
 
-\section{Abel Transform}
+\section{Abel Transform}\label{sec:abel_transform}
 
-\chapter{Image Representation}
+\chapter{Image Representation}\label{chap:image_representation}
 
 Images as defined in \ref{def:image}, are continuous functions. However, one wishes to use computers
 to solve the reconstruction tasks and computers are inherently discrete. Hence, one wishes to
@@ -459,15 +459,15 @@ bikernel. \cite{entezari_box_2012} shows how expliclity how (tensor product) B-S
 the X-ray and Radon transform. \cite{nilchian_differential_2012} shows how B-Splines act under
 the first derivative of the Radon transform.
 
-\chapter{Tomographic Reconstruction}
+\chapter{Tomographic Reconstruction}\label{chap:tomographic_reconstruction}
 
-\section{Analytical Reconstruction}
+\section{Analytical Reconstruction}\label{sec:analytical_reconstruction}
 
-\section{Towards the Matrix form}
+\section{Towards the Matrix form}\label{sec:matrix_formulation}
 
-\section{Iterative Reconstruction}
+\section{Iterative Reconstruction}\label{sec:iterative_reconstruction}
 
-\subsection{ART}
+\subsection{ART}\label{subsec:algebraic_reconstruction_technique}
 
 \begin{listing}
 	\begin{minted}{cpp}
@@ -489,18 +489,18 @@ np.linspace(0, 1)
 
 ART and derivatives
 
-\subsection{CG}
+\subsection{CG}\label{subsec:conjuage_gradient}
 
 CG and such
 
-\subsection{First-order methods}
+\subsection{First-order methods}\label{subsec:first_order_methods}
 
 First orther methods such as Gradient Descent and it's derivatives
 
-\section{Regularization}
+\section{Regularization}\label{sec:regularization}
 
-\subsection{Tikonov}
+\subsection{Tikonov}\label{subsec:tikhonov_regularization}
 
-\subsection{LASSO L1}
+\subsection{LASSO L1}\label{subsec:l1_regularization}
 
-\subsection{TV Regularization}
+\subsection{TV Regularization}\label{subsec:tv_regularization}
