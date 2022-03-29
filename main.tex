@@ -14,10 +14,10 @@
 % correctly.
 \usepackage{etoolbox}
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Colors
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\definecolor{black}               {RGB}{  0,   0,  0}
 \definecolor{kelly_green}         {RGB}{ 76, 187, 23}
 \definecolor{international_orange}{RGB}{255,  79,  0}
 \definecolor{venetian_red}        {RGB}{200,   8, 21}
@@ -122,10 +122,25 @@
 % Math relatex settings
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\newtheorem{definition}{Definition}[chapter]
-\def\definitionautorefname{definition}
- 
+
+\usepackage{thmtools}
+
+\declaretheoremstyle[
+  headpunct={},
+  headfont=\color{cardinal}\normalfont\bfseries,
+  notefont=\itshape,
+  bodyfont=\normalfont,
+]{definitioncolor}
+
+\declaretheorem[
+  style=definitioncolor,
+  name=Definition,
+  numberwithin=chapter
+]{definition}
+
 \usepackage{mathtools}
+\usepackage{bm}
+
 % Define \abs
 \DeclarePairedDelimiter\abs{\lvert}{\rvert}%
 
@@ -162,9 +177,9 @@
 
 \ifxetexorluatex
   \usepackage{unicode-math}
-  \setmainfont{IBM Plex Serif}
-  \setsansfont{IBM Plex Sans}
-  \setmonofont{IBM Plex Mono}
+  \setmainfont{IBM Plex Serif}[Scale=MatchLowercase]
+  \setsansfont{IBM Plex Sans}[Scale=MatchLowercase]
+  \setmonofont{IBM Plex Mono}[Scale=MatchLowercase]
 \else
   \usepackage[lf]{ebgaramond}
   \usepackage[oldstyle,scale=0.7]{sourcecodepro}
