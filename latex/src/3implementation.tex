@@ -2,45 +2,111 @@
 
 So much implementation design
 
-\chapter{Projector}
+\chapter{Projector}\label{chap:projector}
 
-There are a couple of basic principles on how projectors for X-ray attentuation CT work.
-The most common ones are \textit{ray driven}, \textit{voxel driven}, \textit{distance driven},
-or using \textit{separable footsprints}.
+As shown in previous chapters, calculation of the system matrix coefficients is one of the key
+components of tomographic reconstruction. Thus, this has been an important part of research. The
+routines or algorithms, which calculate the matrix are usually referred to as projectors. For the
+forward projection, the contribution of each voxel to each detector pixel is calculated. For the
+backward projection, the contribution of each detector pixel each a voxel is computed.
+
+In the first part of this chapter, a detailed overview over existing research and implementations of
+projectors is given. Next details on the projector used for this thesis is given. This is followed
+by a detailed studied of accuracy and performance of the new projector compared to other projection
+methods.
+
+\section{Types of Projectors}\label{sec:projector_types}
+
+One of the first mentions of projector routines can be found in the RECLBL library package
+\insertref{RECLBL}. Namely, the two types of projectors introduced there are the
+\textit{voxel-driven} (or \textit{pixel-driven} for the 2D case) and the \textit{ray driven}. Many
+state of the art projectors still build on the ideas of these projectors.
+
+The voxel driven approach is very simple. For the forward projection, each voxel is visited and the
+voxel center is projected onto the detector. Finally, the contribution of the voxel to the detector,
+is computed using some form of interpolation.~\cite{peters_algorithms_1981} used bilinear
+interpolation between the two neighbouring detector pixels.~\cite{harauz_interpolation_1983}
+improved on the approach by using bicubic spline interpolation. However, the approach is used rarely
+due to the introduced artifacts (C.f.~\cite[Chapter 3.3]{levakhina_three-dimensional_2014}). I.e. if
+the resolution of the detector is finer compared to the volume, detector pixels might never be
+assigned a value. \todo{describe back projector properly as well}
+
+Instead of projecting the voxel center and interpolating, one can project the complete voxel onto
+the projector plane. This approach was taken by~\cite{long_3d_2010, long_3d_nodate} and is usually
+referred to as separable footprint. They use trapezoidal functions to approximate the footprint both
+accurately and efficiently. Hence, the contribution of voxels to the detector pixels is based on
+these trapeziodial functions. It as also been ported to graphic processing units (GPUs) as shown in
+~\cite{wu_gpu_2011, xie_effective_2015, chapdelaine_new_nodate}. To the best of my knowledge, for
+voxel based approaches, this is the state of the art approach and outperforms other approaches.
+
+This approach was translated to B-Splines in~\cite{momey_b-spline_2012, momey_spline_2015}. There
+B-Splines are assumed to be the basis function at pixel centers, and then the B-Splines are
+projected onto the projector plane. As shown in chapter about B-Spline basis functions
+\insertref{B-Spline chapter}, the projection of \(n\)-dimensional B-Splines yield a
+\(n-1\)-dimensional B-Spline, hence the projection is simple and
+accurate.~\cite{momey_b-spline_2012} already incoorporated both parallel-beam and cone-beam
+geometry.
+
+Similarly,~\cite{ziegler_efficient_2006} proposed a footprint approach for blobs. And it was
+improved and ported to the GPU by~\cite{bippus_projector_2011}.~\cite{kohler_iterative_2011}
+describes a blob projector for phase-contrast CT\@.
+
+A shared problem of the voxel-based approaches, is the challenge of parallel implementations. During
+the forward projectiong, shared access to the projector pixels might be needed. Hence, mitigation
+strategies must be developed.
+
+A conceptually different approach compared to the voxel-based approach, is the \textit{ray-based}
+approach. There, the key idea is to trace rays through the volume. Typically, the intersection
+length is used as a contribution of a pixel to the detector pixel.
+
+Note that this the forward projection of this approach, is trivially parallisable. Each ray can be
+traced independently through the volume.
+
+A classical ray-driven approach was proposed by~\cite{siddon_fast_1985}, often is is referred to as
+Siddon's method. There, the exact path length of a ray traversing through a volume is calculated.
+I.e.\, this is the exact calculation of the line integral of a single ray through the volume. More
+recent work like~\cite{jacobs_fast_1998, christiaens_fast_1999, zhao_fast_2004, gao_fast_2012}
+improved on the Siddon's method, especially in efficiency and
+performance.~\cite{de_greef_accelerated_2009, xiao_efficient_2012} ported Siddon's methods to the
+GPU\@.
+
+Another classic is presented in~\cite{joseph_improved_1982}. It assumes a smooth image and
+interpolates between neighbouring voxels along the ray path. It does so by a in slice-interpolation,
+i.e.\ the voxels perpendicular to the main ray direction are visited.~\cite{graetz_high_2020}
+proposed a branchless GPU version of this approach.
+
+The backward projections of ray-driven approaches typically trace the ray from a detector pixel to
+the source and update all visited voxels based on the weights calculated as in the forward
+direction. And in the of Joseph's based methods, also voxels close by are updated. Note again here,
+that parallelization is hindered by the possibility of shared write access to voxels.
+
+Typically, iterative reconstruction algorithms expect that the forward and backward projectors are
+adjoints of each other \insertref{forward and backward projectors are adjoints}, i.e.\ they are
+\textit{matched} projector pair. This fails for basic pixel- and ray-driven approaches.
+They either either introduce artifacts during the forward or backward projections.
+
+An entirely different approach is the \textit{distance-driven} approach
+~\cite{de_man_distance-driven_2002, de_man_distance-driven_2004}. There, the voxel boundaries and
+detector pixel boundaries are projected onto a common axis, then the overlap is used as a weight.
+This approach is still state of the art, however, is suffers from inaccuracys for projections, which
+are close to 45°. A branchless GPU version was proposed in~\cite{liu_gpu-based_2017}. The
+distance-driven approach doesn't suffer from any high-frequency artifacts.
+
+Projectors based on blobs have been studied for quite some time. Ray-driven approaches are based on
+algorithms proposed in~\cite{matej_practical_1996, popescu_ray_2004}. But rather than assuming a
+infinitely thin ray, they assume a beam. Hence, they are somewhat similar to Joseph's projectors,
+that they have to visit neighbouring voxels, as the support of blobs is larger than that of pixels.
+~\cite{levakhina_distance-driven_2010} proposed a variant of the distance-driven approach based on
+blobs.
+
+Another area of projectors compute the intersection area of multiple rays. Such methods, as proposed
+in~\cite{ha_study_2015, ha_efficient_2016, ha_look-up_2018}, calculate the intersection between rays
+directed a detector boundaries.
+
+\section{Implementation}
 
 
-\section{Ray driven}
- 
-Siddon \cite{siddon_fast_1985}, Joseph \cite{joseph_improved_1982}, with improvments
-by \cite{jacobs_fast_1998,christiaens_fast_1999,zhao_fast_2004,gao_fast_2012}.
 
-\section{Voxel driven}
-
-\enquote{The pixel-driven forward projection is rarely used because it tends to introduce
-high-frequency artifacts to the sinogram. If the detector element size is much smaller than the
-pixel element size, there is a danger to have detector elements in which no value is written. In a
-similar manner, in the pixel-driven backprojection, each pixel element is updated based on the value
-which is obtained from the neighboring detector elements, typically using linear interpolation.}
-\cite{levakhina_three-dimensional_2014}
-
-Introduced by \cite{peters_algorithms_1981}, with improved interpolation by \cite{harauz_interpolation_1983}
-
-\section{Distance driven}
- 
-Introduced by \cite{de_man_distance-driven_2002}, and extended to 3D by \cite{de_man_distance-driven_2004}
-
-\section{Separable footprints}
-
-Improved over distance driven projector, introducted by \cite{long_3d_2010} \cite{long_3d_nodate}.
-
-\section{Area based}
-
-Let's see if this works
-\cite{ha_look-up_2018,ha_efficient_2016,ha_study_2015}
-so nice 
-
-
-\chapter{Experiments}
+\section{Experiments}
 
 How does it compare
-
