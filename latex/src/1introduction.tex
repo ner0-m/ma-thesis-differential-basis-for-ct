@@ -1,8 +1,44 @@
 \chapter{Introduction}
 
-this shoult not be empty!!
+this should not be empty!!
 
-\chapter{Scope}
+\section{Scope}
 
-This is the scope of my thesis let's keep writing because this is not very
-important, but let's write it a little longer so that I see how it works.
+The scope of this work is two fold. First, a major part is the support of some kind of
+differentiable basis functions in the \textit{elsa}~\cite{lasser_elsa_2019} framework. Only
+recently, the team around Prof.\ Dr.\ Franz Pfizer from the Technical University of Munich developed
+an advanced Dark-Field imaging to the human scale~\cite{viermetz_dark-field_2022}. This is an
+exiting development, which also has an impact on team around my supervisor PD Dr.\ rer.\ nat.\
+Tobias Lasser. As it stands today, elsa is not able to reconstruct either phase-contrast CT nor Dark-field
+CT\@. This thesis does not implement full support for reconstruction of phase-contrast CT\@.
+However, this thesis should lay the foundation for this support. In the scope of this thesis is a
+projector, which handles different kinds of differentiable basis functions. As these kind basis
+functions are the basis to support, phase-contrast CT\@.
+
+Secondly, this thesis should be a guide for students trying to get into the field of tomographic
+reconstruction. E.g.\ Students starting a project at the working group of PD Dr.\ rer.\ nat.\ Tobias
+Lasser. This thesis tries to cover many areas, which are already or soon to be implemented in elsa.
+And so, this should be of use to people trying to get into elsa, or parts of this will be worked
+into the documentation of elsa.
+
+I want the theoretical part to be of help for other students, but also for my future self as a
+reference. Hence, I will try to investigate problems on different levels. One level is the
+motivational and high level overview. This covers the larger picture, on what certain methods
+provide benefits over other methods and how they relate. Plus certain similarities and differences.
+Another level is an intuitive approach. Personally, throughout my studies, I found it immensely
+useful to gain a intuition for a method. Together, with the motivational aspects and classification,
+I could dig deeper into further details. Sadly, I will not be able to dig deep into all different
+aspects. As best I can, I'll provide further reading material for those interested.
+
+
+\section{Disclaimer}
+
+I want my research to be as open, reproducible and comprehensible as possible. Hence, the
+development of the source code I've wrote is open source, discussions (though they were few) can be
+found in the elsa GitLab repository \insertref{elsa GitLab repo}, the \LaTeX{} source code of thesis
+can be found on my personal GitHub page \insertref{Thesis GitHub repo}. To the best of my
+possibilities, I try to include the code I've used to generate all of my plots and graphs, I try to
+state dependencies and make building and using my work as easy as I can. But of course, I am aware,
+what is easy to me, might be cumberstone to the next, and impossible to the other.
+
+\inlinetodo{disclaimer gender-neutral language}
