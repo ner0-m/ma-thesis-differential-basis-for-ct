@@ -2,6 +2,7 @@
 
 this should not be empty!!
 
+
 \section{Motivation}\label{chap:Motivation}
 
 \section{Scope}\label{chap:scope}
@@ -32,6 +33,30 @@ useful to gain a intuition for a method. Together, with the motivational aspects
 I could dig deeper into further details. Sadly, I will not be able to dig deep into all different
 aspects. As best I can, I'll provide further reading material for those interested.
 
+\section{Outline}\label{sec:outline}
+
+For problems in tomographic reconstruction, there are a couple of important steps involved. These
+include discretization of the problem, describing the model behind the reonconstruction and finally
+actually solving the problem.
+
+The first part of the thesis, \autoref{chap:imaging_modalities}, covers different imaging
+modalities. It covers their use cases, a little bit of history, and a basic intuition on how they
+work. Afterwards in \autoref{chap:radon_transform_and_related}, the mathematical abstraction for
+these different physical models is laied down. Then \autoref{chap:image_representation} is all about
+discretization of the problem domain. There different basis functions, that can be used to discrete
+the image domain. With a specific focus on differentiable basis functions. In
+\autoref{chap:tomographic_reconstruction} reconstruction techniques are presented. Its all about
+recovering an image from projections. First, a couple of analytical solutions are presented, then a
+deeper dive into iterative reconstruction algorithms is provided.
+
+In the practical section, \autoref{chap:elsa} provides a light introduction into the C++ framework
+\textit{elsa} developed at the \textit{Computational Imaging and Inverse Problems} research group at
+the Technichal University of Munich. The next \autoref{chap:projector} provides details into
+implementations of the physical forward and backward model. And a detailed discussion of
+implementation choices for the projector developed as part of this thesis. In
+\autoref{chap:experiments} a detailed evaluation of the projector is conducted.
+
+The thesis ends with the conclusion in \autoref{chap:conclusion}.
 
 \section{Disclaimer}\label{sec:disclaimer}
 

@@ -520,11 +520,110 @@ dimension, the X-ray transform of B-Splines are box Splines of lower dimension.
 
 \chapter{Tomographic Reconstruction}\label{chap:tomographic_reconstruction}
 
+Till this point, the physical models involved in tomographic reconstruction have been presented and
+discritzation has been discussed. The last missing piece is the solution to the inverse problem.
+As tomographic reconstruction problems are inverse problems, many methods depend on common solutions
+to this space.
+
+Generally, one needs to find solution to the system \(A(f) = m\). There \(A\) is the forward model
+(i.e.\ the physical model, for attenuation X-ray CT it's the X-ray Transform), \(f\) is the
+\(n\)-dimensional image one seeks to reconstruct, and \(m\) is the measured data, i.e.\ the
+projected data.
+
 \section{Analytical Reconstruction}\label{sec:analytical_reconstruction}
+
+As already eluded to in the section about the Radon Transform in \autoref{sec:radon_transform}.
+There do exist closed form analytical inversion methods for the Radon Transform. In the
+aforementioned section, the Fourier Slice Theorem was introduced. There exist method that use this
+approach as a means to reconstruct the desired image. However, they are not often used in practice
+in tomographic reconstruction.
+
+\begin{definition}[Back-Projection]\label{def:back_projection}
+	Let \(f\colon \Omega \to \mathbb{R}\), where \(\Omega \in \mathbb{R}^2\) sufficiently nice.
+	Further, let \(g \coloneq \mathscr{R}f\) be the Radon Transform of \(f\). Then
+	\[ (R^\ast g)(x, y) \coloneq \int_0^\pi g(x\cos \phi + y \sin\phi, \phi) \mathrm{d}\phi \]
+	is the unfiltered back-projection of \(g\).
+\end{definition}
+
+\inlinetodo{Add example images for 1, 2, 4, and so on projection angles}
+
+The result of back-projecting the measured projections is a blurry version of the original function.
+\citeauthor{buzug_computed_2008} describes post-processing as a possible solution. However, there
+exists another option. If the projections are filtered in the Fourier domain and then the filtered
+values are back-projected just as before, a sharper image can be obtained. This is referred to as
+the filtered back-projection (FBP)~\cite{ramachandran_three-dimensional_1971}.
+
+\begin{definition}[Filtered Back-Projection]\label{def:filtered_back_projection}
+	Still, let \(f\colon \Omega \to \mathbb{R}\), where \(\Omega \in \mathbb{R}^2\) sufficiently
+	nice, and \(g \coloneq \mathscr{R}f\) be the Radon Transform of \(f\). Then
+	\[ g^\delta(t, \phi) \coloneq (f \ast g(\cdot, \phi))(t) \]
+	is the filtered projection. \(\delta(x) \approx \abs{x}\) is a filter, which is convoled
+	with the projection data. Using \(\mathscr{R}^\ast\) is the adjoint of the Radon Transform
+	as in \autoref{def:back_projection}, then \(\mathscr{R}^\ast g^\delta\) is the
+	\textit{filtered back-projection}.
+\end{definition}
+
+The quality of the reconstruction depends on the filter and data acquisition. Further the FBP as
+presented here, is limited to parallel beam geometry setups. There do exists other methods for fan
+beam settings that require rebinning (i.e.\ sorting the projections, such that all are parallel).
+However, overall the FBP leads to sharp images and it is wiedly used in medical CT
+scanners\cite{pan_why_2009}.
+
+\inlinetodo{Read Deans (2007) chapter 6, Natterer (1986) chapter 5.1, Herman (2009) chapter 7, Kak (1987) chapter 3.3, Buzug (2008) chapter 5.6)}
 
 \section{Towards the Matrix form}\label{sec:matrix_formulation}
 
+Before we concentrate on iterative reconstruction techniques, a deeper dive into the linear system
+of equation is needed. Recall the \autoref{def:forward-model}, the definition of the forward model.
+There, \(\mathscr{M}_j\) describes the acquisition of a single measurement, i.e.
+\[ m_j = \mathscr{M}_j(f) \]
+This is done for the complete set of projections \(J\). Then further recall
+\autoref{def:permissible_representation}
+\[ f \approx \hat{f}(x) = \sum_{k=1}^{N} c_k \varphi_k(x) \]
+as shown for the Radon Transform, the forward model can be applied and rearranging a little:
+\[ m_j \approx \mathscr{M}_j(\hat{f}) = \sum_{k=1}^{N} c_k \mathscr{M}_j(\varphi_k) \]
+\(a_{ji} \coloneq \mathscr{M}_j(\varphi_k)\) is the contribution of a single \(k\)th basis function
+to the \(j\)th measurement.
+
+Now, the measurements can be stacked to a vector \(m = (m_j) \in  \mathbb{R}^J\), the same for
+the coefficients \(c = (c_i) \mathbb{R}^I\), and the contributions \(a_{j} = (a_{ji}) \in
+\mathbb{R}^I\). Then a single measurement can be written as a scalar product of the coefficient
+vector and the contribution vector. But also importantly, the linear system can be defined:
+\begin{equation}\label{eq:system_lin_equation}
+	m \approx
+	\begin{bmatrix}
+		\rule[.5ex]{2em}{0.4pt} & a_1^T & \rule[.5ex]{2em}{0.4pt} \\
+		\rule[.5ex]{2em}{0.4pt} & a_2^T & \rule[.5ex]{2em}{0.4pt} \\
+		\vdots                                                    \\
+		\rule[.5ex]{2em}{0.4pt} & a_J^T & \rule[.5ex]{2em}{0.4pt}
+	\end{bmatrix} c \eqcolon A c
+\end{equation}
+
+This is a regular system of linear equation, it partitions the problem in the measurements, the
+\textit{system matrix} \(A\) and the coefficient vector \(c\). Also note, that the choice of basis
+function is integrated into the system matrix.
+
 \section{Iterative Reconstruction}\label{sec:iterative_reconstruction}
+
+The system of linear equations given in \autoref{eq:system_lin_equation} is usually ill-posed due to
+noise and measurement errors. Also it is not usually square. Therefore, the problem is not solved
+directly, but rather the \textit{least squared problem} can be solved instead.
+
+\begin{definition}[Least Squared Problem]\label{def:least_squares_problem}
+	The least squares problem is defined as
+	\[ \argmin_c \frac{1}{2} \norm{Ac - m}^2_2 \]
+	The solution to the least squares problem is given by the normal equation
+	\[ A^T A c = A^T m \]
+\end{definition}
+
+Note here, that \(Ac\) is considered the forward projection and \(A^T m\) is the backward
+projection.
+
+However, the system matrix is usually to large to store in system memory. Therefore, algorithms are
+necessary, which do not require the knowledge of the complete system matrix. The software computing
+the system matrix on the fly, is often referred to as projectors. A deep dive into the
+implementation will be conduced in \autoref{chap:projector}.
+
 
 \subsection{ART}\label{subsec:algebraic_reconstruction_technique}
 
