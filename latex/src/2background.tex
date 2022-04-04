@@ -1,7 +1,6 @@
 \chapter{Notation and Terminology}\label{chap:notation}
 
 This is my notation used thourgh the thesis
-
 \chapter{Imaging Modalities}\label{chap:imaging_modalities}
 
 A large number of different fields boil down to a very similar problem statement. Based on a given
@@ -34,28 +33,28 @@ ill-posed.
 
 If a problem does not have any solution, a reformulation can often yields a desired result. Instead
 of the original problem statement, the equivalent least squares problem can be solved to find a
-unique solution. \todo{find a nice example, see \cite{Hansen_discrete_2010}}
+unique solution. \todo{find a nice example, see~\cite{hansen_discrete_2010}}
 
 \paragraph{Uniqueness}
 
 If a problem has multiple - or infinitely many solutions - more requirements or preconditions can be
-added, to narrow down the number of possible solutions. \todo{find a nice example, see
-	\cite{Hansen_discrete_2010}}
+added, to narrow down the number of possible solutions. \todo{find a nice example, see~\cite{hansen_discrete_2010}}
 
 \paragraph{Stability}
 
 This condition is quite critical. As a violation of stability can basically mean, a small
 perturbation or change in the data will result in arbitrarily large changes in the result. Again a
 reformulation can help out. Usually, one adds some for of regularisation to stabilize the results.
-\todo{find a nice example, see \cite{Hansen_discrete_2010}}
+\todo{find a nice example, see~\cite{hansen_discrete_2010}}
 
 The specific field of tomographic reconstruction deals with the challenge to reconstruction an
 image, from a finite set of projections. Specifically, most of the applications considered are
 projections from X-ray sources. However, we will also look at Light field microscopy.
 
-The common ground for all tomographic reconstruction is the Radon transform \insertref{Radon
-	Transform}, or it's closely related transformations as the X-ray transform \insertref{X-ray
-	transform}. The Radon transform will be properly introduced in \insertref{Def Radon transform}.
+The common ground for all tomographic reconstruction is the Radon transform~\cite{radon_uber_1917}
+(see~\cite{radon_determination_1986} for the english translation), or closely related
+transformations such as the X-ray Transform~\cite{solmon_x-ray_1976}. The Radon Transform will be
+properly introduced in \autoref{chap:radon_transform_and_related}.
 
 The remainder of this chapter will introduce a variety of different imaging modalities and their
 applications. This will serve as a motivation for developments in the different fields. This should
@@ -67,24 +66,32 @@ will be striped down and simplified to what is necessary and useful for the scop
 However, as much as possible, resources for the interested reader are cited in the corresponding
 sections.
 
-\todo{Cite (medical) applications for each method}
 
 \section{X-ray Attenuation CT}\label{sec:xray_attenuation_ct}
 
-\todo{First X-ray CT stuff, Look into stuff without cutting it open}
+The discovery of X-rays by Wilhelm Conrad Röntgen \insertref{Röntgen Wilhelm Conrad Röntgen} and its
+usages have already.
+\todo{Cite (medical) applications for each method, write a little more}
+
+The breakthrough for X-ray attenuation CT came with the a series of publications of by
+\citeauthor{hounsfield_computerized_1973}\cite{hounsfield_computerized_1973},
+\citeauthor{ambrose_computerized_1973}\cite{ambrose_computerized_1973} and
+~\citeauthor{perry_computerized_1973}\cite{perry_computerized_1973}. The mathematical foundation was
+laid but many, but importantly as already mentioned~\citeauthor{radon_uber_1917}, but also
+\citeauthor{cormack_representation_1963}\cite{cormack_representation_1963}.
 
 Narrowing our observations to a single X-ray going through a 2 dimensional object, which we wish to
 examinate from the inside. For now, consider the X-ray going in a straight line \(L\). The
-attenuation of the X-ray along this path is based on the Beer-Lambert law \cite{buzug_computed_2008}:
+attenuation of the X-ray along this path is based on the Beer-Lambert law~\cite{buzug_computed_2008}:
 
 \begin{equation}
 	\label{eq:beer-Lambert-law}
-	- \ln \frac{I}{I_0} = \int_L \mu (x) dx
+	- \ln \frac{I}{I_0} = \int_L \mu (x) \, \mathrm{d}x
 \end{equation}
 
 where the integral along the path \(L\) is referred to as the line integral.
 \(\mu \colon \mathbb{R}^2 \to \mathbb{R}\) denotes the linear attenuation cofficients, \(I_0\)
-the initial intensity of the beam (i.e. without any object between the source and the detector).
+the initial intensity of the beam (i.e.\ without any object between the source and the detector).
 
 The challenge for X-ray attenuation CT is to reconstruct the function \(\mu\).
 
@@ -119,16 +126,16 @@ Lastly, a field not based on X-rays.
 In the previous chapter, the notion of the inverse problem was introduced. There, based on a given
 measurement one tries to reconstruct the original quantity, based on a given model. This chapter is
 mostly devoted to derive and analyze this model. Specifically, in the context of X-ray attenuation
-CT, with a brief outlook into other areas needed for e.g. phase-contrast CT.
+CT, with a brief outlook into other areas needed for e.g.\ phase-contrast CT\@.
 
 The physical model is the link between the unknown signal and it's measurements. Usually, the model
 is referred to as forward model. Let us first state a couple of basic definitions and then we will
-look into the derivation of the forward model for X-ray attenuation CT.
+look into the derivation of the forward model for X-ray attenuation CT\@.
 
 \begin{definition}[Image]\label{def:image}
-	Let \(f\colon \mathbb{R}^n \to \mathbb{R}\) be a \(n\)-dimensional continuous function, whose support is
-	bounded. It is referd to it as a \(n\)-dimensional image. And often it will be referred to as image,
-	without the special mention of \(n\)-dimensional.
+	Let \(f\colon \mathbb{R}^n \to \mathbb{R}\) be a \(n\)-dimensional continuous function,
+	whose support is bounded. It is referd to it as a \(n\)-dimensional image. And often it will
+	be referred to as image, without the special mention of \(n\)-dimensional.
 \end{definition}
 
 \inlinetodo{define cartesion grid for images}
@@ -150,42 +157,98 @@ referred to as image. In case of \(n=3\), it is called a \textit{volume}.
 
 This is a very general definition. This is useful to mathematically model a wide variety of
 different applications. In fact, all of the applications in the previous chapter, can be modeled
-using this general definition. And there are many more, which can be modeled this way.
+using this general definition.
 
 \section{Radon Transform}\label{sec:radon_transform}
 
 Looking at the previously stated Beer Lambert law for attenuation CT \autoref{eq:beer-Lambert-law}.
 One can see, that the measured values, are somehow related to a line integral. The mathematical
-model, one can use was first defined by Johann Radon in 1917 \insertref{Radon transform}, and
-later rediscovered by Allan M. Cormack \insertref{CT Allan M. Cormack}.
+model, one can use was first defined by Johann Radon in
+1917~\cite{radon_uber_1917,radon_determination_1986}, and later rediscovered by Allan M. Cormack
+~\cite{cormack_representation_1963}.
 
 \begin{definition}[Radon Transform]
-	Again, let \(\Omega \subset \mathbb{R}^n\) and an image \(f\colon \Omega \to \mathbb{R}\),
-	which is assumed to sufficiently nice. Then the mapping \(\mathscr{R}f\colon (\mathbb{R}^n
-	\to \mathbb{R}) \to (\mathbb{R} \times \mathbb{S}^{n-1} \to \mathbb{R})\) of \(f\), maps
-	\(f\) into the set of its integrals over the affine hyperplanes of \(\mathbb{R}^(n-1)\).
-	Specifically, given a hyperplane \(\mathbb{H}^{n-1}(s, u)\) with \(u \in \mathbb{S}^{n-1}\)
-	a normal vector and \(s \in \mathbb{R}\) the offset to the origin, then the (n-dimensional)
-	\textbf{Radon Transform} is given by:
-	\[ \mathscr{R}f(s, u) = \int_{\mathbb{H}^{n-1}(s, u)} f(v) \, dv \]
+	Let \(\Omega \subset \mathbb{R}^n\) and \(f\colon \Omega \to \mathbb{R}\), which is assumed
+	to sufficiently nice. Then the mapping \(\mathscr{R}f\colon (\mathbb{R}^n \to \mathbb{R})
+	\to (\mathbb{R} \times \mathscr{S}^{n-1} \to \mathbb{R})\) of \(f\), maps \(f\) into the set
+	of its integrals over the affine hyperplanes of \(\mathbb{R}^{n-1}\) is called the
+	\textit{Radon Transform} (c.f.~\cite{natterer_mathematics_1986,buzug_computed_2008}).
 
-	See \insertref{The Mathematics of computed tomography}
+	Specifically, given the unit direction \(\theta \in \mathscr{S}^{n-1}\), one can define the
+	hyperplane \(\mathscr{H}^{n-1}(\theta)\) through the origin and perpendicular to \(\theta\).
+	The Radon Transform \(\mathscr{R}\) of \(f\) is defined by the line integral over the
+	hyperplane perpendicular to the direction \(\theta\) with signed distance \(s \in
+	\mathbb{R}\) to the origin
+	\[ \mathscr{R}f(\theta, s) = \int_{\mathbb{H}^{n-1}(\theta)} f(x + s\theta) \, \, \mathrm{d}x \]
 \end{definition}
 
 Note that for \(n=2\) the hyperplanes are lines, and hence match the forward model for X-ray
-imaging. For the 3-dimensional case, this does not fit anymore. For this case, the so called
-X-ray transform \(\mathscr{X}\) was developed \insertref{find X-ray transform reference}, which is
-very similar to the Radon transform, but for all dimensions only considers integral along lines.
+imaging. For the 3-dimensional case, this does not fit anymore. For this case, the so called X-ray
+transform \(\mathscr{X}\) was developed~\cite{solmon_x-ray_1976}, which is very similar to the Radon
+transform, but for all dimensions only considers integral along lines.
 
-The Radon transform is a linear operator, which is pseudo-commuting with convolution (, invariant to
-translations. \todo{find more important properties of the radon transform} \todo{inverse radon
-	transform}
+In the \(2\)-dimensional case, \(\theta\) is often described by its polar angles \(\phi\) and an
+orthogonal vector \(\theta^\perp\) such that
+\( \theta = (\cos \phi, \sin \phi)\) and \(\theta^\perp = (-\sin\theta, \cos\phi)\)
+then the Radon Transform is described as \( \mathscr{R}_\phi f(s) =\mathscr{R}f(\theta^\perp, s)\).
 
-Of further interest to us is the first derivative of the Radon transform.
+However, in the setting of tomographic reconstruction, one wishes to reconstruct the original image
+\(f\) from a set of measurements \(g\). Already, \citeauthor*{radon_uber_1917} showed a theoretical
+way of the adjoint operations of the Radon Transform. However, these results are very theoretical.
 
-\todo{fourier slice theorem and such should go here?}
+\begin{definition}[Fourier Slice Theorem]\label{def:fourier_slice_theorem}
+	Let \(f\colon \mathbb{R}^2 \to \mathbb{R}\) be sufficiently nice and \(\mathscr{F}_n\) the
+	\(n\)-dimensional Fourier transform. Then
+	\[ (\mathscr{F}_2f)(s) = (\mathscr{F}_1(\mathscr{R}f(\cdot, \phi)))(s) \]
+	It is also often referred to as \textit{projection-slice theorem} or \textit{central slice theorem}
+\end{definition}
+
+This is a very powerful theorem. In a more natural language, the \(1\)-dimensional Fourier Transform
+of the projected data measured at the angle \(\phi\), yields a line in the \(2\)-dimensional
+representation of the image \(f\). Even more, the line is the line going through the origin with a
+rotation angle \(theta\). Hence, with enough projections, the \(f\) can be described fully in the
+Fourier domain and reconstructed using the inverse \(2\)d Fourier Transform.
+
+However, this method has a couple of drawback. \textit{Enough} projections is quite a vague
+statement and a strong limitation. Especially considering the trend to reduce X-ray dosage and hence
+reducing the number of projections acquired. Further, problems arise as the Fourier domain is
+typically sampled in polar coordinates, but for this representation, we'd like to access them using
+Cartesian. This requires some for of interpolation. See the dissertation of
+\citeauthor{vogel_tomographic_nodate}\cite[chap. 4.1.2]{vogel_tomographic_nodate} for a little more
+detailed discussions and very nice illustrative figures. More means to compute the adjoint and
+reconstruction \(f\) are presented in \autoref{chap:tomographic_reconstruction}.
+
+Of further interest to us is the first derivative of the Radon transform. As a variety of image
+methods build on top of the derivative.
+
+\begin{definition}[Derivative of the Radon Transform]
+	The \(n\)th derivative of the Radon Transform is denoted by (compare
+	e.g.~\cite{nilchian_differential_2012,nilchian_fast_2013})
+	\[ \mathscr{R}^{(n)} = \frac{\partial^n}{\partial s^n} \mathscr{R}f(\theta, s)\]
+\end{definition}
+
+The derivatives are linear operators, which are scale invariant, pseudo-distributive with respect to
+convolution and projected translational invariant. The adjoint of the first derivative of the Radon
+Transform is shown in~\cite{nilchian_differential_2012}, and for the \(n\)th derivative
+see~\cite{nilchian_fast_2013}.
 
 \section{X-ray Transform}\label{sec:xray_transform}
+
+The \(n\)-dimensional Radon Transform computed the integral over \(n-1\)-dimensional hyperplanes.
+However, for the setting of attenuation X-ray CT, one is interested in the line integration over
+lines in \(n\)-dimensional spaces.
+
+\begin{definition}[X-ray Transform]
+	Given \(\theta \in \mathscr{S}^{n-1}\) and \(x \in \mathbb{R}^n\), then
+	\[ \mathscr{X}f(\theta, x) = \int_{-\infty}^{+\infty} f(x + t \theta) \, \mathrm{d}t\]
+	is the X-ray Transform. It is the integral over the straight line through \(x\) with
+	direction \(\theta\) (c.f.~\cite{natterer_mathematics_1986,solmon_x-ray_1976}).
+\end{definition}
+
+In the two dimensional case, the Radon Transform and X-ray Transform are equivalent.
+Then, the relation between the Radon Transform and the X-ray Transform is
+\[\mathscr{X}f(\theta, s\theta^\perp) = \mathscr{R}f(\theta^\perp, s)\]
+For the case of attenuation X-ray CT, the X-ray Transform is the physical forward model used.
 
 \section{Abel Transform}\label{sec:abel_transform}
 
@@ -208,8 +271,9 @@ For our purposes, we assume the function lies on a regular spaced discrete grid.
 \(n\)-dimensional index of a grid cell, and \(x_{\symbfit{k}} \in \mathbb{R}^n\) the center coordinate
 of the \(\symbfit{k}\)-th grid cell. Then, the previous equation can be reformulated:
 \[ \hat{f}(x) = \sum_{\symbfit{k} \in \mathbb{Z}^n} c_{\symbfit{k}} \varphi(x - x_{\symbfit{k}}) \]
-This definition follows the notation given in \cite{momey_new_2011}.
-
+This definition follows the notation given in \cite{momey_new_2011}. This method to discretize an
+image is called \textit{series expansion} and is described in detail in
+e.g.~\cite{herman_basis_2015}.
 
 Now, if one applies the Radon transformation to the discretized image: \todo{generalize to all linear physical models}
 \[ \mathscr{R}\hat{f}(x) = \mathscr{R}\left( \sum_{\symbfit{k} \in \mathbb{Z}^n} c_{\symbfit{k}} \varphi(x - x_{\symbfit{k}}) \right) \]
@@ -221,69 +285,6 @@ Note that this holds for any linear physical model. Notably, this holds for the 
 the first derivative of the Radon transform. But it is also true for the physical models behind the
 applications discussed in the previous chapter. Hence, it is sufficient to study, how a basis
 function acts under the given transformation.
-
-\subsection{Properties of Basis Function}
-
-\todo{maybe remove this section}
-
-From this it is evident, that the choice of basis function is crucial for the accuracy of the
-discretized image. A suboptimal representation, will yield undesired results. In
-\cite{nilchian_optimized_2015}, 4 properties a basis functions should satisfy are proposed. These are:
-\begin{itemize}
-	\item Riesz Basis
-	\item Partition Of Unity
-	\item Compact Support
-	\item Isotropy
-\end{itemize}
-Similar properties are stated in \cite{hanson_local_1985}.
-
-\paragraph{Riesz Basis}
-
-\cite{hanson_local_1985} formulates a similar requirement, however states it less restrictive. It is
-states as a requirement for strong linear independence, rather than a unique representation.
-
-\todo{Explain Riesz Basis, find definition of it and cite it}
-
-\paragraph{Partition of Unity}
-
-Some function \(g\), fulfills the property partition-of-unity if
-\begin{itemize}
-	\item \(g: \mathbb{R}^n \to [0, 1]\), i.e. it \(g\) maps into the unit interval
-	\item \(\sum_{\symbfit{k} \in \mathbb{Z}^n} g(x + k) = 1 \; \forall x \in \mathbb{R}^n\)
-\end{itemize}
-
-Given the basis fulfills this property, the error of approximation converges to zero, with sampling
-step \(\Delta\) going to zero \cite{nilchian_optimized_2015}. Formally
-\[ \lim_{\Delta \to 0} \norm{f - \hat{f}}_{L_2} = 0 \]
-
-\todo{define and explain the constraints required here}
-
-This requirement is close to the property power of approximation and fidelity of visual
-appearance in \cite{hanson_local_1985}.
-
-\paragraph{Compact support}
-
-The compact support is a rather practical requirement. In order to reduce the computational cost,
-the function should be compact. Phrased differently, the smaller the support, fewer evaluations for
-a given point are required, i.e. the number of zero elements in \(c_{\symbfit{k}}\) grows with
-shrinking support.
-
-\insertref{assumption about gaussian}
-On the other hand, given a function without compact support, such as the gaussian.
-
-\paragraph{Isotropy}
-
-Isotropy is again a practical requirement. If a basis function is isotropic, it is projections do
-not depend on the direction or angle. This greatly simplifies the implementation and improves
-efficiency.
-
-Both compact supoort and isotropy are practical requirement to fulfill the requirements of efficient
-computation of forward and backward projection and implementation of reconstruction constraints by
-\cite{hanson_local_1985}.
-
-A couple of choices for different basis functions are discussed in this section. First, the most
-common choice in the pixel basis function is presented. Then a closer look at two alternatives in
-spherically symmetric basis functions (from now on referred to \textit{blobs}), and B-Splines.
 
 \section{Voxel Basis}\label{sec:voxel_basis}
 
@@ -306,8 +307,12 @@ the vector \(\symbfit{x} \in \mathbb{R}^n\) is larger half the step size, the fu
 An image approximated by the voxel basis function, in the series expansion method is equivalent to
 the nearest neighbourhood interpolation.
 
+As pointed out by \citeauthor*{lewitt_multidimensional_1990}
+in~\cite{lewitt_multidimensional_1990,lewitt_alternatives_1992} the voxel-basis function isn't
+necessarily a good choice for biomedical images. It is discontinuous at the boundaries.
+
 The analytical formulation of the Radon transform of the pixel basis function
-(compare~\insertref{Toft 1996}) is given by:
+(compare~\cite{toft_radon_1996}) is given by:
 \begin{equation}\label{eq:radon_voxel_basis}
 	\mathscr{R}\varphi^{\text{pixel}}(\rho, \theta) =
 	\begin{cases}
@@ -317,12 +322,16 @@ The analytical formulation of the Radon transform of the pixel basis function
 	\end{cases}
 \end{equation}
 
+As the voxel basis function is discontinuous at the boundaries, there does not exist a way to
+compute the derivative of the radon transform relying on the basis function. Steps such as numerical
+derivation must be used.
+
 \todo{understand this properly and explain this properly}
 
 \section{Blob Basis}\label{sec:blob_basis}
 
-First introduced by Lewitt in \insertref{Reference to 1990 Lewitt paper}, spherically symmetric
-volume elements (often referred to as blobs) are an alternative to the pixel basis.
+First introduced by Lewitt in~\cite{lewitt_multidimensional_1990}, spherically symmetric volume
+elements (often referred to as blobs) are an alternative to the pixel basis.
 ~\cite{lewitt_alternatives_1992} describes how blobs can be used in iterative reconstruction
 algorithms as a basis instead of pixels.
 
@@ -357,7 +366,7 @@ controlling the shape of the blob. \(m\) controls the continuity of the blob fun
 The X-ray transform of the blob basis function is given by
 (c.f.~\cite{lewitt_multidimensional_1990,lewitt_alternatives_1992})
 \begin{align}\label{eq:radon_blob_basis}
-	p(s) & = 2 \int_0^{(a^2-s^2)^{1 / 2}} \varphi^{\text{blob}}_{m, \alpha, a}\left(\left(s^2 - t^2\right)^{1/2}\right) \diff t                                                                                \\
+	p(s) & = 2 \int_0^{(a^2-s^2)^{1 / 2}} \varphi^{\text{blob}}_{m, \alpha, a}\left(\left(s^2 - t^2\right)^{1/2}\right) \, \mathrm{d} t                                                                        \\
 	     & = \frac{a}{I_m(\alpha)} \left( \frac{2\pi}{\alpha}\right)^{1/2} \left( \sqrt{1 - \left(\frac{s}{a}\right)^2} \right)^{m + 1/2} I_{m+1/2}\left( \alpha \sqrt{1 - \left(\frac{s}{a}\right)^2} \right)
 \end{align}
 \(s\) is the distance from the X-ray to the blob center, and \(\sqrt{a^2 - s^2}\) is one half of the
@@ -371,7 +380,7 @@ From an implementational standpoint, the half integer order of the modified Kais
 of the first kind, can be quite nasty. Implementations do exist as it can be seen
 in~\cite{temme_numerical_1975}. However, the floating point implementations are non-trivial. Plus,
 for the case of C++, since C++17 the standard library provides mathematical special functions
-~\cite{noauthor_c_nodate-3, noauthor_stdcyl_bessel_i_nodate}. But sadly, it is not yet entirely
+~\cite{noauthor_c_nodate, noauthor_stdcyl_bessel_i_nodate}. But sadly, it is not yet entirely
 cross platform, as it is only supported by libstdc++~\cite{noauthor_libstdc_nodate-1}, and not
 libc++. However, for our cases it is sufficient to assume \(m \in \mathbb{N}\). Then the above
 equation can be further simplified.
@@ -417,47 +426,97 @@ tomography~\cite{tran_robust_2013, tran_inverse_2014}, positron emission tomogra
 single-photon emission tomography (SPECT)~\cite{guedon_b-spline_1991, reutter_fully_2007}.
 
 Using B-Splines as a basis function was first presented by~\cite{momey_new_2011,
-momey_b-spline_2012, momey_spline_2015}. And a similar image representation was adapted for
+	momey_b-spline_2012, momey_spline_2015}. And a similar image representation was adapted for
 phase-contrast CT in~\cite{nilchian_fast_2013, nilchian_differential_2012, nilchian_spline_2015}.
 They differ in the approximation of the evaluiation of the X-ray transform. The former use a
 footprint of the B-Splines, where the later rely on the first derivative of the B-Spline basis
 function.
 
-\begin{definition}[Recursive B-Spline]
-	\label{def:bspline}
-	The centered B-Spline of degree $d$ and of width $\Delta$ is given by
-	\begin{align*}
-		\beta_\Delta^0(x) & = \mu(x) =
+\begin{definition}[B-Spline]
+	The most basic definition of a B-Spline of degree \(0\) and unit width is the step function:
+	\begin{equation}
+		\beta^0(x) = \mu(x) =
 		\begin{cases}
-			\frac{1}{\Delta}, & \text{if } x \in [-\frac{\Delta}{2}, \frac{\Delta}{2}] \\
-			0,                & \text{otherwise}
-		\end{cases} \\
-		\beta_\Delta^d(x) & = \beta_\Delta^0 * \beta_\Delta^{d-1}(x) =
-		\underbrace{\beta_\Delta^0 * \dots * \beta_\Delta^0(x)}_{d+1 \text{concolution terms}}
-	\end{align*}
-	where $\mu(x)$ is the step function centered around 0. \todo[inline]{I'm not sure if this is sound}
-
-	The zero-dimensional B-Spline, is the normalized unit impulse of width $\Delta$. And the
-	$d$-dimensional B-Spline is just the $d+1$ fold convolution of the normalized unit impulses
-	\cite{horbelt_discretization_2002}.
-
-	Note that
-	\[ \beta_\Delta^d(x) = \frac{1}{\Delta} \beta_1^d(\frac{x}{\Delta}) \]
-	therefore, if no specific subscript is mentioned, the B-Spline with $\Delta = 1$ is implied.
-
-	In \cite{unser_fast_1991}, a non-recursive definition of the unit width B-Spline is given as:
-	\[ \beta^d = \sum_{j=0}^{n+1} \frac{(-1)^j}{n!} \binom{n+1}{j}(x - j)\mu(x - j) \]
+			1, & \text{if } x \in \mathopen[\minus \frac{1}{2}, \frac{1}{2}\mathclose] \\
+			0, & \text{otherwise}
+		\end{cases}
+	\end{equation}
+	Then the univariate B-Spline of degree \(d\) can be constructed by \(d + 1\) convolution of \(\beta^0\)
+	(compare~\cite{momey_new_2011}):
+	\begin{equation}
+		\beta^d(x) = \beta^0 * \beta^{d-1}(x) =
+		\underbrace{\beta^0 * \dots * \beta^0(x)}_{d+1 \text{concolution terms}}
+	\end{equation}
 \end{definition}
+Note that B-Splines of degree \(0\) is just the voxel-basis function.
+
+Another way to actually compute the B-Spline basis of order \(d\) is given
+in~\cite{unser_fast_1991}:
+\begin{equation}
+	\beta^d(x) = \sum_{i=0}^{d+1} \frac{(-1)^i}{n!} \binom{d+1}{i}(x - i)^d\mu(x - i)
+\end{equation}
+where \(\binom{d+1}{i}\) is the bionomial coefficient.
+
+The derivatives are again B-Spline of degree \(d-1\) (compare \cite{unser_splines_1999}):
+\begin{equation}
+	\frac{\partial \beta^d(x)}{\partial x} = \beta^{d-1}\left(x + \frac{1}{2}\right) -
+	\beta^{d-1}\left(x - \frac{1}{2}\right)
+\end{equation}
+B-Splines are continuously differentiable up to order \(d-1\).
+
+B-Splines are separable. Hence, \(n\)-dimensional B-Splines, often referred to as tensor product
+B-Splines, can be constructed the following way:
+\begin{equation}
+	\beta^d(x) = \prod^n_{i=1} \beta^d(x_i)
+\end{equation}
+where \(x \in \mathbb{R}^n\)
 
 B-Splines have a couple of really attractive properties. B-Splines are the shortest and smoothest
-scaling functions for a given order of approximation \cite{momey_b-spline_2012}. This
-are close to a Gaussian function,
-with a sufficiently large $d$ \cite{momey_b-spline_2012}, all while preserving compactness.
+scaling functions for a given order of approximation~\cite{momey_b-spline_2012}. They are close to a
+Gaussian function, with a sufficiently large $d$~\cite{momey_b-spline_2012}, all while preserving
+compactness. Hence, they tend to spherically symmetric functions, while preserving local support.
+Due to these properties, \citeauthor*{momey_new_2011}\cite{momey_new_2011} argue for B-Splines over
+blobs. Further, they note the need to tune the parameters for of blobs for optimal results, which
+adds complexity.
 
-In \cite{horbelt_discretization_2002}, it was shown that the Radon transform of B-Splines are spline
-bikernel. \cite{entezari_box_2012} shows how expliclity how (tensor product) B-Splines act under
-the X-ray and Radon transform. \cite{nilchian_differential_2012} shows how B-Splines act under
+Importantly, blobs fail to satisfy the partition of unity~\cite{nilchian_fast_2013}. A basis
+functions that satisfies the partition of unity, can approximate any input function arbitarly close.
+~\cite{nilchian_fast_2013} show the importance of the property for tomographic reconstruction.
+
+In~\cite{horbelt_discretization_2002}, it was shown that the Radon transform of B-Splines are spline
+bikernel.~\cite{entezari_box_2012} shows how expliclity how (tensor product) B-Splines act under
+the X-ray and Radon transform.~\cite{nilchian_differential_2012} shows how B-Splines act under
 the first derivative of the Radon transform.
+
+The Radon Transform of a \(2\)-dimensional B-Spline was shown by
+\citeauthor*{horbelt_discretization_2002}\cite{horbelt_discretization_2002}. Given the projection
+angle \(\theta\), then it is:
+\begin{equation}
+	\mathscr{R}\beta^d(s) = \beta^d_{\sin\theta} * \beta^d_{\cos\theta}(d)
+\end{equation}
+Hence it is the convolution of two splines of different width (denoted by the subscript). These are
+referred to as spline bikernels. \citeauthor*{horbelt_discretization_2002} presents an explicit
+formulation to compute it.
+
+To extend this to the \(3\)-dimensional setting, one can look into \textit{box splines}. Box splines
+can be seen as a generalization of B-Splines.
+
+\begin{definition}[Box Spline]
+	Box splines are the shadow of a hypercube in \(\mathbb{R}^n\), when projected down to a
+	lower dimension \(\mathbb{R}^d\). Similarly to B-Splines, box splines can be defined via
+	convolution:
+	\begin{equation}
+		M_\Xi(x) = M_{\xi_1} * \dots * M_{\xi_n}(x)
+	\end{equation}
+	where \(\Xi \coloneq \mathopen[ \xi_1 \xi_2 \dots \xi_n \mathclose] \in \mathbb{R}^{s \times n}\)
+	is the matrix of directions. Each \(\xi\) defines a direction of the hypercube.
+	\(\Xi\) completely defines the box spline (compare~\cite{de_boor_box_1993})
+\end{definition}
+
+\citeauthor*{entezari_box_2012}~\cite{entezari_box_2012} proofed that the X-ray transform of a
+\(d\)-variate box spline is a \(d - 1\) variate box spline. Further, it is the box spline defined
+the by projection of the direction matrix \(\Xi\). This means, going back to B-Splines, that for any
+dimension, the X-ray transform of B-Splines are box Splines of lower dimension.
 
 \chapter{Tomographic Reconstruction}\label{chap:tomographic_reconstruction}
 

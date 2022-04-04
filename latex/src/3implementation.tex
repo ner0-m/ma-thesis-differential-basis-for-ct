@@ -116,6 +116,8 @@ scripts, which can be found in the GitHub repository for this Thesis. You need t
 Then you'll be able to run all the scripts, with the last argument being the path to the
 \textit{example\_argparse} binary, which you just build.
 
+\section{Error measurements}\label{sec:error_measurements}
+
 \section{Forward Projection}\label{sec:experiments_forward_projection}
 
 \inlinetodo{Maybe you have time to do implement a analytic sinogram for blob phantoms}
@@ -124,40 +126,45 @@ As explained in details in the background part of thesis, the forward projection
 attenuation X-ray CT, the line integral through the object. It's quality if important for every
 reconstruction task.
 
+\inlinetodo{Rework with reformated figures}
+
 In \autoref{fig:sinogram_shepp_logan}, one can see the sinogram of the Shepp-Logan phantom
 \insertref{Reference to Shepp-Logan phantom} (see \autoref{fig:shepp_logan_phantom}). If one never
 seen a sinogram, each row (in this case, someimtes it is turned 90°) represents the projection of a
 certain angle. In this case, the first row is the projection with angle 0° and increments downwards
-in equally spaced steps for a total arc of 360°.
+in equally spaced steps for a total arc of 360°. For this sonogram in total 1024 angles are
+computed.
 
 \begin{figure}[h]
 	\centering
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_blob.png}
-		\caption{blob based}\label{fig:sinogram_blob}
-	\end{subfigure}
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_bspline.png}
-		\caption{b-spline based}\label{fig:sinogram_bspline}
-	\end{subfigure} \\
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_siddon.png}
-		\caption{siddon's}\label{fig:sinogram_siddon}
-	\end{subfigure}
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_joseph.png}
-		\caption{joseph's}\label{fig:sinogram_joseph}
-	\end{subfigure} \\
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
+	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+			\begin{subfigure}[b]{0.3125\textwidth}
+				% \centering
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_Blob.png}
+				\caption{Blob based projector}\label{fig:sinogram_blob}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.3125\textwidth}
+				% \centering
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_BSpline.png}
+				\caption{B-Spline based projector}\label{fig:sinogram_bspline}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.3125\textwidth}
+				% \centering
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_Siddon.png}
+				\caption{Siddon's projector}\label{fig:sinogram_siddon}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.3125\textwidth}
+				% \centering
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_Joseph.png}
+				\caption{Joseph's projector}\label{fig:sinogram_joseph}
+			\end{subfigure}
+		}} \\
+	\begin{subfigure}[b]{0.3125\textwidth}
+		% \centering
 		\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dphantom.png}
-		\caption{shepp-logan phantom}\label{fig:shepp_logan_phantom}
+		\caption{Shepp-Logan Phantom}\label{fig:shepp_logan_phantom}
 	\end{subfigure}
-	\caption{(a)-(d) sinogram of shepp-logan phantom, (e) original shepp-logan phantom}%
+	\caption{(a)-(d) sinogram of Shepp-Logan phantom, (e) original shepp-logan phantom}%
 	\label{fig:sinogram_shepp_logan}
 \end{figure}
 
@@ -172,27 +179,30 @@ successfully.
 
 \begin{figure}[h]
 	\centering
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_blob_center_crop.png}
-		\caption{blob based projector}\label{fig:sinogram_blob_center_crop}
-	\end{subfigure}
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_bspline_center_crop.png}
-		\caption{b-spline based projector}\label{fig:sinogram_bspline_center_crop}
-	\end{subfigure} \\
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_siddon_center_crop.png}
-		\caption{siddon's projector}\label{fig:sinogram_siddon_center_crop}
-	\end{subfigure}
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_joseph_center_crop.png}
-		\caption{joseph's projector}\label{fig:sinogram_joseph_center_crop}
-	\end{subfigure}
-	\caption{overview of artifacts in projectors, clearly both the siddon' and joseph's projectors}%
+	\makebox[\textwidth]{
+		\makebox[1.3\textwidth]{%
+			\begin{subfigure}[b]{0.3125\textwidth}
+				% \centering
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_croped_Blob.png}
+				\caption{Blob based projector}\label{fig:sinogram_blob_center_crop}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.3125\textwidth}
+				% \centering
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_croped_BSpline.png}
+				\caption{B-Spline based projector}\label{fig:sinogram_bspline_center_crop}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.3125\textwidth}
+				% \centering
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_croped_Siddon.png}
+				\caption{Siddon's projector}\label{fig:sinogram_siddon_center_crop}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.3125\textwidth}
+				% \centering
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_croped_Joseph.png}
+				\caption{Joseph's projector}\label{fig:sinogram_joseph_center_crop}
+			\end{subfigure}
+		}}
+	\caption{Crop of the left center of the sinogram to highlight artifacts}%
 	\label{fig:sinogram_shepp_logan_center_crop}
 \end{figure}
 
@@ -218,31 +228,29 @@ degree cases, they behave differently. \todo{They also different in something ar
 
 \begin{figure}[h]
 	\centering
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinodifference_blob_siddon.png}
-		\caption{Blob to Siddon}\label{fig:sino_diff_blob_siddon}
-	\end{subfigure}
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinodifference_blob_joseph.png}
-		\caption{Blob to Joseph}\label{fig:sino_diff_blob_joseph}
-	\end{subfigure} \\
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinodifference_bspline_siddon.png}
-		\caption{B-Spline to Siddon}\label{fig:sino_diff_bspline_siddon}
-	\end{subfigure}
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinodifference_bspline_joseph.png}
-		\caption{B-Spline to Joseph}\label{fig:sino_diff_bspline_joseph}
-	\end{subfigure}\\
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinodifference_blob_bspline.png}
-		\caption{Blob to B-Spline}\label{fig:sino_diff_blob_bspline}
-	\end{subfigure}
+	\makebox[\textwidth]{
+		\makebox[1.3\textwidth]{%
+			\begin{subfigure}[b]{0.25\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinodifference_Blob_Siddon.png}
+				\caption{Blob to Siddon}\label{fig:sino_diff_blob_siddon}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.25\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinodifference_Blob_Joseph.png}
+				\caption{Blob to Joseph}\label{fig:sino_diff_blob_joseph}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.25\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinodifference_BSpline_Siddon.png}
+				\caption{B-Spline to Siddon}\label{fig:sino_diff_bspline_siddon}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.25\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinodifference_BSpline_Joseph.png}
+				\caption{B-Spline to Joseph}\label{fig:sino_diff_bspline_joseph}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.25\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinodifference_Blob_BSpline.png}
+				\caption{Blob to B-Spline}\label{fig:sino_diff_blob_bspline}
+			\end{subfigure}
+		}}
 	\caption{Normalized absolute difference between different projectors}%
 	\label{fig:sino_differences}
 \end{figure}
@@ -251,6 +259,9 @@ Overall, one should note that the L2-norms of each sinogram is vastly differentl
 blob based projector is noticeable brighter. \todo{compute l2 norm and make table out of it, find
 	explanation}
 
+\inlinetodo{As of now, only the blob based images are normalized then compared, maybe stay
+consistent}
+
 \section{Reconstruciton of Synthetic Data}\label{sec:experiments_synthethic_projection}
 
 In this chapter, many different reconstruction tasks are presentend to show different behaviour
@@ -258,277 +269,279 @@ under different conditions. All reconstructions are performed using the Fast Ite
 Shrinkage-Thresholding (FISTA) Algorithm \insertref{FISTA ref}. Usually, \(25\) iterations are
 performed for the reconstruction unless mentioned otherwise. The regularization parameter is tuned
 for each reconstruction to perform best visually. It is given in tables respective tables for the
-reconstruction containing the error metrics.
-
-\begin{table}%
-	\centering
-	\csvreader[
-		head to column names,
-		separator=semicolon,
-		tabular = ccccc,
-		table head = \toprule \textbf{projector} & \textbf{msr} & \textbf{rmsr} & \textbf{psnr} & \textbf{ssim} \\\midrule,
-		table foot = \bottomrule
-	]{figures/experiments/reconstruction_rectangle/metrics.csv}{}{%
-		\csvlinetotablerow%
-	}
-	\caption{error metric for reconstruction of rectangle phantom using fista}%
-	\label{tab:error_metric_shepp_logan}
-\end{table}
+reconstruction containing the error metrics~\ref{tab:error_metric_shepp_logan}.
 
 \begin{figure}[h]
 	\centering
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_blob_croped.png}
-		\caption{blob based projector}%
-		\label{fig:rectangle_recon_artifacts_blob}
-	\end{subfigure}
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_bspline_croped.png}
-		\caption{b-spline based projector}%
-		\label{fig:rectangle_recon_artifacts_bspline}
-	\end{subfigure} \\
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_siddon_croped.png}
-		\caption{siddon's projector}%
-		\label{fig:rectangle_recon_artifacts_siddon}
-	\end{subfigure}
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_joseph_croped.png}
-		\caption{joseph's projector}%
-		\label{fig:rectangle_recon_artifacts_joseph}
-	\end{subfigure}
-	\caption{overview of artifacts in projectors, clearly both the siddon' and joseph's
-		projectors}%
+	\makebox[\textwidth]{
+		\makebox[1.3\textwidth]{%
+			\begin{subfigure}[b]{0.25\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dphantom.png}
+				\caption{Rectangular phantom}%
+				\label{fig:rectangle_recon_phantom}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.25\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_blob_croped.png}
+				\caption{Blob based projector}%
+				\label{fig:rectangle_recon_artifacts_blob}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.25\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_bspline_croped.png}
+				\caption{B-Spline based projector}%
+				\label{fig:rectangle_recon_artifacts_bspline}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.25\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_siddon_croped.png}
+				\caption{Siddon's projector}%
+				\label{fig:rectangle_recon_artifacts_siddon}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.25\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_joseph_croped.png}
+				\caption{Joseph's projector}%
+				\label{fig:rectangle_recon_artifacts_joseph}
+			\end{subfigure}
+		}}
+	\caption{(a) Rectangular phantom, (b) - (e) crop of top left corner of the reconstruction
+		rectangle with different projectors}%
 	\label{fig:rectangle_recon_artifacts}
 \end{figure}
 
-\begin{figure}[h]
-	\centering
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2ddifference_blob_croped.png}
-		\caption{blob based projector}%
-		\label{fig:rectangle_recon_difference_blob}
-	\end{subfigure}
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2ddifference_bspline_croped.png}
-		\caption{b-spline based projector}%
-		\label{fig:rectangle_recon_difference_bspline}
-	\end{subfigure} \\
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2ddifference_siddon_croped.png}
-		\caption{siddon's projector}%
-		\label{fig:rectangle_recon_difference_siddon}
-	\end{subfigure}
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2ddifference_joseph_croped.png}
-		\caption{joseph's projector}%
-		\label{fig:rectangle_recon_difference_joseph}
-	\end{subfigure}
-	\caption{normalized absolute difference image with rectangle phantom}%
-	\label{fig:rectangle_recon_difference}
-\end{figure}
+Looking at \autoref{fig:rectangle_recon_artifacts}, the original phantom is depicted at the bottom
+(\autoref{fig:rectangle_recon_phantom}). It is a square, centered in the middle of the frame with a
+constant value of 1. There, the first row show the blob and B-Spline based projectors, and the
+second row the Siddon's and Joseph's projector. Clearly, in both the reconstruction of Siddon's and
+Joseph's artifacts can be seen, which are not present in the blob and B-Spline based ones. These are
+again due to the nature of the ray-driven approaches and the thin support of the rays.
 
 \begin{figure}[h]
 	\centering
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dreconstruction_blob.png}
-		\caption{blob based projector}%
-		\label{fig:reconstruction_shepp_logan_blob}
-	\end{subfigure}
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dreconstruction_bspline.png}
-		\caption{b-spline based projector}%
-		\label{fig:reconstruction_shepp_logan_bspline}
-	\end{subfigure} \\
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dreconstruction_siddon.png}
-		\caption{siddon's projector}%
-		\label{fig:reconstruction_shepp_logan_siddon}
-	\end{subfigure}
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dreconstruction_joseph.png}
-		\caption{joseph's projector}%
-		\label{fig:reconstruction_shepp_logan_joseph}
-	\end{subfigure}
-	\caption{overview of artifacts in projectors, clearly both the siddon' and joseph's
-		projectors}%
+	\makebox[\textwidth]{
+		\makebox[1.3\textwidth]{%
+			\begin{subfigure}[b]{0.25\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2ddifference_Blob_croped.png}
+				\caption{Blob to projector}%
+				\label{fig:rectangle_recon_difference_blob}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.25\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2ddifference_BSpline_croped.png}
+				\caption{B-Spline based projector}%
+				\label{fig:rectangle_recon_difference_bspline}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.25\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2ddifference_Siddon_croped.png}
+				\caption{Siddon's projector}%
+				\label{fig:rectangle_recon_difference_siddon}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.25\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2ddifference_Joseph_croped.png}
+				\caption{Joseph's projector}%
+				\label{fig:rectangle_recon_difference_joseph}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.25\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2ddifference_Blob_BSpline_croped.png}
+				\caption{Blob to B-Spline}%
+				\label{fig:rectangle_recon_difference_blob_bspline}
+			\end{subfigure}
+		}}
+	\caption{\subref{fig:rectangle_recon_difference_blob}--\subref{fig:rectangle_recon_difference_joseph}
+        absolute difference image to phantom, \subref{fig:rectangle_recon_difference_blob_bspline}
+        absolute difference between reconstruction using the blob and B-Spline projectors}%
+	\label{fig:rectangle_recon_difference}
+
+\end{figure}
+
+Looking at the normalized absolute differences, shown in \autoref{fig:rectangle_recon_difference},
+the artifacts already visible in the previous figure are again clearly visible. Interestingly, both
+the blob based projector and the B-Spline based on are cleaner than the other approaches. They do
+exhibit a touch of glow around the corner, but they are pretty consistent. Especially, compare to
+Siddon's method, the glow around the corner is quite noisy. This is also true for the Siddon's based
+one, but it's less severe. \todo{Add difference of blob to bspline one} No noticeable difference
+between the blob and B-Spline based projectors can be notices.
+
+\begin{figure}[h]
+	\centering
+	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dreconstruction_blob.png}
+				\caption{Blob based projector}%
+				\label{fig:reconstruction_shepp_logan_blob}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dreconstruction_bspline.png}
+				\caption{B-Spline based projector}%
+				\label{fig:reconstruction_shepp_logan_bspline}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dreconstruction_siddon.png}
+				\caption{Siddon's projector}%
+				\label{fig:reconstruction_shepp_logan_siddon}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dreconstruction_joseph.png}
+				\caption{Joseph's projector}%
+				\label{fig:reconstruction_shepp_logan_joseph}
+			\end{subfigure}
+		}} \\
+	\makebox[\textwidth]{
+		\makebox[1.3\textwidth]{%
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2ddifference_blob.png}
+				\caption{blob based projector}%
+				\label{fig:reconstruction_shepp_logan_diff_blob}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2ddifference_bspline.png}
+				\caption{b-spline based projector}%
+				\label{fig:reconstruction_shepp_logan_diff_bspline}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2ddifference_siddon.png}
+				\caption{siddon's projector}%
+				\label{fig:reconstruction_shepp_logan_diff_siddon}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2ddifference_joseph.png}
+				\caption{joseph's projector}%
+				\label{fig:reconstruction_shepp_logan_diff_joseph}
+			\end{subfigure}
+		}}
+	\caption{Top row: Reconstruction of Shepp-Logan phantom using FISTA, Bottom row: differences
+        to ground truth}%
 	\label{fig:reconstruction_shepp_logan}
 \end{figure}
+
+Without trying to repeat the results to often, as a last synthetic data set, the reconstruction of
+the Sheep-Logan phantom is shown the top row of \autoref{fig:reconstruction_shepp_logan}. Similarly,
+to before both, the blob and B-Spline based projector exhibit no ring like artifacts and look quite
+clean compared to both the Siddon and Joseph projectors. And again no noticeable difference, can be
+seen between the blob and B-Spline projectors. \todo{also add difference between blob and B-Spline
+based one}. This is again noticeable in the differences given in the bottom row of
+\autoref{fig:reconstruction_shepp_logan}
+
+\autoref{tab:error_metric_shepp_logan} shows the different error metrics for the reconstruction of
+the Shepp-Logan phantom. They are all quite similar and all in the neighbourhood of \(0.00002\)
+(MSR), \(0.001\) (RMSR), \(0.5\) (PSNR) or \(0.01\) (SSIM). \todo{validate via python/matlab
+	scripts}
 
 \begin{table}%
 	\centering
 	\csvreader[
 		head to column names,
 		separator=semicolon,
-		tabular = ccccc,
-		table head = \toprule \textbf{projector} & \textbf{msr} & \textbf{rmsr} & \textbf{psnr} & \textbf{ssim} \\\midrule,
+		tabular = cccccc,
+		table head = \toprule \textbf{Projector} & \textbf{MSR} & \textbf{RMSR} & \textbf{MAE} & \textbf{PSNR} & \textbf{SSIM} \\\midrule,
 		table foot = \bottomrule
 	]{figures/experiments/reconstruction_shepp_logan/metrics.csv}{}{%
 		\csvlinetotablerow%
 	}
-	\caption{error metric for reconstruction of shepp-logan phantom using fista}%
+	\caption{Error metrics for the reconstruction of the Shepp-Logan phantom using FISTA}%
 	\label{tab:error_metric_shepp_logan}
 \end{table}
 
-\begin{figure}[h]
-	\centering
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2ddifference_blob.png}
-		\caption{blob based projector}%
-		\label{fig:reconstruction_shepp_logan_diff_blob}
-	\end{subfigure}
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2ddifference_bspline.png}
-		\caption{b-spline based projector}%
-		\label{fig:reconstruction_shepp_logan_diff_bspline}
-	\end{subfigure} \\
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2ddifference_siddon.png}
-		\caption{siddon's projector}%
-		\label{fig:reconstruction_shepp_logan_diff_siddon}
-	\end{subfigure}
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2ddifference_joseph.png}
-		\caption{joseph's projector}%
-		\label{fig:reconstruction_shepp_logan_diff_joseph}
-	\end{subfigure}
-	\caption{reconstruction of shepp-logan phantom with the different projectors. reconstruction
-		performed using fista}%
-	\label{fig:reconstruction_shepp_logan_diff}
-\end{figure}
-
-\inlinetodo{extent elsa example to be able to add noise}
-
-\subsection{few angle reconstruction}\label{sec:experiments_few_angle}
+\subsection{Few Angle Reconstruction}\label{sec:experiments_few_angle}
 
 \begin{table}%
 	\centering
 	\csvreader[
 		head to column names,
 		separator=semicolon,
-		tabular = ccccc,
-		table head = \toprule \textbf{projector} & \textbf{msr} & \textbf{rmsr} & \textbf{psnr} & \textbf{ssim} \\\midrule,
+		tabular = cccccc,
+		table head = \toprule \textbf{Projector} & \textbf{MSR} & \textbf{RMSR} & \textbf{MAE} & \textbf{PSNR} & \textbf{SSIM} \\\midrule,
 		table foot = \bottomrule
 	]{figures/experiments/reconstruction_fewangles/metrics.csv}{}{%
 		\csvlinetotablerow%
 	}
 	\caption{error metric for reconstruction of shepp-logan phantom using fista with few angles}%
-	\label{tab:error_metric_shepp_logan}
+	\label{tab:error_metric_shepp_logan_few_angles}
 \end{table}
 
 \begin{figure}[h]
 	\centering
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2dreconstruction_blob.png}
-		\caption{blob based projector}%
-		\label{fig:reconstruction_fewangles_blob}
-	\end{subfigure}
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2dreconstruction_bspline.png}
-		\caption{b-spline based projector}%
-		\label{fig:reconstruction_fewangles_bspline}
-	\end{subfigure} \\
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2dreconstruction_siddon.png}
-		\caption{siddon's projector}%
-		\label{fig:reconstruction_fewangles_siddon}
-	\end{subfigure}
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2dreconstruction_joseph.png}
-		\caption{joseph's projector}%
-		\label{fig:reconstruction_fewangles_joseph}
-	\end{subfigure}
-	\caption{reconstruction using few angles}%
+	\makebox[\textwidth]{
+		\makebox[1.3\textwidth]{%
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2dreconstruction_blob.png}
+				% \caption{blob based projector}%
+				% \label{fig:reconstruction_fewangles_blob}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2dreconstruction_bspline.png}
+				% \caption{b-spline based projector}%
+				% \label{fig:reconstruction_fewangles_bspline}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2dreconstruction_siddon.png}
+				% \caption{siddon's projector}%
+				% \label{fig:reconstruction_fewangles_siddon}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2dreconstruction_joseph.png}
+				% \caption{joseph's projector}%
+				% \label{fig:reconstruction_fewangles_joseph}
+			\end{subfigure}
+		}}
+	\makebox[\textwidth]{
+		\makebox[1.3\textwidth]{%
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2ddifference_blob.png}
+				% \caption{blob based projector}%
+				% \label{fig:reconstruction_diff_fewangles_blob}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2ddifference_bspline.png}
+				% \caption{b-spline based projector}%
+				% \label{fig:reconstruction_diff_fewangles_bspline}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2ddifference_siddon.png}
+				% \caption{siddon's projector}%
+				% \label{fig:reconstruction_diff_fewangles_siddon}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2ddifference_joseph.png}
+				% \caption{joseph's projector}%
+				% \label{fig:reconstruction_diff_fewangles_joseph}
+			\end{subfigure}
+		}}
+	\makebox[\textwidth]{
+		\makebox[1.3\textwidth]{%
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2dreconstruction_blob_croped.png}
+				% \caption{blob based projector}%
+				% \label{fig:reconstruction_crop_fewangles_blob}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2dreconstruction_bspline_croped.png}
+				% \caption{b-spline based projector}%
+				% \label{fig:reconstruction_crop_fewangles_bspline}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2dreconstruction_siddon_croped.png}
+				% \caption{siddon's projector}%
+				% \label{fig:reconstruction_crop_fewangles_siddon}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2dreconstruction_joseph_croped.png}
+				% \caption{joseph's projector}%
+				% \label{fig:reconstruction_crop_fewangles_joseph}
+			\end{subfigure}
+		}}
+	\caption{top row: Reconstruction of Shepp-Logan phantom with few angles, middle row:
+        differences to ground truth, bottom row: crop into portion of the reconstruction,from left
+        to right: the blob based projector, the B-Spline based projector, Siddon's projector,
+        Joseph's projector}%
 	\label{fig:reconstruction_fewangles}
 \end{figure}
 
-\begin{figure}[h]
-	\centering
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2dreconstruction_blob_croped.png}
-		\caption{blob based projector}%
-		\label{fig:reconstruction_crop_fewangles_blob}
-	\end{subfigure}
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2dreconstruction_bspline_croped.png}
-		\caption{b-spline based projector}%
-		\label{fig:reconstruction_crop_fewangles_bspline}
-	\end{subfigure} \\
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2dreconstruction_siddon_croped.png}
-		\caption{siddon's projector}%
-		\label{fig:reconstruction_crop_fewangles_siddon}
-	\end{subfigure}
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2dreconstruction_joseph_croped.png}
-		\caption{joseph's projector}%
-		\label{fig:reconstruction_crop_fewangles_joseph}
-	\end{subfigure}
-	\caption{croped region of reconstruction using few angles}%
-	\label{fig:reconstruction_crop_fewangles}
-\end{figure}
+\subsection{Behaviour in the Presence of Noise}
 
-\begin{figure}[h]
-	\centering
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2ddifference_blob_croped.png}
-		\caption{blob based projector}%
-		\label{fig:reconstruction_diff_fewangles_blob}
-	\end{subfigure}
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2ddifference_bspline_croped.png}
-		\caption{b-spline based projector}%
-		\label{fig:reconstruction_diff_fewangles_bspline}
-	\end{subfigure} \\
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2ddifference_siddon_croped.png}
-		\caption{siddon's projector}%
-		\label{fig:reconstruction_diff_fewangles_siddon}
-	\end{subfigure}
-	\begin{subfigure}[b]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2ddifference_joseph_croped.png}
-		\caption{joseph's projector}%
-		\label{fig:reconstruction_diff_fewangles_joseph}
-	\end{subfigure}
-	\caption{normalized absolute difference of reconstruction using few angles}%
-	\label{fig:reconstruction_diff_fewangles}
-\end{figure}
+\inlinetodo{extent elsa example to be able to add noise}
 
-\subsection{behaviour in the presence of noise}
-
-\section{reconstruction of medical data}\label{sec:experiments_medical_projection}
+\section{Reconstruction of Medical Data}\label{sec:experiments_medical_projection}
 
 \inlinetodo{extent elsa example to be able to read phantom data in}
 
-\section{quality overview}\label{sec:experiments_quality_projection}
+\section{Quality Overview}\label{sec:experiments_quality_projection}
 
 \subsection{Reduced artifacts in Forward Projection}\label{sec:experiments_artifacts_forward}
 
