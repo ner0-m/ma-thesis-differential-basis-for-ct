@@ -649,34 +649,42 @@ implementation will be conduced in \autoref{chap:projector}.
 \subsection{Landweber Iteration}\label{subsec:landweber_iteration}
 
 A well studied class of iterative algorithms is the \textit{landweber
-	iteration}~\cite{landweber_iteration_1951}. It has been discovered in many different ways in the
-past.
+	iteration}~\cite{landweber_iteration_1951}. It has been discovered in many different ways in
+the past. The algorithm was introduced in the tomographic space by
+\citeauthor{gilbert_iterative_1972}~\cite{gilbert_iterative_1972} under the name of
+Simultaneous Iterative Reconstruction Technique (SIRT).
 
 \begin{definition}[Landweber Iteration]\label{def:landweber_iteration}
 	Given a linear system of equations as defined in \autoref{def:inverse_problem}, the
 	landweber iteration finds a solution to the corresponding least squares problem. The update
 	step for \(k = 0, 1, \dots\) is given by
 	\[
-		c^{(k+1)} = c^{(k)} + \omega A^T(b - Ac^{(k)})
+		c^{(k+1)} = c^{(k)} + \lambda^{(k)} A^T(m - Ac^{(k)})
 	\]
-	\(\omega \in \mathbb{R}\) is a relaxation parameter that must satisfy \(0 < \omega < 2
-	\norm{A^T A}_2^{-1}\)
+	\(\lambda^{(k)} \in \mathbb{R}\) is a sequence of relaxation parameter that must satisfy
+	\(0 < \lambda^{(k)} < 2 \norm{A^T A}_2^{-1}\quad \forall k \in \mathbb{N}\).
 \end{definition}
 
-The landweber iteration is a special case of gradient descent. If \(f(c) = \frac{1}{2} \norm{Ac -
-	y}_2^2\), the update can be written in terms of the gradient
+Generally, Landweber iterations (in the basic case) only rely on the forward \(Ac^{(k)}\) and backward
+\(A^T m\) projections. The innermost part of the of the update function, is a forward projection of the
+current guess. Next, the residual to the measurement is taken and finally the error is back
+projected and used as an update to the current guess.
+
+The basic Landweber iteration is a special case of gradient descent. If \(f(c) = \frac{1}{2}
+\norm{Ac - m}_2^2\), the update can be written in terms of the gradient
 \[
-	c^{(k+1)} = c^{(k)} - \omega \nabla f(c^{(k)})
+	c^{(k+1)} = c^{(k)} - \lambda^{(k)} \nabla f(c^{(k)})
 \]
-
-Generally, the general landweber iteration can be given by
+A generalisation of the Landweber iteration can be given by
 \[
-	c^{(k+1)} = P(c^{(k)} + \omega A^TM(b - Ac^{(k)}))
+	c^{(k+1)} = c^{(k)} + \lambda^{(k)} DA^TM(m - Ac^{(k)})
 \]
+The expat algorithm and it's convergence behaviour, depend on the exact choice of the matrices \(D\)
+and \(M\). The basic Landweber iteration as presented above has \(D = M = I\). If \(D = \frac{1}{J}
+\text{diag}(\norm{a_j}^2_2)^{-1}\), with \(\norm{a_j}^2_2\) being the squared \(L_2\) norm of the
+\(j\)th row of the system matrix~\cite[chap 6.2]{hansen_discrete_2010}.
 
-A different algorithm that falls into this category is Cimmino iterations\cite[chap 6.2]{hansen_discrete_2010})
-
-\subsection{ART}\label{subsec:algebraic_reconstruction_technique}
+\subsection{Algebraic Reconstruction Technique}\label{subsec:algebraic_reconstruction_technique}
 
 The Algebraic Reconstruction Technique (ART) was proposed by
 \citeauthor{gordon_algebraic_1970}\cite{gordon_algebraic_1970}. However, outside of tomography the
@@ -706,25 +714,12 @@ The original Kaczmarz method had \(\lambda(k) = 1\, \forall k \in \mathbb{N}\), 
 relaxation parameter can improve the reconstruction in noisy settings. Further, the method can be
 written as a Landweber-type method\cite{hansen_discrete_2010}, but it's rather uncommon.
 
+Compared to the Landweber iterations given in the previous section, the Kaczmarz methods accesses
+the rows of the system matrix \(A\) sequentially (but maybe not in ascending order). On the other
+hand Landweber type methods access all rows of the system matrix simultaneously. Hence, the
+`simultaneous` as part of SIRT\@.
+
 \inlinetodo{add figure for this}
-
-\begin{listing}
-	\begin{minted}{cpp}
-int main() {
-    fmt::print("hello, world\n");
-    return 0;
-}
-    \end{minted}
-	\caption{"Some sampe C code"}
-\end{listing}
-\begin{listing}
-	\begin{minted}{python}
-import numpy as np
-
-np.linspace(0, 1)
-    \end{minted}
-	\caption{"Some sampe python code"}
-\end{listing}
 
 
 \subsection{CG}\label{subsec:conjuage_gradient}
@@ -737,8 +732,132 @@ First orther methods such as Gradient Descent and it's derivatives
 
 \section{Regularization}\label{sec:regularization}
 
-\subsection{Tikonov}\label{subsec:tikhonov_regularization}
+So far all solvers presented here have only looked at the least squares problem. I.e.\ they only
+concern themself with the forward model and do not incorporate any further constrains. However,
+usually we have some information about the images we wish to reconstruct. For example, one would
+expect them to be smooth. One hopes that regularization stabilises the solution. In the sense that
+small perturbations by noise in the measurements, still yields solutions close to the exact
+solutions.
 
-\subsection{LASSO L1}\label{subsec:l1_regularization}
+\begin{definition}[Regularized Problem]\label{def:regularized_problem}
+	Let \(R(c)\) be a \textit{penalty function} or \textit{regularizer}, then the least square
+	problem can be expanded to
+	\[
+		\argmin_c \frac{1}{2} \norm{A c - m}_2^2 + \lambda R(c)
+	\]
+	this is referred to as \textit{regularized problem}. \(lambda\) is a regularization
+	parameter. It denotes the weight of of the penalty term.
+\end{definition}
+
+This can also be generalized to other problems. Let \(T(c)\) be a data fidelity term (e.g.\
+the least squares one, or the negative log-likelihood). Then the regularized problem can be
+described as
+\[ \argmin_c T(c) + \lambda R(c) \]
+Usually, \(R\) is chosen to be non-linear and often is expected to be continuously differentiable.
+This equation has three parts. The first \(T(c)\) is the data term. It measures how well a
+prediction models the noisy data. However, we do not want to fit the noise in the data. This is the
+second, the regularization term. \(\lambda\) controls the importance or the balance of each the
+previous terms.
+
+\subsection{Tikonov Regularization}\label{subsec:tikhonov_regularization}
+
+A well studied and often used regularization is named after Andrey Nikolayevich
+Tikhonov~\cite{tihonov_solution_1963}. The penalty restricts the solution based on the Euclidean
+norm.
+
+\begin{definition}[Tikhonov Regularization]\label{def:tikhonov_regularization}
+	The penalty term for Tikhonov regularization is given by
+	\[
+		R(c)_{\text{Tikhonov}} = \norm{\Gamma c}_2^2
+	\]
+\end{definition}
+A common case is a simple scaling function i.e.\ \(\Gamma = \alpha I\), thus the Tikhonov
+regularizer penalises \(c\) with large \(L_2\) norm. Therefore, it is often referred to as
+\(L_2\)-regularization. But also the first and second derivative operator is commonly
+used~\cite{golub_tikhonov_1999} The hope is, that Tikhonov regularization suppresses high-frequency
+noise.
+
+On a fruther note, the Tikhonov regularization can be reformulated to a least squares problem again
+\[
+	\argmin_c \frac{1}{2}
+	\left\lVert
+	\begin{pmatrix}
+		A \\
+		\lambda \Gamma
+	\end{pmatrix}
+	c -
+	\begin{pmatrix}
+		m \\
+		0
+	\end{pmatrix}
+	\right\rVert_2^2
+\]
+Here \(\begin{pmatrix}
+	A \\
+	\lambda \Gamma
+\end{pmatrix}\) is a stacked matrix, with the system matrix on top, and the Tikhonov matrix in the
+bottom. A different commonly used notation is
+\[
+	(A^T A + \lambda \Gamma^T \Gamma)x = A^T m
+\]
+The problem remains linear and thus can be solved using the previously discussed iterative
+reconstruction algorithms. However, in general, for non Tikhonov regularization this does not hold
+true. Thus, the problem is rendered non-linear and different optimization techniques have to be
+used.
+
+\subsection{\(L_1\)-Regularization}\label{subsec:l1_regularization}
+
+Another common regularization method is based on the \(L_1\) norm, i.e.\ the sum of absolute
+values.
+\begin{definition}[\(L_1\)-Regularization]\label{def:l1_regularization}
+	The penalty term for Tikhonov regularization is given by
+	\[
+		R(c)_{L_1} = \norm{c}_1
+	\]
+	See~\cite{tibshirani_regression_1996,tibshirani_lasso_2013,beck_fast_2009}
+\end{definition}
+Compared to the \(L_2\) regularization, the \(L_1\) regulraization enforces sparsity. I.e.\ the
+assumption is that the representation is in some way sparse, and should be enfored. Also it is
+more robust to outliers~\cite{beck_fast_2009}. For information on how these problems can be solved
+see \citeauthor{beck_fast_2009}~\cite{beck_fast_2009}. As it will be used in the experimental
+sections, specifically iterative shrinkage-thresholding algorithms (ISTA) and  Fast Iterative
+Shrinkage-Thresholding Algorithm (FISTA).
+
+\begin{definition}[ISTA]\label{def:ista}
+	The update step for ISTA is given by
+	\[
+            c^{(k+1)} = \mathscr{T_\alpha} (c^{(k)} - 2 \lambda A^T (A c^{(k)} - m))
+	\]
+        where \(t\) is an appropriate stepsize and \(\mathscr{T_\alpha}\) is the shrinkage operator
+        defined by
+	\[
+            \mathscr{T_\alpha}(c)_j = \max(\abs{c_i} - \alpha, 0) \sign(c_j)
+	\]
+\end{definition}
+Similar to Landweber like methods, the residual of the forward projection current prediction and the
+measurement vector is backprojected. Next, the projected error is subtracted from the current
+estimate and then the shirankage operator is applied.
+
+However, the convergence of ISTA is rather slow (compare~\cite{beck_fast_2009} and its references).
+FISTA improves on the convergence of ISTA, but it is out of scope for this thesis. Please refer to
+\citeauthor{beck_fast_2009}~\cite{beck_fast_2009} for further reading. \todo{but is it?}
 
 \subsection{TV Regularization}\label{subsec:tv_regularization}
+
+% \begin{listing}
+% 	\begin{minted}{cpp}
+% int main() {
+%     fmt::print("hello, world\n");
+%     return 0;
+% }
+%     \end{minted}
+% 	\caption{"Some sampe C code"}
+% \end{listing}
+% \begin{listing}
+% 	\begin{minted}{python}
+% import numpy as np
+%
+% np.linspace(0, 1)
+%     \end{minted}
+% 	\caption{"Some sampe python code"}
+% \end{listing}
