@@ -1,23 +1,41 @@
 \chapter{Notation and Terminology}\label{chap:notation}
 
-This is my notation used thourgh the thesis
+Let \(A\) be an operator, then \(A^\ast\) is the adjoint operation.
+
 \chapter{Imaging Modalities}\label{chap:imaging_modalities}
 
 A large number of different fields boil down to a very similar problem statement. Based on a given
 measurement, how can one retrieve the original measured object, assuming the projection process is
-known \cite{herman_basis_2015}. This is presicly, the definition of reconstruction used throughout
+known~\cite{herman_basis_2015}. This is presicly, the definition of reconstruction used throughout
 this thesis.
 
-These fields include but are not limited to variation methods in imaging (e.g. image denoising,
-impainting, super resolution and more \insertref{find reference for each}), X-ray attenuation
-computed tomography, Phase-Contrast computed tomography, ligth-field tomography, electron
-microscopic \insertref{find references}, and many more.
+These fields include but are not limited to variation methods in imaging (e.g.\ image denoising,
+impainting, super resolution and more~\cite{scherzer_variational_2009}), X-ray attenuation computed
+tomography, Phase-Contrast computed tomography, ligth-field tomography, seismic imaging,
+nondestructive material testing~\cite{carpio_inverse_2008}, and many more. All of these problems
+are part of the class of so called \textit{inverse problems}.
 
-All of these problems are part of the class of so called \textit{inverse problems}. Inverse problems
-in turn are again part of the so called \textit{ill-posed problems}. Following the definition of
-Hadamard, \insertref{properly cite Hadamard, J. (1902) Sur les Problèmes aux Dérivées Partielles et
-	Leur Signification Physique. Princeton University Bulletin, 13, 49-52.} a problem is well posed if
-all of the following properties are fulfilled:
+A little detour to motivate the important of inverse problems: The Hubble Space Telescope was
+launched into space in 1990. However, it initially had a problems with the spherical aberration in
+its optics. A hardware fix was deployed in 1993. But due to the cost of the operation in general,
+the images of the telescope were still used and lot of processing went into the images. A lot of
+different techniques were used to recover as much information as possible. This includes techniques
+involving the solution of inverse problem similar as discussed in this thesis. The details are out
+of scope, but the interested reader can look into~\cite{white_restoration_1992,adorf_hubble_1995}.
+
+\begin{definition}[Inverse Problem]\label{def:inverse_problem}
+	Loosely speaking, the solution to inverse problems is the cause of an effect. Turning this
+	into the mathematical setting, let \(H\) and \(K\) be Hilbert spaces (i.e.\ a vector space,
+	which has a scalar product and is complete), then let \(m \in K\) the measurements and \(f
+	\in H\) the original cause. The the system which causes the effect can be modeled by a
+	linear bounded operator \(A\). Then the problem is formulated as
+	\[ A f = m \]
+\end{definition}
+
+Broadly speaking, problems in math can be categorized in to categories. Problems are either
+\textit{well-posed} or they are \textit{ill-posed}. Following the definition of
+Hadamard~\cite{hadamard_sur_1902} a problem is well posed if all of the following properties are
+fulfilled:
 
 \begin{itemize}
 	\item \textbf{Existence}: The problem has a solution.
@@ -25,36 +43,34 @@ all of the following properties are fulfilled:
 	\item \textbf{Stability}: The solution depends continuously on the data.
 \end{itemize}
 
-A problem, which fulfills all of the above is referred to as \textit{well-posed}. If any doesn't
-hold it's called \textit{ill-posed}. The classes of problems referred to above, are basically all
-ill-posed.
+If any of these conditions doesn't hold it's called ill-posed. An example for well-posed problems is
+the heat equation with specified initial conditions. The classes of problems referred to above, are
+basically all ill-posed~\cite{hansen_discrete_2010}.
 
-\paragraph{Existence}
+For an ill-posed inverse problem, that means the inverse \(A^{-1}\) does not exists, the solution
+does not lie in \(K\), or is not continuous (c.f.~\cite[chap. 4]{natterer_mathematics_1986}). From a
+practical standpoint the first two properties can be solved quite easily. If no solution exists, one
+can substitute it by a different problem, e.g.\ the looking for the solution to the least squares
+problem. If multiple or infinitely many solutions exists, one can choose the one with minimal norm.
+However, if the third property is violated, the solutions to a system with two close measurements
+\(g\) and \(g^\epsilon\) need not to be close.
 
-If a problem does not have any solution, a reformulation can often yields a desired result. Instead
-of the original problem statement, the equivalent least squares problem can be solved to find a
-unique solution. \todo{find a nice example, see~\cite{hansen_discrete_2010}}
+From a practical point this is quite important. Imagen two blurred images, that only differ slightly
+from one another, i.e.\ they show the same picture. But if the stability criterion is violated, the
+solution to the inverse problem, need not to be close to each other. Hence, proper care needs to be
+taken in the development of algorithms, that search for solutions for the inverse problem.
 
-\paragraph{Uniqueness}
+See \citeauthor{hansen_discrete_2010}\cite{hansen_discrete_2010} for some nice illustrative examples
+for each property.
 
-If a problem has multiple - or infinitely many solutions - more requirements or preconditions can be
-added, to narrow down the number of possible solutions. \todo{find a nice example, see~\cite{hansen_discrete_2010}}
+The specific field of tomographic reconstruction, the challenge is to reconstruction an image from a
+finite set of projections. Specifically, most of the applications considered are projections from
+X-ray sources. However, other imaging modalities such as light field microscopy exists.
 
-\paragraph{Stability}
-
-This condition is quite critical. As a violation of stability can basically mean, a small
-perturbation or change in the data will result in arbitrarily large changes in the result. Again a
-reformulation can help out. Usually, one adds some for of regularisation to stabilize the results.
-\todo{find a nice example, see~\cite{hansen_discrete_2010}}
-
-The specific field of tomographic reconstruction deals with the challenge to reconstruction an
-image, from a finite set of projections. Specifically, most of the applications considered are
-projections from X-ray sources. However, we will also look at Light field microscopy.
-
-The common ground for all tomographic reconstruction is the Radon transform~\cite{radon_uber_1917}
-(see~\cite{radon_determination_1986} for the english translation), or closely related
-transformations such as the X-ray Transform~\cite{solmon_x-ray_1976}. The Radon Transform will be
-properly introduced in \autoref{chap:radon_transform_and_related}.
+The common ground for all X-ray based tomographic reconstruction is the Radon
+transform~\cite{radon_uber_1917} (see~\cite{radon_determination_1986} for the English translation),
+or closely related transformations such as the X-ray Transform~\cite{solmon_x-ray_1976}. The Radon
+Transform will be properly introduced in \autoref{chap:radon_transform_and_related}.
 
 The remainder of this chapter will introduce a variety of different imaging modalities and their
 applications. This will serve as a motivation for developments in the different fields. This should
@@ -159,6 +175,9 @@ This is a very general definition. This is useful to mathematically model a wide
 different applications. In fact, all of the applications in the previous chapter, can be modeled
 using this general definition.
 
+Other important transformations, which are not considered in this thesis are the Cone-Beam Transform
+(c.f.~\cite[chap 2]{carpio_inverse_2008}), or Abel transform \insertref{Ref to Abel Transform}.
+
 \section{Radon Transform}\label{sec:radon_transform}
 
 Looking at the previously stated Beer Lambert law for attenuation CT \autoref{eq:beer-Lambert-law}.
@@ -249,8 +268,6 @@ In the two dimensional case, the Radon Transform and X-ray Transform are equival
 Then, the relation between the Radon Transform and the X-ray Transform is
 \[\mathscr{X}f(\theta, s\theta^\perp) = \mathscr{R}f(\theta^\perp, s)\]
 For the case of attenuation X-ray CT, the X-ray Transform is the physical forward model used.
-
-\section{Abel Transform}\label{sec:abel_transform}
 
 \chapter{Image Representation}\label{chap:image_representation}
 
@@ -573,20 +590,25 @@ scanners\cite{pan_why_2009}.
 
 \section{Towards the Matrix form}\label{sec:matrix_formulation}
 
-Before we concentrate on iterative reconstruction techniques, a deeper dive into the linear system
-of equation is needed. Recall the \autoref{def:forward-model}, the definition of the forward model.
-There, \(\mathscr{M}_j\) describes the acquisition of a single measurement, i.e.
-\[ m_j = \mathscr{M}_j(f) \]
-This is done for the complete set of projections \(J\). Then further recall
-\autoref{def:permissible_representation}
+The goal of this chapter is a short run through the steps that are necessary to go form the
+continuous definition of the inverse problem as given in \autoref{def:inverse_problem} to a discrete
+version, with which we can work on computers.
+
+In the \autoref{def:forward-model}, the definition of forward model is given. This forward model
+takes the place of the bounded linear operator \(A\) from \autoref{def:inverse_problem}. However,
+this is all still in the continuous space. Using \autoref{def:permissible_representation}, \(f\) can
+decomposed into the sum of coefficients and basis functions:
 \[ f \approx \hat{f}(x) = \sum_{k=1}^{N} c_k \varphi_k(x) \]
-as shown for the Radon Transform, the forward model can be applied and rearranging a little:
+as shown for the Radon Transform, the forward model can be applied and rearranging a little using
+the linearity of the operator:
 \[ m_j \approx \mathscr{M}_j(\hat{f}) = \sum_{k=1}^{N} c_k \mathscr{M}_j(\varphi_k) \]
 \(a_{ji} \coloneq \mathscr{M}_j(\varphi_k)\) is the contribution of a single \(k\)th basis function
 to the \(j\)th measurement.
 
-Now, the measurements can be stacked to a vector \(m = (m_j) \in  \mathbb{R}^J\), the same for
-the coefficients \(c = (c_i) \mathbb{R}^I\), and the contributions \(a_{j} = (a_{ji}) \in
+\inlinetodo{Have an image like Vogel Beyond tomographic Figure 4.7}
+
+Now, the measurements can be stacked to a vector \(m = (m_j) \in \mathbb{R}^J\), the same for
+the coefficients \(c = (c_i) \in \mathbb{R}^I\), and the contributions \(a_{j} = (a_{ji}) \in
 \mathbb{R}^I\). Then a single measurement can be written as a scalar product of the coefficient
 vector and the contribution vector. But also importantly, the linear system can be defined:
 \begin{equation}\label{eq:system_lin_equation}
@@ -600,14 +622,14 @@ vector and the contribution vector. But also importantly, the linear system can 
 \end{equation}
 
 This is a regular system of linear equation, it partitions the problem in the measurements, the
-\textit{system matrix} \(A\) and the coefficient vector \(c\). Also note, that the choice of basis
-function is integrated into the system matrix.
+\textit{system matrix} \(A \in \mathbb{R}^{J \times I}\) and the coefficient vector \(c\). Also
+note, that the choice of basis function is integrated into the system matrix.
 
 \section{Iterative Reconstruction}\label{sec:iterative_reconstruction}
 
-The system of linear equations given in \autoref{eq:system_lin_equation} is usually ill-posed due to
-noise and measurement errors. Also it is not usually square. Therefore, the problem is not solved
-directly, but rather the \textit{least squared problem} can be solved instead.
+As explained in \autoref{chap:image_representation}, the problems considered in this thesis are
+ill-posed. Hence, care has to be taken when solving the linear system of equations in
+\autoref{eq:system_lin_equation}. A common approach is to considered least squares problem instead.
 
 \begin{definition}[Least Squared Problem]\label{def:least_squares_problem}
 	The least squares problem is defined as
@@ -624,8 +646,67 @@ necessary, which do not require the knowledge of the complete system matrix. The
 the system matrix on the fly, is often referred to as projectors. A deep dive into the
 implementation will be conduced in \autoref{chap:projector}.
 
+\subsection{Landweber Iteration}\label{subsec:landweber_iteration}
+
+A well studied class of iterative algorithms is the \textit{landweber
+	iteration}~\cite{landweber_iteration_1951}. It has been discovered in many different ways in the
+past.
+
+\begin{definition}[Landweber Iteration]\label{def:landweber_iteration}
+	Given a linear system of equations as defined in \autoref{def:inverse_problem}, the
+	landweber iteration finds a solution to the corresponding least squares problem. The update
+	step for \(k = 0, 1, \dots\) is given by
+	\[
+		c^{(k+1)} = c^{(k)} + \omega A^T(b - Ac^{(k)})
+	\]
+	\(\omega \in \mathbb{R}\) is a relaxation parameter that must satisfy \(0 < \omega < 2
+	\norm{A^T A}_2^{-1}\)
+\end{definition}
+
+The landweber iteration is a special case of gradient descent. If \(f(c) = \frac{1}{2} \norm{Ac -
+	y}_2^2\), the update can be written in terms of the gradient
+\[
+	c^{(k+1)} = c^{(k)} - \omega \nabla f(c^{(k)})
+\]
+
+Generally, the general landweber iteration can be given by
+\[
+	c^{(k+1)} = P(c^{(k)} + \omega A^TM(b - Ac^{(k)}))
+\]
+
+A different algorithm that falls into this category is Cimmino iterations\cite[chap 6.2]{hansen_discrete_2010})
 
 \subsection{ART}\label{subsec:algebraic_reconstruction_technique}
+
+The Algebraic Reconstruction Technique (ART) was proposed by
+\citeauthor{gordon_algebraic_1970}\cite{gordon_algebraic_1970}. However, outside of tomography the
+method is often know as Kaczmarz method~\cite{kaczmarz_approximate_1993}. Though ART is a slight
+modification of the original Kaczmarz method.
+
+The basic idea of the algorithm, is to view each row of the system matrix as a hyperplane and update
+the solution by iteratively project it onto the hyperplane. If the system matrix is square \(I = J\)
+and of full rank, all hyperplanes intersect at one point and ART will converge to it. However, if
+the system is overderminted (\(J > I\)) and noisy, which it usually is, the hyperplanes will not
+intersect at a single point, but rather at in close proximity to each other.
+
+\begin{definition}[Algebraic Reconstruction Technique]\label{def:art}
+	Given the system of linear equations \(Ac = m\), and an initial solution guess \(c^{(0)} \in
+	\mathbb{R}^I\) (often the zero vector). Then the solution can be iterativly updated for
+	\(k = 0, 1, \dots\)
+	\[
+		c^{(k+1)} = c^{(k)} + \lambda^{j(k)} \frac{m_{j(k)} - \langle a_{j(k)}, c^{j(k)} \rangle}{\norm{a_{j(k)}}}a_{j(k)}
+	\]
+	where \(\lambda^{(k)} \in \left(0, 1\right]\) is a sequence of relaxation parameters, and
+	\(j(k)\) is a mapping to select the an appropriate row for each iterations. In the simple
+	case \(j(k) = (k \mod J) + 1\), but it can also be
+	randomized~\cite{strohmer_randomized_2007}.
+\end{definition}
+
+The original Kaczmarz method had \(\lambda(k) = 1\, \forall k \in \mathbb{N}\), lowering the
+relaxation parameter can improve the reconstruction in noisy settings. Further, the method can be
+written as a Landweber-type method\cite{hansen_discrete_2010}, but it's rather uncommon.
+
+\inlinetodo{add figure for this}
 
 \begin{listing}
 	\begin{minted}{cpp}
@@ -645,7 +726,6 @@ np.linspace(0, 1)
 	\caption{"Some sampe python code"}
 \end{listing}
 
-ART and derivatives
 
 \subsection{CG}\label{subsec:conjuage_gradient}
 
