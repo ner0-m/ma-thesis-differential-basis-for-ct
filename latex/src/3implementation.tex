@@ -537,6 +537,76 @@ the Shepp-Logan phantom. They are all quite similar and all in the neighbourhood
 
 \inlinetodo{extent elsa example to be able to add noise}
 
+\subsection{Behaviour in the Presence of Noise}
+
+\begin{figure}[h]
+	\centering
+	\makebox[\textwidth]{
+		\makebox[1.3\textwidth]{%
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_distance/2dreconstruction_10_Blob.png}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_distance/2dreconstruction_50_Blob.png}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_distance/2dreconstruction_100_Blob.png}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_distance/2dreconstruction_200_Blob.png}
+			\end{subfigure}
+		}}
+	\makebox[\textwidth]{
+		\makebox[1.3\textwidth]{%
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_distance/2dreconstruction_10_BSpline.png}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_distance/2dreconstruction_50_BSpline.png}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_distance/2dreconstruction_100_BSpline.png}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_distance/2dreconstruction_200_BSpline.png}
+			\end{subfigure}
+		}}
+	\makebox[\textwidth]{
+		\makebox[1.3\textwidth]{%
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_distance/2dreconstruction_10_Siddon.png}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_distance/2dreconstruction_50_Siddon.png}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_distance/2dreconstruction_100_Siddon.png}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_distance/2dreconstruction_200_Siddon.png}
+			\end{subfigure}
+		}}
+	\makebox[\textwidth]{
+		\makebox[1.3\textwidth]{%
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_distance/2dreconstruction_10_Joseph.png}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_distance/2dreconstruction_50_Joseph.png}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_distance/2dreconstruction_100_Joseph.png}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_distance/2dreconstruction_200_Joseph.png}
+			\end{subfigure}
+		}}
+	\caption{Comparison of handling with different distances of source to detector.
+        From left to right: Source closer to volume, top to bottom: Blob based, B-Spline based,
+        Siddon's, Siddon's projector}%
+	\label{fig:reconstruction_fewangles}
+\end{figure}
+
 \section{Reconstruction of Medical Data}\label{sec:experiments_medical_projection}
 
 \inlinetodo{extent elsa example to be able to read phantom data in}
