@@ -1,19 +1,22 @@
 \chapter{Notation and Terminology}\label{chap:notation}
 
-Let \(A\) be an operator, then \(A^\ast\) is the adjoint operation.
+\inlinetodo{This section has to be done}
+Let \(A\) be an operator, then \(A^\ast\) is the adjoint operation. class of linear bounded
+operators from two vector spaces.
+Hilbert space, Real numbers, matrix, vector, approx linear bounded operators, transpose
 
 \chapter{Imaging Modalities}\label{chap:imaging_modalities}
 
 A large number of different fields boil down to a very similar problem statement. Based on a given
-measurement, how can one retrieve the original measured object, assuming the projection process is
-known~\cite{herman_basis_2015}. This is presicly, the definition of reconstruction used throughout
-this thesis.
+measurement, how can one retrieve the original measured object, assuming the measurement process is
+known. This is also often referred to as reconstruction form projections~\cite{herman_basis_2015}.
+This is presicly, the definition of reconstruction used throughout this thesis.
 
-These fields include but are not limited to variation methods in imaging (e.g.\ image denoising,
-impainting, super resolution and more~\cite{scherzer_variational_2009}), X-ray attenuation computed
-tomography, Phase-Contrast computed tomography, ligth-field tomography, seismic imaging,
-nondestructive material testing~\cite{carpio_inverse_2008}, and many more. All of these problems
-are part of the class of so called \textit{inverse problems}.
+These fields include, but are not limited to, variation methods in imaging (e.g.\ image denoising,
+inpainting, super resolution and more~\cite{scherzer_variational_2009}), X-ray attenuation CT,
+differential phase-contrast CT, X-ray dark-field contrast CT, light-field tomography, seismic
+imaging, nondestructive material testing~\cite{carpio_inverse_2008}. All of these problems are part
+of the class of so called \textit{inverse problems}.
 
 A little detour to motivate the important of inverse problems: The Hubble Space Telescope was
 launched into space in 1990. However, it initially had a problems with the spherical aberration in
@@ -27,15 +30,23 @@ of scope, but the interested reader can look into~\cite{white_restoration_1992,a
 	Loosely speaking, the solution to inverse problems is the cause of an effect. Turning this
 	into the mathematical setting, let \(H\) and \(K\) be Hilbert spaces (i.e.\ a vector space,
 	which has a scalar product and is complete), then let \(m \in K\) the measurements and \(f
-	\in H\) the original cause. The the system which causes the effect can be modeled by a
-	linear bounded operator \(A\). Then the problem is formulated as
+	\in H\) the original cause. The system which causes the effect can be modeled by a
+	linear bounded operator \(A \in \mathscr{L}(H, K)\). Then the problem is formulated as
 	\[ A f = m \]
+	The inverse problem is to retrieve \(f\) (the cause) given \(m\) (the measurements) and \(A\)
+	(the physical model).
 \end{definition}
 
-Broadly speaking, problems in math can be categorized in to categories. Problems are either
-\textit{well-posed} or they are \textit{ill-posed}. Following the definition of
-Hadamard~\cite{hadamard_sur_1902} a problem is well posed if all of the following properties are
-fulfilled:
+I want to point out a minor, but important detail. Different imaging modalities, which vary
+drastically in scope of physical properties, can be mathematically reduces to a common concept. This
+enables reasoning on common ground. Improvements in one field, can benefit other fields. Further, a
+common language can be used. This, I personally find very much fascinating and is one of my
+motivations to keep learning.
+
+Back to the inverse problems. Broadly speaking, problems in math can be categorized in to
+categories. Problems are either \textit{well-posed} or they are \textit{ill-posed}. Following the
+definition of Hadamard~\cite{hadamard_sur_1902} a problem is well posed if all of the following
+properties are fulfilled:
 
 \begin{itemize}
 	\item \textbf{Existence}: The problem has a solution.
@@ -43,45 +54,57 @@ fulfilled:
 	\item \textbf{Stability}: The solution depends continuously on the data.
 \end{itemize}
 
-If any of these conditions doesn't hold it's called ill-posed. An example for well-posed problems is
-the heat equation with specified initial conditions. The classes of problems referred to above, are
-basically all ill-posed~\cite{hansen_discrete_2010}.
+If any of these conditions doesn't hold it is ill-posed. An example for well-posed problems is the
+heat equation with specified initial conditions. Inverse problems are basically all
+ill-posed~\cite{hansen_discrete_2010}, at least the ones considereds in this thesis.
 
-For an ill-posed inverse problem, that means the inverse \(A^{-1}\) does not exists, the solution
-does not lie in \(K\), or is not continuous (c.f.~\cite[chap. 4]{natterer_mathematics_1986}). From a
+For an ill-posed inverse problem, either the inverse \(A^{-1}\) does not exists, the solution does
+not lie in \(K\), or is not continuous (c.f.~\cite[chap. 4]{natterer_mathematics_1986}). From a
 practical standpoint the first two properties can be solved quite easily. If no solution exists, one
 can substitute it by a different problem, e.g.\ the looking for the solution to the least squares
 problem. If multiple or infinitely many solutions exists, one can choose the one with minimal norm.
 However, if the third property is violated, the solutions to a system with two close measurements
 \(g\) and \(g^\epsilon\) need not to be close.
 
-From a practical point this is quite important. Imagen two blurred images, that only differ slightly
-from one another, i.e.\ they show the same picture. But if the stability criterion is violated, the
-solution to the inverse problem, need not to be close to each other. Hence, proper care needs to be
-taken in the development of algorithms, that search for solutions for the inverse problem.
+From a practical point this is quite important. Imagen two blurred images of the same scene, that
+only differ slightly from one another. If the stability criterion is violated, the solution to the
+inverse problem trying to deblur the images, need not to be close to each other. Hence, proper care
+needs to be taken in the development of algorithms, that search for solutions for the inverse
+problem. See \citeauthor{hansen_discrete_2010}\cite{hansen_discrete_2010} for some nice illustrative
+examples for each property.
 
-See \citeauthor{hansen_discrete_2010}\cite{hansen_discrete_2010} for some nice illustrative examples
-for each property.
+In the specific field of tomographic reconstruction, the challenge is to reconstruction an image
+from a finite set of projections. Specifically, most of the applications considered are projections
+from X-ray sources. However, other imaging modalities such as light field microscopy exists.
 
-The specific field of tomographic reconstruction, the challenge is to reconstruction an image from a
-finite set of projections. Specifically, most of the applications considered are projections from
-X-ray sources. However, other imaging modalities such as light field microscopy exists.
+An important aspect of of tomographic reconstruction is the so called \textit{forward model}. It is
+the mathematical abstraction of the physical measuring process (\(A\) in
+\autoref{def:inverse_problem}). Throughout this thesis, X-rays are treated as infinitely thin rays,
+and therefore, mathematically a single X-ray going through the object can be model using a line.
+Along its path through the object the object interacts with the matter and once it passed through it
+will hit some kind of detector \todo{Add figure for idea of line integral}. This can either measure
+the attenuation of the X-ray, the refraction or the scattering, but the mathematical abstraction is
+very similar.
 
-The common ground for all X-ray based tomographic reconstruction is the Radon
-transform~\cite{radon_uber_1917} (see~\cite{radon_determination_1986} for the English translation),
-or closely related transformations such as the X-ray Transform~\cite{solmon_x-ray_1976}. The Radon
-Transform will be properly introduced in \autoref{chap:radon_transform_and_related}.
+This idea was already studied by \citeauthor{radon_uber_1917}. Hence, the resulting transformation
+modeling the projection of an object to its projection is often referred to as the \textit{Radon
+	Transform}. For \(2\)-dimensional reconstructions this holds true, but for higher dimensions,
+this is not necessarily true anymore. Other transformations, such as the \textit{X-ray
+	Transform}~\cite{solmon_x-ray_1976}, have been presented. A closer overview of both the Radon
+Transformtion and the X-ray Transformation is given in \autoref{chap:radon_transform_and_related}.
 
-The remainder of this chapter will introduce a variety of different imaging modalities and their
-applications. This will serve as a motivation for developments in the different fields. This should
+Again, note how the mathematical description closes the gap between different concepts of
+measuring X-ray attenuation, refraction and scattering.
+
+The remainder of this chapter will introduce a mainly two different imaging modalities and their
+applications: X-ray attenuation CT, and differential X-ray phase-contrast CT\@. This should
 also help to gain an intuition for the mathematical introduction and definitions in the following
-chapters.
+chapters. This part will cover briefly the acquisition of measurements and the physical process
+behind it. \todo{what else will I talk about?}
 
-Physical details will not be discussed, as they are beyond the scope of this thesis. Rather, they
-will be striped down and simplified to what is necessary and useful for the scope of this thesis.
-However, as much as possible, resources for the interested reader are cited in the corresponding
-sections.
-
+Out of scope are physical details will not be discussed. Rather, they will be striped down and
+simplified to what is necessary and useful for the scope of this thesis. However, as much as
+possible, resources for the interested reader are cited in the corresponding sections.
 
 \section{X-ray Attenuation CT}\label{sec:xray_attenuation_ct}
 
@@ -96,46 +119,130 @@ The breakthrough for X-ray attenuation CT came with the a series of publications
 laid but many, but importantly as already mentioned~\citeauthor{radon_uber_1917}, but also
 \citeauthor{cormack_representation_1963}\cite{cormack_representation_1963}.
 
-Narrowing our observations to a single X-ray going through a 2 dimensional object, which we wish to
-examinate from the inside. For now, consider the X-ray going in a straight line \(L\). The
-attenuation of the X-ray along this path is based on the Beer-Lambert law~\cite{buzug_computed_2008}:
+\inlinetodo{First talk about how CT scanners rotate around object and take measurements}
+\inlinetodo{Figure showing attenuation in wave model (i.e. reduction of amplitude of wave)}
 
-\begin{equation}
-	\label{eq:beer-Lambert-law}
+For a simple study of the physical process in X-ray attenuation CT, we'll start with the analysis of
+a single X-ray going through an object with a homogeneous (i.e.\ single constant) attenuation
+coefficient (see \autoref{fig:x-ray_homogeneous_attenuation}). The object one desires to investigae,
+is between a X-ray source and a detector. The X-ray source generates X-rays with a certain intensity
+\(I_0\). After the X-ray travers the object, the detector measures a reduced intensity denoted as
+\(I_1\). The connection between \(I_0\) and \(I_1\) is determined by the attenuation coefficient
+\(mu\) and the distance traveled through the matter \(s\). It is given by
+\[ I_1 = I_0 e^{-\mu s} \]
+
+\begin{figure}[t]
+	\centering
+	\def\svgwidth{0.75\textwidth}
+	\import{./figures/homogeneous_attenuation}{homogeneous_attenuation.pdf_tex}
+	\caption{Simplified model of a single X-ray (red line) going through a material with
+		homogeneous attenuation coefficient \(\mu\) (blue rectangle). \(I_0\) is the initial
+		intensity of the of the X-ray, \(I_1\) is the measured intensity, given by
+		attuenuation coefficient \(mu\) and the distance \(s\) the ray travels through the
+		object.}\label{fig:x-ray_homogeneous_attenuation}
+\end{figure}
+
+Extending this model to accommodate changing or varying attenuation coefficients, one needs to
+replace the constant coefficient \(\mu\), by a function \(\mu: \mathbb{R}^2 \mapsto \mathbb{R}\)
+(for now, this is keep in the two dimensional case). Then the measured intensity is given by the
+integral along the line the ray travels along \(L\) of the function \(\mu\), see
+\autoref{fig:x-ray_nonhomogeneous_attenuation} for an illustration.
+
+\begin{figure}[t]
+	\centering
+	\def\svgwidth{0.75\textwidth}
+	\import{./figures/nonhomogeneous_attenuation}{nonhomogeneous_attenuation.pdf_tex}
+	\caption{Model of a single X-ray (red line) going through a material with
+		homogeneous attenuation coefficient \(\mu(x)\) (abdominal section). Again \(I_0\) is
+		the initial intensity of the of the X-ray, \(I_1\) is the measured intensity, given
+		by the integral along the line \(L\) (i.e.\ the ray given in red) of the
+		attuenuation coefficient function \(mu(x)\), where \(x\) is each point along the
+		line \(L\).}\label{fig:x-ray_nonhomogeneous_attenuation}
+\end{figure}
+
+% Some help from https://www.fips.fi/slides/Bubba_SummerSchoolVFIP2019_1.pdf
+Then the connection between the initial intensity, and measured intensity is connected by the
+\textit{Beer-Lambert law}~\cite{buzug_computed_2008}:
+\begin{equation}\label{eq:beer-Lambert-law}
 	- \ln \frac{I}{I_0} = \int_L \mu (x) \, \mathrm{d}x
 \end{equation}
+The right-hand side of \autoref{eq:beer-Lambert-law} is the line integral of the attenuation
+coefficient function \(\mu\) along the line \(L\). Such a transformation of a function is referred
+to as the \textit{Radon Transform}~\cite{radon_uber_1917} (see~\cite{radon_determination_1986} for
+the English translation). The challenge of X-ray attenuation CT, is to reconstruct the attenuation
+coefficients \(\mu\) from a finite set of measurements.
 
-where the integral along the path \(L\) is referred to as the line integral.
-\(\mu \colon \mathbb{R}^2 \to \mathbb{R}\) denotes the linear attenuation cofficients, \(I_0\)
-the initial intensity of the beam (i.e.\ without any object between the source and the detector).
+So far, only single rays are discussed, but let alone from a practical standpoint, many X-rays
+traverse the object. CT scanners usually have a couple of different geometric models that are or
+were common. By now rather uncommon, but important for certain theoretical results is the parallel
+beam scanner. There all rays traverse the object parallel to each other. Another, common setting is
+the fan-bean geometry. It is a \(2\)-dimensional setting, where the X-rays are emitted from the a
+point-source and are not parallel to each other, but rather (as the name suggest) have a fan like
+pattern. Further, the detector is curved. The last discussed geometry is the so called cone beam
+geometry. As it's name suggest, the rays travels in a cone like fashion from the point source. The
+detector is typically flat.
+\todo{find citation for geometry setups}
 
-The challenge for X-ray attenuation CT is to reconstruct the function \(\mu\).
+\begin{figure}[t]
+	\centering
+	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+			\begin{subfigure}{0.6\textwidth}
+				\def\svgwidth{\textwidth}
+				\import{./figures/parallel_beam_setup}{parallel_beam_setup.pdf_tex}
+				\caption{Parallel Beam Setup}\label{fig:parallel_beam_geometry}
+			\end{subfigure}%
+			\begin{subfigure}{0.6\textwidth}
+				\def\svgwidth{\textwidth}
+				\import{./figures/fan_beam_setup}{fan_beam_setup.pdf_tex}
+				\caption{Fan Beam Setup}\label{fig:fan_beam_geometry}
+			\end{subfigure}%
+		}}%
+
+	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+			\begin{subfigure}{0.6\textwidth}
+				\def\svgwidth{\textwidth}
+				\import{./figures/cone_beam_setup}{cone_beam_setup.pdf_tex}
+                                \caption{Cone Beam setup}\label{fig:cone_beam_geometry}
+			\end{subfigure}%
+			\begin{subfigure}{0.6\textwidth}
+			\end{subfigure}%
+		}}%
+	\caption{Geometry setup of CT scanners}\label{fig:ct_geometry_setup}
+\end{figure}
+
+\inlinetodo{\autoref{fig:ct_geometry_setup} the last about cone is still ugly}
 
 \section{Phase-Contrast CT}\label{sec:phasecontrast_ct}
 
-Though, attenuation is the predominant X-ray based imaging method, other methods take other physical
-properties of X-rays into account, such as diffraction, refraction and scattering.
+In the X-ray attenuation CT setup, X-rays are only considered to exhibit attenuation. However, as
+visible light, X-rays are also refracted and scattered. There exist a variety of different means to
+measure a signal to reconstruct the phase-contrast \todo{add some references for the different
+	signals}. However, here I'll focus on the grating based interferometer as described
+in~\cite{pfeiffer_hard-x-ray_2008}. There a differential phase-contrast is acquierd. Thus this
+method is often referred to as differential phase-contrast CT\@.
 
-As the name suggest, Phase-contrast X-ray CT considers the phase shift of the X-rays going through
-an object.
+\inlinetodo{Figures showing grating setup}
 
-Read and incorporate:
-\begin{itemize}
-	\item Differential phase-contrast X-ray computed tomography: From model discretization to image
-	      reconstruction, Nilchan
-	\item Tomographic reconstruction of three-dimensional objects from hard X-ray differential phase
-	      contrast projection images
-\end{itemize}
+Disregarding many of the physical details, \(\phi(x, z)\) is acquired using the grating
+interferometer. The measurement can be described as
+\[ \phi(x, z) = \frac{2\pi d}{p} \frac{\partial}{\partial x}\int \delta(x, y, z)\mathrm{d}y\]
+where \(\delta (x, y, z)\) is the refractive index decrement, associated to the real part of the
+complex index of refraction \(n = 1 − \delta + i\beta\), \(d\) the distance between the distance
+between phase grating and analyzer grating and \(p\) is related to phase-stepping. Phase-stepping is
+required to acquire the differential phase-shift signal, but is out of scope for the thesis, see
+~\cite{weitkamp_x-ray_2005} for more information.
 
+One key thing should be noted and is of interested here. The phase-shift also depends on the line
+integral. Therefore, similar mathematical methods can be used, as with X-ray attenuation CT\@.
 
-\section{Anisotropic X-ray Dark-field Tomography}\label{sec:axdt}
+\inlinetodo{Show Mathias images of a tooth}
 
-Once one takes also
+\subsection{X-ray Dark-field Tomography}\label{sec:directional_darkfield}
 
-\section{Light Field Microscopy}\label{sec:lightfield_microscopy}
+The same grating based measures one more thing. It is also possible to measure (ultra) small angle
+scattering, which enables the reconstruction of a X-ray dark-field signal.
 
-Lastly, a field not based on X-rays.
-
+\inlinetodo{Figure of tooth. Some more on this, but not today}
 
 \chapter{Radon Transform and its related transform}\label{chap:radon_transform_and_related}
 
@@ -242,7 +349,7 @@ methods build on top of the derivative.
 
 \begin{definition}[Derivative of the Radon Transform]
 	The \(n\)th derivative of the Radon Transform is denoted by (compare
-	e.g.~\cite{nilchian_differential_2012,nilchian_fast_2013})
+	e.g.\ \cite{nilchian_differential_2012,nilchian_fast_2013})
 	\[ \mathscr{R}^{(n)} = \frac{\partial^n}{\partial s^n} \mathscr{R}f(\theta, s)\]
 \end{definition}
 
@@ -288,14 +395,14 @@ For our purposes, we assume the function lies on a regular spaced discrete grid.
 \(n\)-dimensional index of a grid cell, and \(x_{\symbfit{k}} \in \mathbb{R}^n\) the center coordinate
 of the \(\symbfit{k}\)-th grid cell. Then, the previous equation can be reformulated:
 \[ \hat{f}(x) = \sum_{\symbfit{k} \in \mathbb{Z}^n} c_{\symbfit{k}} \varphi(x - x_{\symbfit{k}}) \]
-This definition follows the notation given in \cite{momey_new_2011}. This method to discretize an
+This definition follows the notation given in~\cite{momey_new_2011}. This method to discretize an
 image is called \textit{series expansion} and is described in detail in
-e.g.~\cite{herman_basis_2015}.
+e.g.\ \cite{herman_basis_2015}.
 
 Now, if one applies the Radon transformation to the discretized image: \todo{generalize to all linear physical models}
 \[ \mathscr{R}\hat{f}(x) = \mathscr{R}\left( \sum_{\symbfit{k} \in \mathbb{Z}^n} c_{\symbfit{k}} \varphi(x - x_{\symbfit{k}}) \right) \]
 Due to the linearity of the Radon Transform this is equivalent to \[ \mathscr{R}\hat{f}(x) =  \sum_{\symbfit{k} \in \mathbb{Z}^n} c_{\symbfit{k}}\mathscr{R}\left( \varphi(x - x_{\symbfit{k}}) \right) \]
-i.e. the Radon transformation of the image, only act upon the basis function. Hence, it is
+i.e.\ the Radon transformation of the image, only act upon the basis function. Hence, it is
 sufficient to study, how the Radon transformation acts upon the individual basis function.
 
 Note that this holds for any linear physical model. Notably, this holds for the X-ray transform and
@@ -584,7 +691,7 @@ The quality of the reconstruction depends on the filter and data acquisition. Fu
 presented here, is limited to parallel beam geometry setups. There do exists other methods for fan
 beam settings that require rebinning (i.e.\ sorting the projections, such that all are parallel).
 However, overall the FBP leads to sharp images and it is wiedly used in medical CT
-scanners\cite{pan_why_2009}.
+scanners~\cite{pan_why_2009}.
 
 \inlinetodo{Read Deans (2007) chapter 6, Natterer (1986) chapter 5.1, Herman (2009) chapter 7, Kak (1987) chapter 3.3, Buzug (2008) chapter 5.6)}
 
@@ -712,12 +819,12 @@ intersect at a single point, but rather at in close proximity to each other.
 
 The original Kaczmarz method had \(\lambda(k) = 1\, \forall k \in \mathbb{N}\), lowering the
 relaxation parameter can improve the reconstruction in noisy settings. Further, the method can be
-written as a Landweber-type method\cite{hansen_discrete_2010}, but it's rather uncommon.
+written as a Landweber-type method~\cite{hansen_discrete_2010}, but it's rather uncommon.
 
 Compared to the Landweber iterations given in the previous section, the Kaczmarz methods accesses
 the rows of the system matrix \(A\) sequentially (but maybe not in ascending order). On the other
 hand Landweber type methods access all rows of the system matrix simultaneously. Hence, the
-`simultaneous` as part of SIRT\@.
+`simultaneous' as part of SIRT\@.
 
 \inlinetodo{add figure for this}
 
@@ -826,12 +933,12 @@ Shrinkage-Thresholding Algorithm (FISTA).
 \begin{definition}[ISTA]\label{def:ista}
 	The update step for ISTA is given by
 	\[
-            c^{(k+1)} = \mathscr{T_\alpha} (c^{(k)} - 2 \lambda A^T (A c^{(k)} - m))
+		c^{(k+1)} = \mathscr{T_\alpha} (c^{(k)} - 2 \lambda A^T (A c^{(k)} - m))
 	\]
-        where \(t\) is an appropriate stepsize and \(\mathscr{T_\alpha}\) is the shrinkage operator
-        defined by
+	where \(t\) is an appropriate stepsize and \(\mathscr{T_\alpha}\) is the shrinkage operator
+	defined by
 	\[
-            \mathscr{T_\alpha}(c)_j = \max(\abs{c_i} - \alpha, 0) \sign(c_j)
+		\mathscr{T_\alpha}(c)_j = \max(\abs{c_i} - \alpha, 0) \sign(c_j)
 	\]
 \end{definition}
 Similar to Landweber like methods, the residual of the forward projection current prediction and the

@@ -19,6 +19,15 @@
 \usepackage[usestackEOL]{stackengine}
 \usepackage{caption}
 \usepackage{subcaption}
+
+% Use svg
+\usepackage{svg}
+
+% Render incscape pdf's with equation
+\usepackage{import}
+\usepackage{xifthen}
+\usepackage{pdfpages}
+\usepackage{transparent}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Colors
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -211,7 +220,13 @@
 }
 
 \makeindex
-\makeglossaries
+\makeglossaries%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Nomenclature
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{nomencl}
+\makenomenclature%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Ordinals
@@ -305,18 +320,16 @@
 	%
 	\vspace{1cm}
 	%
-	\begin{minipage}[l]{\textwidth}
-		%
-		\textnormal{%
-			\normalsize
-			%
-			\begin{singlespace*}
-				\onehalfspacing
-				%
-				In this part, all of the necessary theory is presented.
-			\end{singlespace*}
-		}
-	\end{minipage}
+	% \begin{minipage}[l]{\textwidth}
+	% 	%
+	% 	\textnormal{%
+	% 		\normalsize
+	% 		%
+	% 		\begin{singlespace*}
+	% 			\onehalfspacing%
+	% 		\end{singlespace*}
+	% 	}
+	% \end{minipage}
 }
 
 \input{latex/src/2background}
