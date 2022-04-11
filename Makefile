@@ -34,6 +34,9 @@ toc:
 	pdftk $(LATEX_BUILD_DIR)/main.pdf cat 6-7 output $(LATEX_BUILD_DIR)/main_toc.pdf
 
 check:
+	$(TEXTIDOTE) --output plain --check en --dict dict.txt main.tex | tee $(LATEX_BUILD_DIR)/report.txt
+
+check-html:
 	$(TEXTIDOTE) --output html --check en --dict dict.txt main.tex > $(LATEX_BUILD_DIR)/report.html
 
 distclean:
