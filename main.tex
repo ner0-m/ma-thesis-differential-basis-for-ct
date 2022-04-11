@@ -91,7 +91,34 @@
 % \pagecolor[RGB]{213, 214, 219}
 % \color[RGB]{52, 59, 88}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Figure commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% Then I can import matplotlib stuff
+\usepackage{pgf}
+
+% Usage of includegraphicsmaybe
+% \begin{figure}[t]
+%         \centering
+%         \includegraphicsmaybe[width=0.24\textwidth]{asdasdfigures/experiments/forward_projection/2dphantom.png}
+%         \caption{Test maybe image\inlinetodo{Put figure here}}\label{fig:test_maybe}
+% \end{figure}
+\newcommand{\includegraphicsmaybe}[2][]{\IfFileExists{#2}{\includegraphics[#1]{#2}}{\includegraphics{example-image}}}
+
+% \newcommand{\incfig}[2]{%
+% 	\def\svgwidth{\columnwidth}
+% 	\import{#1}{#2.pdf_tex}
+% }
+\newcommand{\incfig}[1]{%
+	\def\svgwidth{\columnwidth}
+	\input{#1.pdf_tex}
+}
+\newcommand{\incfigmaybe}[1]{\IfFileExists{#1.pdf_tex}{\def\svgwidth{\columnwidth}\input{#1.pdf_tex}}{\includegraphics{example-image}}}
+
+% This avoid nasty errors, but I also need symbolic links from subfolder to figures folder
+\graphicspath{{figures/}}
+% \newcommand{\incfigmaybe}[1]{\IfFileExists{#1}{\incfig{#1}}{\includegraphics{example-image-a}}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Sectioning of thesis
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -153,7 +180,6 @@
 ]{definition}
 
 \usepackage{mathtools}
-\usepackage{bm}
 
 % Define \abs
 \DeclarePairedDelimiter\abs{\lvert}{\rvert}%
@@ -164,6 +190,14 @@
 % Define \sign
 \DeclareMathOperator{\sign}{sign}
 
+% Define Radon Transform
+\newcommand{\radon}{\mathscr{R}}
+% Define X-ray Transform
+\newcommand{\xray}{\mathscr{X}}
+% definitions for vectors
+\newcommand{\mvec}[1]{\symbfit{#1}}
+% approx something
+\newcommand{\near}[1]{\hat{#1}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Bibliography
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -192,20 +226,34 @@
 % Fonts
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\ifxetexorluatex
+\ifxetexorluatex%
+	\usepackage{amssymb}
+	\let\mathbbalt\mathbb
 	\usepackage{unicode-math}
+	\let\mathbb\mathbbalt% UNIVERSAL RESET TO ORIGINAL \mathbb
 	\setmainfont{IBM Plex Serif}[Scale=MatchLowercase]
 	\setsansfont{IBM Plex Sans}[Scale=MatchLowercase]
 	\setmonofont{IBM Plex Mono}[Scale=MatchLowercase]
+	% Try again after restart
+	% \setmathfont[range={\mathscr,\mathbfscr}]{XITS Math}
 \else
 	\usepackage[lf]{ebgaramond}
 	\usepackage[oldstyle,scale=0.7]{sourcecodepro}
-	\singlespacing
+	\singlespacing%
 \fi
 
 \newacronym[description={Principal component analysis}]{PCA}{PCA}{principal component analysis}
 \newacronym                                            {SNF}{SNF}{Smith normal form}
 \newacronym[description={Topological data analysis}]   {TDA}{TDA}{topological data analysis}
+\newacronym[description={Computational Imaging and Inverse Problems research group}]{CIIP}{CIIP}{Computational Imaging and Inverse Problems}
+\newacronym{TUM}{TUM}{Technical University of Munich}
+\newacronym{ART}{ART}{Algebraic Reconstruction Technique}
+\newacronym{SIRT}{SIRT}{Simultaneous Iterative Reconstruction Technique}
+\newacronym{ISTA}{ISTA}{Iterative Shrinkage-Thresholding Algorithms}
+\newacronym{FISTA}{FISTA}{Fast Iterative Shrinkage-Thresholding Algorithm}
+\newacronym{CPU}{CPU}{Central Processing Unit}
+\newacronym{GPU}{GPU}{Graphics Processing Unit}
+\newacronym{LUT}{LUT}{Look-up Table}
 
 \newglossaryentry{LaTeX}{%
 	name        = {\LaTeX},
@@ -219,7 +267,7 @@
 	sort        = {Real numbers},
 }
 
-\makeindex
+\makeindex%
 \makeglossaries%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -258,7 +306,8 @@
 \newcommand*{\getTitleGer}{Differenzierbare Projektionsoperatoren für Röntgen-Computertomographie}
 \newcommand*{\getFaculty}{Department of Informatics}
 \newcommand*{\getDoctype}{Master's Thesis in Data Engineering and Analytics}
-\newcommand*{\getSupervisor}{PD Dr. rer. nat. Tobias Lasser}
+\newcommand*{\getSupervisor}{PD Dr.\ rer.\ nat.\ Tobias Lasser}
+\newcommand*{\getAdvisor}{Advisor}
 \newcommand*{\getAuthor}{David Frank}
 \newcommand*{\getSubmissionDate}{15.06.2021}
 \newcommand*{\getSubmissionLocation}{Munich}

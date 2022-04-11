@@ -1,6 +1,61 @@
 \chapter{elsa}\label{chap:elsa}
 
-So much implementation design
+I want to dedicate a chapter to the C++ framework elsa~\cite{lasser_elsa_2019} developed at the
+\gls{CIIP} research group. As the practical part of my thesis is implemented for elsa, I feel that a
+short introduction is more than appropriated. But, throughout the last 5 years , I've mostly been
+working on either elsa, or the predecessor of it. Hence, I also like this to be a part of this
+thesis for personal reasons.
+
+elsa is a modern, flexible and open-source framework for tomographic reconstruction. I consider elsa
+to have three important goals. First, and maybe most importantly for the user side, it should be
+close the either mathematical notation, or at least mathematical concepts, second, it should be
+useful for the research done at the \gls{CIIP} research group and finally, it should be as easy as
+possible for other to reproduce results from the research.
+
+elsa is able to handle general optimization problems of the form
+\[ \argmin_{\mvec{c}} \quad T(A, \mvec{c}, \mvec{m}) + \sum_{k=1}^K \lambda_k R_k(\mvec{c}) \]
+where \(T\) is the data fidelity term depending on the forward model \(A\), the solution
+\(\mvec{c}\), and the measurements \(\mvec{m}\), \(K\) penalty or regularization terms depending on
+\(\mvec{c}\) and \(\lambda_k\) is a regularization parameter for the \(k\)th penalty term (compare
+\autoref{def:regularized_problem} with a single penalty term).
+
+Building the framework around this general problem statement enables the implementation of multiple
+imaging modalities in one framework. Currently, only X-ray attenuation CT is implemented. However,
+from a theoretical standpoint other modalities such as phase-contrast CT, (anisotropic) dark-field
+CT can be incorporated. Plus many aspects of the framework are independent of the specific
+application, and reusable. I.e\ one needs no different implementation of algorithms solving the
+above given equations such as \gls{ART}, or \gls{ISTA}\@.
+
+This is a key difference between other frameworks such as the ASTRA
+Toolbox~\cite{van_aarle_fast_2016}, TIGRE~\cite{biguri_tigre_2016} or
+FreeCT~\cite{hoffman_technical_2016}. Though there are frameworks supporting multiple imaging
+modalities, they are not general enough for the research at the \gls{CIIP} research group.
+
+From a software engineering standpoint, a lot of effort is put into reproducibility, maintenance and
+correctness, by following as many different best practices as we can and see fit. This includes
+having an extensive unit testing suite (though, we can still improve there), a merge request based
+workflow, which heavily relies on continuous integration, and as much as possible, we follow modern
+C++ guidelines and rely on modern features from C++17. Further, to ease prototyping and improve
+accessibility Python bindings are provided as well.
+
+The general architecture is is build in a couple of layers. At the bottom, all data handling is done
+by the \mintinline{cpp}{DataContainer} class. It is the one type to store and handle all
+\(n\)-dimensional data in the framework. It handles storage for data accessible by the \gls{CPU} and
+the \gls{GPU} and transfers between those two. Further, it leverages expression templates to reduce
+the general memory footprint of applications. Above that, the mathematical concepts are implemented.
+This includes concepts for residuals, functionals (such as \(l_1\), \(l_2\), or the Huber norm) and
+linear operators (modeling both the forward models and operators such as scaling or finite
+differences). Finally, it also includes an abstraction for the different algorithms solving
+optimization problems.
+
+Currently, two different forward models are implemented for X-ray attenuation CT. Both have a
+\gls{CPU} and \gls{GPU} (specifically NVidia's CUDA) version available, as the forward and backward
+projection are usually the computationally most expensive. The specific implemented methods are
+referred to as Siddon's and Joseph's method, see the next \autoref{chap:projector} for a details.
+
+I will refer the interested reader to
+\href{https://gitlab.lrz.de/IP/elsa/}{https://gitlab.lrz.de/IP/elsa/}. There, one can find guides to
+install and use elsa extensively, plus examples.
 
 \chapter{Projector}\label{chap:projector}
 
@@ -35,20 +90,20 @@ Instead of projecting the voxel center and interpolating, one can project the co
 the projector plane. This approach was taken by~\cite{long_3d_2010, long_3d_nodate} and is usually
 referred to as separable footprint. They use trapezoidal functions to approximate the footprint both
 accurately and efficiently. Hence, the contribution of voxels to the detector pixels is based on
-these trapeziodial functions. It as also been ported to graphic processing units (GPUs) as shown in
-~\cite{wu_gpu_2011, xie_effective_2015, chapdelaine_new_nodate}. To the best of my knowledge, for
-voxel based approaches, this is the state of the art approach and outperforms other approaches.
+these trapeziodial functions. It as also been ported to \gls{GPU} as shown in ~\cite{wu_gpu_2011,
+	xie_effective_2015, chapdelaine_new_nodate}. To the best of my knowledge, for voxel based
+approaches, this is the state of the art approach and outperforms other approaches.
 
 This approach was translated to B-Splines in~\cite{momey_b-spline_2012, momey_spline_2015}. There
 B-Splines are assumed to be the basis function at pixel centers, and then the B-Splines are
 projected onto the projector plane. As shown in chapter about B-Spline basis functions
 \insertref{B-Spline chapter}, the projection of \(n\)-dimensional B-Splines yield a
 \(n-1\)-dimensional B-Spline, hence the projection is simple and
-accurate.~\cite{momey_b-spline_2012} already incoorporated both parallel-beam and cone-beam
+accurate.~\cite{momey_b-spline_2012} already incorporated both parallel-beam and cone-beam
 geometry.
 
 Similarly,~\cite{ziegler_efficient_2006} proposed a footprint approach for blobs. And it was
-improved and ported to the GPU by~\cite{bippus_projector_2011}.~\cite{kohler_iterative_2011}
+improved and ported to the \gls{GPU} by~\cite{bippus_projector_2011}.~\cite{kohler_iterative_2011}
 describes a blob projector for phase-contrast CT\@.
 
 A shared problem of the voxel-based approaches, is the challenge of parallel implementations. During
@@ -68,12 +123,24 @@ I.e.\, this is the exact calculation of the line integral of a single ray throug
 recent work like~\cite{jacobs_fast_1998, christiaens_fast_1999, zhao_fast_2004, gao_fast_2012}
 improved on the Siddon's method, especially in efficiency and
 performance.~\cite{de_greef_accelerated_2009, xiao_efficient_2012} ported Siddon's methods to the
-GPU\@.
+\gls{GPU}\@.
+
+\begin{figure}[H]
+	\centering
+	% Taken from https://tex.stackexchange.com/a/398309
+	\includegraphics[width=\textwidth]{./figures/projectors_siddon/siddon_traversal.png}
+	\caption{Visualization of Siddon's method. Siddon's method exactly computes the intersection
+		length of each voxel (text inside each voxel) with a ray (cardinal red line), which
+		is used as a weight for the forward and backward projections. The intersection
+		length for each voxel is given by the distance between the points where the ray
+		enters and exists each voxel (marked as black
+		dots).}\label{fig:visualization_siddon_traversal}
+\end{figure}
 
 Another classic is presented in~\cite{joseph_improved_1982}. It assumes a smooth image and
 interpolates between neighbouring voxels along the ray path. It does so by a in slice-interpolation,
 i.e.\ the voxels perpendicular to the main ray direction are visited.~\cite{graetz_high_2020}
-proposed a branchless GPU version of this approach.
+proposed a branchless \gls{GPU} version of this approach.
 
 The backward projections of ray-driven approaches typically trace the ray from a detector pixel to
 the source and update all visited voxels based on the weights calculated as in the forward
@@ -89,7 +156,7 @@ An entirely different approach is the \textit{distance-driven} approach
 ~\cite{de_man_distance-driven_2002, de_man_distance-driven_2004}. There, the voxel boundaries and
 detector pixel boundaries are projected onto a common axis, then the overlap is used as a weight.
 This approach is still state of the art, however, is suffers from inaccuracys for projections, which
-are close to 45°. A branchless GPU version was proposed in~\cite{liu_gpu-based_2017}. The
+are close to 45°. A branchless \gls{GPU} version was proposed in~\cite{liu_gpu-based_2017}. The
 distance-driven approach doesn't suffer from any high-frequency artifacts.
 
 Projectors based on blobs have been studied for quite some time. Ray-driven approaches are based on
@@ -103,8 +170,88 @@ Another area of projectors compute the intersection area of multiple rays. Such 
 in~\cite{ha_study_2015, ha_efficient_2016, ha_look-up_2018}, calculate the intersection between rays
 directed a detector boundaries.
 
-\section{Implementation}\label{sec:implementation}
+\section{Implementation of Differentiable Projection Operators}\label{sec:implementation}
 
+The forward model is implemented elsa, and can be found in the master branch. This section covers
+first a general overview of the algorithm, plus some details on the implementation. Recall the
+definition of image from \autoref{def:image}, this method works for both \(2\) and \(3\) dimensional
+images, however, to avoid repetition I will only talk about images and refer to both.
+
+For both the forward and backward projection, the implemented algorithm can be categorized as a
+ray-driven approach. I.e.\ it traverses each ray through the image going form all the poses defined
+to each detector pixel.
+
+Given a ray, the first step is a quick intersection test of the ray and the bounding box of the
+image. If the ray hits the bounding box, it needs to traverse the regular spaced grid of the image.
+The specific traversal algorithm is based on~\cite{amanatides_fast_1987}, however it is simplified.
+In \autoref{fig:visualization_siddon_traversal} the steps the algorithm would take can be seen. It
+ensures, each voxel is visited, even if it is only for a small amount.
+
+For the purpose of this projector, however, the basis functions considered have a support larger
+than a single voxel. Hence, the previous algorithm can be simplified to traverse in a
+\textit{slice-by-slice} fashion. Specifically, this means, that the algorithm only steps a fixed
+width in the leading direction of the given ray. The voxels visited this way are referred to here as
+\textit{center voxels}, as they are the center of the a given slice. Then for each center voxel, the
+neighbouring voxels perpendicular to the leading direction are visited for a given distance. The
+distance depends on the specific choice of basis function and their parameters. This is depicted in
+\autoref{fig:visualization_slice_traversal}.
+
+\begin{figure}[H]
+	\centering
+	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+			\begin{subfigure}{0.65\textwidth}
+				\includegraphics[width=\textwidth]{./figures/projectors_slice/slice_traversal.png}
+				\caption{}\label{fig:visu_slice_traver_a}%
+			\end{subfigure}%
+			\begin{subfigure}{0.65\textwidth}
+				\includegraphics[width=\textwidth]{./figures/projectors_slice/slice_traversal_clean.png}
+				\caption{}\label{fig:visu_slice_traver_b}%
+			\end{subfigure}
+		}}
+	\caption{\subref{fig:visu_slice_traver_a} Visualization of the voxels visited
+		for the slice traversal. The ray (cardinal red line) traverses the image. For each
+		center voxel (darker blue), neighbour voxels (light blue) perpendicular to the
+		leading direction (here the x-direction) are visited for a certain distance (here
+		the distance is \(1\)). The center voxels are traversed from closer to the ray
+		origin, in this visualization on the left, going to the right. The dotted black
+		lines indicate the perpendicular distance from the voxel center to the ray.
+		\subref{fig:visu_slice_traver_b} same setting as in
+		\subref{fig:visu_slice_traver_a}, however, the support of the a basis function is
+		depicted (black circle), only for a single slice. There the intersection between the
+		ray and the circle is the Radon Transform of the ray and the contribution of the
+		basis function to the projection.
+	}\label{fig:visualization_slice_traversal}
+\end{figure}
+
+The next important part of the projector is the evaluation of the weight for each visited voxel.
+Looking at \autoref{fig:visualization_slice_traversal}, the dotted black lines indicate the
+distances from the voxel center to the ray. These distances are used to compute the Radon Transform
+of the given basis function.
+
+In the case of blob basis functions, the closed form solution given in \autoref{eq:radon_blob_basis}
+is used with \(r\) being exactly the distance just mentioend. In the case of B-Splines it is just a
+touch more complicated. As explained in \autoref{sec:bspline_basis}, the projected B-Spline are
+again B-Splines. However, B-Splines are not perfectly spherically symmetric. But they are close
+enough to assume it (compare~\cite{momey_b-spline_2012, momey_spline_2015} for specifics) Hence, it
+is assumed that the B-Spline are spherically symmetric, and therefore the evaluation (and using
+their separability) simplifies to
+\[ \radon\beta^d(r) = \beta^d(r) \prod^{n - 1}_{k=1} \beta^d(0) \]
+For both basis functions, a \gls{LUT} is computed first for the creation of the projector, and the
+for the actual projections the values are looked up.
+
+The same traversal and evaluation methods are used for both the forward and backward projection, and
+hence no further disuccsion is needed there. However, one more point should be noted for the sake of
+completeness. As \citeauthor*{momey_spline_2015}~\cite{momey_spline_2015} showed for B-Splines and
+\citeauthor*{kohler_iterative_2011}~\cite{kohler_iterative_2011} for blobs, it is possible to use
+footprints instead of a ray-driven approach for both basis functions. The only reason this wasn't
+pursued during this thesis, is the lack of experience of the footprint based methods in elsa. This
+definitely is a possible area of improvement in the projector.
+
+Also note, the current version of the projector only supports X-ray attenuation CT. However, this
+projector should be easily adapted to instead of the Radon Transform, yield the derivative of the
+Radon Transform as weights. In theory, it should only be necessary to create a the function to
+populate the \gls{LUT}, and a very thing wrapper around it to provide the functionality needed for
+elsa to use it as a projector.
 
 \chapter{Experiments}\label{chap:experiments}
 
