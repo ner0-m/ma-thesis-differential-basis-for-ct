@@ -2,7 +2,7 @@
 
 I want to dedicate a chapter to the C++ framework elsa~\cite{lasser_elsa_2019} developed at the
 \gls{CIIP} research group. As the practical part of my thesis is implemented for elsa, I feel that a
-short introduction is more than appropriated. But, throughout the last 5 years , I've mostly been
+short introduction is more than appropriated. But, throughout the last 5 years, I've mostly been
 working on either elsa, or the predecessor of it. Hence, I also like this to be a part of this
 thesis for personal reasons.
 
@@ -32,13 +32,13 @@ FreeCT~\cite{hoffman_technical_2016}. Though there are frameworks supporting mul
 modalities, they are not general enough for the research at the \gls{CIIP} research group.
 
 From a software engineering standpoint, a lot of effort is put into reproducibility, maintenance and
-correctness, by following as many different best practices as we can and see fit. This includes
+correctness, by following as numerous different best practices as we can and see fit. This includes
 having an extensive unit testing suite (though, we can still improve there), a merge request based
 workflow, which heavily relies on continuous integration, and as much as possible, we follow modern
 C++ guidelines and rely on modern features from C++17. Further, to ease prototyping and improve
 accessibility Python bindings are provided as well.
 
-The general architecture is is build in a couple of layers. At the bottom, all data handling is done
+The general architecture is build in a couple of layers. At the bottom, all data handling is done
 by the \mintinline{cpp}{DataContainer} class. It is the one type to store and handle all
 \(n\)-dimensional data in the framework. It handles storage for data accessible by the \gls{CPU} and
 the \gls{GPU} and transfers between those two. Further, it leverages expression templates to reduce
@@ -51,7 +51,7 @@ optimization problems.
 Currently, two different forward models are implemented for X-ray attenuation CT. Both have a
 \gls{CPU} and \gls{GPU} (specifically NVidia's CUDA) version available, as the forward and backward
 projection are usually the computationally most expensive. The specific implemented methods are
-referred to as Siddon's and Joseph's method, see the next \autoref{chap:projector} for a details.
+referred to as Siddon's and Joseph's method, see the next \autoref{chap:projector} for details.
 
 I will refer the interested reader to
 \href{https://gitlab.lrz.de/IP/elsa/}{https://gitlab.lrz.de/IP/elsa/}. There, one can find guides to
@@ -61,7 +61,7 @@ install and use elsa extensively, plus examples.
 
 As shown in previous chapters, calculation of the system matrix coefficients is one of the key
 components of tomographic reconstruction. Thus, this has been an important part of research. The
-routines or algorithms, which calculate the matrix are usually referred to as projectors. For the
+routines or algorithms, which calculate the matrix are frequently referred to as projectors. For the
 forward projection, the contribution of each voxel to each detector pixel is calculated. For the
 backward projection, the contribution of each detector pixel each a voxel is computed.
 
@@ -75,24 +75,24 @@ methods.
 One of the first mentions of projector routines can be found in the RECLBL library package
 \insertref{RECLBL}. Namely, the two types of projectors introduced there are the
 \textit{voxel-driven} (or \textit{pixel-driven} for the 2D case) and the \textit{ray driven}. Many
-state of the art projectors still build on the ideas of these projectors.
+state-of-the-art projectors still build on the ideas of these projectors.
 
 The voxel driven approach is very simple. For the forward projection, each voxel is visited and the
 voxel center is projected onto the detector. Finally, the contribution of the voxel to the detector,
 is computed using some form of interpolation.~\cite{peters_algorithms_1981} used bilinear
-interpolation between the two neighbouring detector pixels.~\cite{harauz_interpolation_1983}
-improved on the approach by using bicubic spline interpolation. However, the approach is used rarely
-due to the introduced artifacts (C.f.~\cite[Chapter 3.3]{levakhina_three-dimensional_2014}). I.e. if
-the resolution of the detector is finer compared to the volume, detector pixels might never be
-assigned a value. \todo{describe back projector properly as well}
+interpolation between the two neighboring detector pixels.~\cite{harauz_interpolation_1983}
+improved on the approach by using bi-cubic spline interpolation. However, the approach is used
+rarely due to the introduced artifacts (C.f.~\cite[Chapter~3.3]{levakhina_three-dimensional_2014}).
+I.e.\ if the resolution of the detector is finer compared to the volume, detector pixels might never
+be assigned a value. \todo{describe back projector properly as well}
 
 Instead of projecting the voxel center and interpolating, one can project the complete voxel onto
 the projector plane. This approach was taken by~\cite{long_3d_2010, long_3d_nodate} and is usually
 referred to as separable footprint. They use trapezoidal functions to approximate the footprint both
 accurately and efficiently. Hence, the contribution of voxels to the detector pixels is based on
-these trapeziodial functions. It as also been ported to \gls{GPU} as shown in ~\cite{wu_gpu_2011,
+these trapezoidal functions. It as also been ported to \gls{GPU} as shown in~\cite{wu_gpu_2011,
 	xie_effective_2015, chapdelaine_new_nodate}. To the best of my knowledge, for voxel based
-approaches, this is the state of the art approach and outperforms other approaches.
+approaches, this is the state-of-the-art approach and outperforms other approaches.
 
 This approach was translated to B-Splines in~\cite{momey_b-spline_2012, momey_spline_2015}. There
 B-Splines are assumed to be the basis function at pixel centers, and then the B-Splines are
@@ -107,25 +107,25 @@ improved and ported to the \gls{GPU} by~\cite{bippus_projector_2011}.~\cite{kohl
 describes a blob projector for phase-contrast CT\@.
 
 A shared problem of the voxel-based approaches, is the challenge of parallel implementations. During
-the forward projectiong, shared access to the projector pixels might be needed. Hence, mitigation
+the forward projection, shared access to the projector pixels might be needed. Hence, mitigation
 strategies must be developed.
 
 A conceptually different approach compared to the voxel-based approach, is the \textit{ray-based}
 approach. There, the key idea is to trace rays through the volume. Typically, the intersection
 length is used as a contribution of a pixel to the detector pixel.
 
-Note that this the forward projection of this approach, is trivially parallisable. Each ray can be
+Note that this the forward projection of this approach, is trivially parallelizable. Each ray can be
 traced independently through the volume.
 
 A classical ray-driven approach was proposed by~\cite{siddon_fast_1985}, often is is referred to as
 Siddon's method. There, the exact path length of a ray traversing through a volume is calculated.
-I.e.\, this is the exact calculation of the line integral of a single ray through the volume. More
+I.e.\ this is the exact calculation of the line integral of a single ray through the volume. More
 recent work like~\cite{jacobs_fast_1998, christiaens_fast_1999, zhao_fast_2004, gao_fast_2012}
 improved on the Siddon's method, especially in efficiency and
 performance.~\cite{de_greef_accelerated_2009, xiao_efficient_2012} ported Siddon's methods to the
 \gls{GPU}\@.
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	% Taken from https://tex.stackexchange.com/a/398309
 	\includegraphics[width=\textwidth]{./figures/projectors_siddon/siddon_traversal.png}
@@ -138,7 +138,7 @@ performance.~\cite{de_greef_accelerated_2009, xiao_efficient_2012} ported Siddon
 \end{figure}
 
 Another classic is presented in~\cite{joseph_improved_1982}. It assumes a smooth image and
-interpolates between neighbouring voxels along the ray path. It does so by a in slice-interpolation,
+interpolates between neighboring voxels along the ray path. It does so by a in slice-interpolation,
 i.e.\ the voxels perpendicular to the main ray direction are visited.~\cite{graetz_high_2020}
 proposed a branchless \gls{GPU} version of this approach.
 
@@ -148,27 +148,27 @@ direction. And in the of Joseph's based methods, also voxels close by are update
 that parallelization is hindered by the possibility of shared write access to voxels.
 
 Typically, iterative reconstruction algorithms expect that the forward and backward projectors are
-adjoints of each other \insertref{forward and backward projectors are adjoints}, i.e.\ they are
+the adjoint of each other \insertref{forward and backward projectors are adjoints}, i.e.\ they are
 \textit{matched} projector pair. This fails for basic pixel- and ray-driven approaches.
-They either either introduce artifacts during the forward or backward projections.
+They either introduce artifacts during the forward or backward projections.
 
 An entirely different approach is the \textit{distance-driven} approach
 ~\cite{de_man_distance-driven_2002, de_man_distance-driven_2004}. There, the voxel boundaries and
 detector pixel boundaries are projected onto a common axis, then the overlap is used as a weight.
-This approach is still state of the art, however, is suffers from inaccuracys for projections, which
-are close to 45°. A branchless \gls{GPU} version was proposed in~\cite{liu_gpu-based_2017}. The
+This approach is still state of the art, however, is suffers from inaccuracies for projections, which
+are close to \(45^\circ\). A branchless \gls{GPU} version was proposed in~\cite{liu_gpu-based_2017}. The
 distance-driven approach doesn't suffer from any high-frequency artifacts.
 
 Projectors based on blobs have been studied for quite some time. Ray-driven approaches are based on
 algorithms proposed in~\cite{matej_practical_1996, popescu_ray_2004}. But rather than assuming a
 infinitely thin ray, they assume a beam. Hence, they are somewhat similar to Joseph's projectors,
-that they have to visit neighbouring voxels, as the support of blobs is larger than that of pixels.
+that they have to visit neighboring voxels, as the support of blobs is larger than that of pixels.
 ~\cite{levakhina_distance-driven_2010} proposed a variant of the distance-driven approach based on
 blobs.
 
 Another area of projectors compute the intersection area of multiple rays. Such methods, as proposed
 in~\cite{ha_study_2015, ha_efficient_2016, ha_look-up_2018}, calculate the intersection between rays
-directed a detector boundaries.
+directed a detector boundary.
 
 \section{Implementation of Differentiable Projection Operators}\label{sec:implementation}
 
@@ -191,12 +191,12 @@ For the purpose of this projector, however, the basis functions considered have 
 than a single voxel. Hence, the previous algorithm can be simplified to traverse in a
 \textit{slice-by-slice} fashion. Specifically, this means, that the algorithm only steps a fixed
 width in the leading direction of the given ray. The voxels visited this way are referred to here as
-\textit{center voxels}, as they are the center of the a given slice. Then for each center voxel, the
-neighbouring voxels perpendicular to the leading direction are visited for a given distance. The
+\textit{center voxels}, as they are the center of a given slice. Then for each center voxel, the
+neighboring voxels perpendicular to the leading direction are visited for a given distance. The
 distance depends on the specific choice of basis function and their parameters. This is depicted in
 \autoref{fig:visualization_slice_traversal}.
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
 			\begin{subfigure}{0.65\textwidth}
@@ -210,13 +210,13 @@ distance depends on the specific choice of basis function and their parameters. 
 		}}
 	\caption{\subref{fig:visu_slice_traver_a} Visualization of the voxels visited
 		for the slice traversal. The ray (cardinal red line) traverses the image. For each
-		center voxel (darker blue), neighbour voxels (light blue) perpendicular to the
+		center voxel (darker blue), neighbor voxels (light blue) perpendicular to the
 		leading direction (here the x-direction) are visited for a certain distance (here
 		the distance is \(1\)). The center voxels are traversed from closer to the ray
 		origin, in this visualization on the left, going to the right. The dotted black
 		lines indicate the perpendicular distance from the voxel center to the ray.
 		\subref{fig:visu_slice_traver_b} same setting as in
-		\subref{fig:visu_slice_traver_a}, however, the support of the a basis function is
+		\subref{fig:visu_slice_traver_a}, however, the support of the basis function is
 		depicted (black circle), only for a single slice. There the intersection between the
 		ray and the circle is the Radon Transform of the ray and the contribution of the
 		basis function to the projection.
@@ -229,7 +229,7 @@ distances from the voxel center to the ray. These distances are used to compute 
 of the given basis function.
 
 In the case of blob basis functions, the closed form solution given in \autoref{eq:radon_blob_basis}
-is used with \(r\) being exactly the distance just mentioend. In the case of B-Splines it is just a
+is used with \(r\) being exactly the distance just mentioned. In the case of B-Splines it is just a
 touch more complicated. As explained in \autoref{sec:bspline_basis}, the projected B-Spline are
 again B-Splines. However, B-Splines are not perfectly spherically symmetric. But they are close
 enough to assume it (compare~\cite{momey_b-spline_2012, momey_spline_2015} for specifics) Hence, it
@@ -240,7 +240,7 @@ For both basis functions, a \gls{LUT} is computed first for the creation of the 
 for the actual projections the values are looked up.
 
 The same traversal and evaluation methods are used for both the forward and backward projection, and
-hence no further disuccsion is needed there. However, one more point should be noted for the sake of
+hence no further discussion is needed there. However, one more point should be noted for the sake of
 completeness. As \citeauthor*{momey_spline_2015}~\cite{momey_spline_2015} showed for B-Splines and
 \citeauthor*{kohler_iterative_2011}~\cite{kohler_iterative_2011} for blobs, it is possible to use
 footprints instead of a ray-driven approach for both basis functions. The only reason this wasn't
@@ -249,11 +249,12 @@ definitely is a possible area of improvement in the projector.
 
 Also note, the current version of the projector only supports X-ray attenuation CT. However, this
 projector should be easily adapted to instead of the Radon Transform, yield the derivative of the
-Radon Transform as weights. In theory, it should only be necessary to create a the function to
-populate the \gls{LUT}, and a very thing wrapper around it to provide the functionality needed for
-elsa to use it as a projector.
+Radon Transform as weights. In theory, it should only be necessary to create a function to populate
+the \gls{LUT}, and a very thing wrapper around it to provide the functionality needed for elsa to
+use it as a projector.
 
 \chapter{Experiments}\label{chap:experiments}
+
 
 \section{Reproducibility}\label{sec:experiments_repoduction}
 
@@ -263,6 +264,11 @@ scripts, which can be found in the GitHub repository for this Thesis. You need t
 Then you'll be able to run all the scripts, with the last argument being the path to the
 \textit{example\_argparse} binary, which you just build.
 
+The experiments are run using elsa. Hence, some further detilas have to be given here. The overall
+the geometric setup elsa follows is as described in
+\citeauthor{hartley_multiple_2003}~\cite{hartley_multiple_2003}. Further, elsa is itself unitless.
+Hence, distances are always given in relation to pixel sizes.
+
 \section{Error measurements}\label{sec:error_measurements}
 
 Error measurements are a delicate topic. They can fake a false sense of security. Metrics might
@@ -270,68 +276,93 @@ indicate a improved result, however visually the result might be worse. Therefor
 are taken into considerations here.
 
 \begin{definition}[Mean Squared Error]
-	One of the most famous error metrics: \textit{Mean Square Error}(MSE). It is defined as the
+	One of the most famous error metrics: \textit{\gls{MSE}}. It is defined as the
 	squared differences of each pixel value, weighted with the total number of pixels
 	\[ MSE = \frac{1}{n} \sum_{i=1}^{n}(x_i - \hat{x}_i)^2\]
 	where \(x_i\) is each voxel of the reference image, \(\hat{x}_i\) each voxel of the comparison
 	image and \(n\) the total number of voxels in the image.
 \end{definition}
 
-Building on top of the MSE, the \textit{Root Mean Square Error}, is the square root of the MSE.
+Building on top of the \gls{MSE}, the \textit{\gls{RMSE}}, is the square root of the
+\gls{MSE}.
 \begin{definition}[Normalized Root Mean Squared Error]
-	The \textit{Root Mean Square Error} is defined as
+	The \textit{\glsfirst{RMSE}} is defined as
 	\[ RMSE = \sqrt{MSE(x, \hat{x}}) \]
 	where \(x\) is the reference image and \(\hat{x}\) the comparison image. Further, the
-	\textit{Normalized Root Mean Squared Error} is defined as
+	\textit{\glsfirst{NRMSE}} is defined as
 	\[ NRMSE = \frac{RMSD}{x_{max} - x_{min}} \]
 	with \(x_{min}\) and \(x_{max}\) are the minimum and maximum values of the reference image,
 	respectively.
 \end{definition}
-Another frequently used metric is the \textit{Peak Signal to Noise Ration} (PSNR)
+Another frequently used metric is the \textit{\gls{PSNR}}
 \begin{definition}[Peak Signal to Noise Ration]
-	The \textit{Peak Signal to Noise Ration} is defined as
+	The \textit{\glsfirst{PSNR}} is defined as
 	\[ PSNR = 10 \cdot \log_{10}\left( \frac{MAX}{\sqrt{MSE}} \right) \]
 	where \(MAX\) is the maximum possible range depending on the data type of the images
 \end{definition}
-All of the so far given metrics are based on the MSE, i.e.\ they measure based on exact voxel by
+\inlinetodo{Add references}
+All the so far given metrics are based on the \gls{MSE}, i.e.\ they measure based on exact voxel by
 voxel values. They measure absolute errors and weight them depending on the exact method. However,
 they don't necessarlly have much in common with the visual perception of humans. The
-\textit{Structural Similarity Index Measure} (SSIM) is a perception-based approach. The idea for
-SSIM is the relation of close pixels to one another and different values important to the human
-perception.
+\textit{\gls{SSIM}}~\cite{wang_image_2004,avanaki_exact_2009} is a perception-based approach. The
+idea for \gls{SSIM} is the relation of close pixels to one another and different values important to
+the human perception.
 \begin{definition}[Structural Similarity Index Measure]
-	Given a reference image \(x\) and a comparison image \(\hat{x}\) then the \textit{Structural
-		Similarity Index Measure} is given by
+	given by Given a reference image \(x\) and a comparison image \(\hat{x}\) then the
+	\textit{\glsfirst{SSIM}} is
 	\[ SSIM(x, \hat{x}) = \frac{\left(2 \mu_x \mu_{\hat{x}} + c_1\right) \left( 2
 			\sigma_{x, \hat{x}} + c_2 \right)}{\left(\mu_x^2
 			+ \mu_{\hat{x}}^2 + c_1 \right) \left( \sigma_x^2 + \sigma_{\hat{x}}^2 + c_2 \right)} \]
 	where \(\mu_x\) is the average of \(x\), \(\mu_{\hat{x}}\) is the average of \(\hat{x}\),
 	\(\sigma_x^2\) is the variance of \(x\), \(\sigma_{\hat{x}}^2\) is the variance of
 	\(\hat{x}\), and \(\sigma_{x, \hat{x}}\) is the covariance of \(x\) and \(\hat{x}\)
-	\insertref{DOI:10.1109/TIP.2003.819861 and DOI:10.1007/s10043-009-0119-z}
 \end{definition}
 
-\inlinetodo{Add references}
+Throughout the experiment sections, all error metrics are calculated the same way. The error norms
+are computed using the scikit python package~\cite{van_der_walt_scikit-image_2014}. The snippet of
+python code in Listing \autoref{py:error_metric} illustrades this.
+
+\begin{listing}[h]
+	\begin{minted}{python}
+from skimage.metrics import structural_similarity
+from skimage.metrics import mean_squared_error
+from skimage.metrics import normalized_root_mse
+from skimage.metrics import peak_signal_noise_ratio
+
+# Assuming both phantom and reconstruction are read in somehow
+MSE = mean_squared_error(phantom, reconstruction)
+NRMSE = normalized_root_mse(phantom, reconstruction)
+PSNR = peak_signal_noise_ratio(phantom, reconstruction)
+SSIM = structural_similarity(phantom, reconstruction,
+        data_range=phantom.max() - phantom.min())
+    \end{minted}
+	\caption{Computation of \gls{MSE}, \gls{NRMSE}, \gls{PSNR} and \gls{SSIM} using the scikit python package.}\label{py:error_metric}
+\end{listing}
 
 \section{Forward Projection}\label{sec:experiments_forward_projection}
 
-\inlinetodo{Maybe you have time to do implement a analytic sinogram for blob phantoms}
-
 As explained in details in the background part of thesis, the forward projection is in the case of
-attenuation X-ray CT, the line integral through the object. It's quality if important for every
+attenuation X-ray CT, the line integral through the object. It's quality if essential for every
 reconstruction task.
 
-\inlinetodo{Rework with reformated figures}
+For this section, the sinograms of the Shepp-Logan phantom~\cite{shepp_fourier_1974} (shown in
+\autoref{fig:overview_shepp_logan_phantom}) are compared. The sinogram is computed for each
+different projector method (The projector using blobs and B-Splines, Siddon's and Joseph's method).
+The projection is performed in \(2\)D. The resolution of the initial phantom is \(512 \times 512\)
+pixel. The sinogram is computed for in total \(768\) projection angles arranged equally spaced in a
+full circle around the object. The source is \(51200\) units away from the image center and the
+detector is \(512\) units away. The one-dimensional flat detector has a resolution of \(\lfloor 512
+* \sqrt{2} \rfloor = 724\) for each pose.
 
-\inlinetodo{Describe experiment setup detailed}
-In \autoref{fig:sinogram_shepp_logan}, one can see the sinogram of the Shepp-Logan phantom
-\insertref{Reference to Shepp-Logan phantom} (see \autoref{fig:shepp_logan_phantom}). If one never
-seen a sinogram, each row (in this case, someimtes it is turned 90°) represents the projection of a
-certain angle. In this case, the first row is the projection with angle 0° and increments downwards
-in equally spaced steps for a total arc of 360°. For this sonogram in total 1024 angles are
-computed.
+A similar setup was used for the three-dimensional forward projection. Apart from the difference in
+dimension, it uses as phantom size of \(256 \times 256 \times 256\) voxels. The detector is flat and
+has a along a full \(360^\circ\) circular trajectory around the object. The circular trajectory is
+resolution of \(362 \times 362\) pixels. In total \(384\) equally spaced projection poses are
+acquired equivalent to a rotation around the \(y\)-axis, with the center of rotation being the
+center of the volume. The distance to from the source to the center is \(25600\) units and the
+distance from the center of the volume to the principal point of the detector is \(256\) units.
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	% Taken from https://tex.stackexchange.com/a/398309
 	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
@@ -389,11 +420,11 @@ computed.
 			\end{subfigure}
 			\begin{subfigure}[b]{0.3321\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/plot_sino_differences.png}
-				\caption{Cross section of \(180\)° projection}\label{fig:plot_sino_differences}
+				\caption{Cross-section of \(180\)° projection}\label{fig:plot_sino_differences}
 			\end{subfigure}
 			\begin{subfigure}[b]{0.3321\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dphantom_windowed.png}
-				\caption{Shepp-Logan phantom}\label{fig:shepp_logan_phantom}
+				\caption{Shepp-Logan phantom}\label{fig:forward_shepp_logan_phantom}
 			\end{subfigure}
 		}}
 	\caption{\subref{fig:sinogram_blob}--\subref{fig:sinogram_joseph} sinogram of \(256 \times
@@ -407,121 +438,259 @@ computed.
 		sinogram between the sinogram for the Blob based and B-Spline based projector.%
 		\subref{fig:plot_sino_differences} Plot of cross sections at \(180\)° (i.e.\ the
 		center row) of sinograms. The intensity difference of the Blob based projector
-		compared to the others is clearly visible. \subref{fig:shepp_logan_phantom} original
-		shepp-logan phantom used to create the sinograms}%
+		compared to the others is clearly visible. \subref{fig:forward_shepp_logan_phantom} original
+		Shepp-Logan phantom used to create the sinograms}%
 	\label{fig:sinogram_shepp_logan}
 \end{figure}
 
-However, on this scale fine details will be lost. Therefore, a crop into the center left edge of the
-sinogram is given in \autoref{fig:sinogram_shepp_logan_center_crop}. This is the region for the
-projection angles around 180° degrees. The Siddon's projector in
-\autoref{fig:sinogram_siddon_center_crop} exhibits the strongest artifacts. Similar artifacts are
-present in regions around all multiples of 45° degrees (visible in \autoref{fig:sinogram_siddon}, if
-zoomed in) Similar artifacts, These are the typical artifacts for ray-driven projectors. The
-Joseph's projector in \autoref{fig:sinogram_joseph_center_crop} already reduces these artefacts
-successfully.
-
-Both the Blob and B-Spline based projector don't exhibit these kind of artifacts as the Siddon's
-projector. However, they also contain less artifacts than the Joseph's one. This is better visible
-in the difference images, depicted in \autoref{fig:sino_differences}. Please note that these are
-normalized absolute difference, i.e.\ the sinograms are normalized to the interval \(\mathopen[0,
-	1\mathclose]\), and then the absolute value of the voxel-by-voxel difference is computed.
-
-The first row of \autoref{fig:sino_differences} show the difference of the sinograms of the Siddon's
-and Joseph's projector compared to the Blob based projector. The second row, the difference of
-Siddon's and Joseph's to the B-Spline based on. For both projectors, the ring like artifacts from
-the Siddon's projector are clearly visible again. However, now one can also see ring-like artifacts
-in the difference to the Joseph's projector. They are clearly visible around each multiple of 45°
-and 90° degree. Here, it is also clearly visible, that the Joseph's projector has the most artifacts
-around the multiples of 45° degrees.
-
-\autoref{fig:sino_diff_blob_bspline} shows the difference between the blob and B-Spline based
-projectors. As expected they behave very much identical. The light outlines of the sinogram are
-mostly due to the a small difference in brightness in the blob based projector. However, in the 45°
-degree cases, they behave differently. \todo{They also different in something around 22.5° degrees,
-	find out which exactly}
+Looking at \autoref{fig:sinogram_shepp_logan}, an overview of the forward projection for the
+different projectors is shown. As a first, an obvious observation: All of the forward projections
+are accatable. There exist differences (as it can be seen in the second and third row of
+\autoref{fig:sinogram_shepp_logan}), but one has to look more in-depth. Staying with the overview
+first and looking at the first row, one should note the extreme difference in displayed values. The
+projectors based on the blob basis functions is noticeably brigther. This is reconfirmed with the
+plot in \autoref{fig:plot_sino_differences}. The plot shows a cross-section slice of the sinogram at
+\(180^\circ\). There is it clear, the blob based projector has a throughout higher intensity value.
+This also motivates the choice of absolute normalized differences. Focusing on the overall visible
+artifacts, one can see in the difference images
+(\autoref{fig:sino_diff_blob_siddon} -- \autoref{fig:sino_diff_bspline_joseph}), artifacts most
+notably in the differences to the Siddon's projector. The area around angles divadable by
+\(90^\circ\) contains clearly ring like artifacts especially in the boundary portion of the
+sinogram. The blob and B-Spline based projectors compared to the Joseph's have the most visible
+difference at multiples of \(45^\circ\).
+Lastly looking at the difference between the blob and and B-Spline based projector in
+\autoref{fig:sino_diff_blob_bspline}, once can see clear differences in at multiples of
+\(45^\circ\).
 
 \begin{figure}[h]
 	\centering
+
 	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
-			\begin{subfigure}[b]{0.3125\textwidth}
-				% \centering
-				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_croped_Blob.png}
+			\rotatebox[origin=c]{90}{\bfseries Forward projections\strut}
+			\begin{subfigure}{0.3125\textwidth}
+				\stackinset{c}{}{t}{-.2in}{}{%
+					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_Blob.png}}
 				\caption{Blob based projector}\label{fig:sinogram_blob_center_crop}
-			\end{subfigure}
-			\begin{subfigure}[b]{0.3125\textwidth}
-				% \centering
-				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_croped_BSpline.png}
+			\end{subfigure}%
+			\begin{subfigure}{0.3125\textwidth}
+				\stackinset{c}{}{t}{-.2in}{}{%
+					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_BSpline.png}}
 				\caption{B-Spline based projector}\label{fig:sinogram_bspline_center_crop}
-			\end{subfigure}
-			\begin{subfigure}[b]{0.3125\textwidth}
-				% \centering
-				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_croped_Siddon.png}
+			\end{subfigure}%
+			\begin{subfigure}{0.3125\textwidth}
+				\stackinset{c}{}{t}{-.2in}{}{%
+					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_Siddon.png}}
 				\caption{Siddon's projector}\label{fig:sinogram_siddon_center_crop}
-			\end{subfigure}
-			\begin{subfigure}[b]{0.3125\textwidth}
-				% \centering
-				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_croped_Joseph.png}
+			\end{subfigure}%
+			\begin{subfigure}{0.3125\textwidth}
+				\stackinset{c}{}{t}{-.2in}{}{%
+					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_Joseph.png}}
 				\caption{Joseph's projector}\label{fig:sinogram_joseph_center_crop}
-			\end{subfigure}
+			\end{subfigure}%
 		}}
 
 	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
-			\begin{subfigure}[b]{0.3125\textwidth}
-				% \centering
-				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_croped_difference_Blob_Siddon.png}
+			\rotatebox[origin=c]{90}{\bfseries Absolute Normalized Differences\strut}
+			\begin{subfigure}{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_difference_Blob_Siddon.png}
 				\caption{Difference Blob and Siddon}\label{fig:sinogram_difference_blob_siddon_crop}
-			\end{subfigure}
-			\begin{subfigure}[b]{0.3125\textwidth}
-				% \centering
-				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_croped_difference_Blob_Joseph.png}
+			\end{subfigure}%
+			\begin{subfigure}{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_difference_Blob_Joseph.png}
 				\caption{Difference Blob and Joseph}\label{fig:sinogram_difference_blob_joseph_crop}
-			\end{subfigure}
-			\begin{subfigure}[b]{0.3125\textwidth}
-				% \centering
-				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_croped_difference_BSpline_Siddon.png}
+			\end{subfigure}%
+			\begin{subfigure}{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_difference_BSpline_Siddon.png}
 				\caption{Difference B-Spline and Siddon}\label{fig:sinogram_difference_bspline_siddon_crop}
-			\end{subfigure}
-			\begin{subfigure}[b]{0.3125\textwidth}
-				% \centering
-				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_croped_difference_BSpline_Joseph.png}
+			\end{subfigure}%
+			\begin{subfigure}{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_difference_BSpline_Joseph.png}
 				\caption{Difference B-Spline and Joseph}\label{fig:sinogram_difference_bspline_joseph_crop}
-			\end{subfigure}
+			\end{subfigure}%
 		}}
+
 	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
-			\begin{subfigure}[b]{0.3125\textwidth}
-				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_Blob_rectangle.png}
+			\begin{subfigure}[t]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_difference_Blob_BSpline.png}
 				\caption{Sinogram with marked region of crops}\label{fig:sinogram_crop_overview}
 			\end{subfigure}
+			\begin{subfigure}[t]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_Blob_rectangle.png}
+				\caption{Sinogram with marked region of crops}\label{fig:sinogram_crop_overview}
+			\end{subfigure}%
 		}}
 	\caption{\subref{fig:sinogram_blob_center_crop}--\subref{fig:sinogram_joseph_center_crop}
 		crop into the sinogram shown in \autoref{fig:sinogram_shepp_logan}. Showing a part
 		of the projections of around \(180\)° to \(225\)°.
 		\subref{fig:sinogram_difference_blob_siddon_crop}--\subref{fig:sinogram_difference_bspline_joseph_crop}
-		same croped region as the first row, but showing the absolute normalized
+		same cropped region as the first row, but showing the absolute normalized
 		differences. \subref{fig:sinogram_crop_overview} sinogram with rectangle marking the
-		croped region imges in
+		cropped region images in
 		\subref{fig:sinogram_blob_center_crop}--\subref{fig:sinogram_difference_bspline_joseph_crop}
 	}
-	\label{fig:sino_differences}
+	\label{fig:sinogram_shepp_logan_cropped}
 \end{figure}
 
-Overall, one should note that the L2-norms of each sinogram is vastly differently. Especially, the
-blob based projector is noticeable brighter. \todo{compute l2 norm and make table out of it, find
-	explanation}
+Taking a closer look in \autoref{fig:sinogram_shepp_logan_cropped}, a crop of the results from
+\autoref{fig:sinogram_shepp_logan} can be seen. Specifically, a crop that contains a protion of the
+projections with angles \([180^\circ, 225^\circ]\). In this close up, the typical ring like artefacts
+of ray-driven projectors can be clearly seen in the forward projection of the Siddon's projector
+(\autoref{fig:sinogram_siddon_center_crop}). The other sinograms look clean even on this scale.
+Looking at the second row of \autoref{fig:sinogram_shepp_logan_cropped}, the absolute normalized
+difference images, do show more artefacts. Now also the Joseph's projector shows clear visible
+ring-like artefacts at angles around \(90^\circ\), but also multiples of \(45^\circ\) degree.
+The difference between the projectors based on the blob and B-Spline basis functions show
+differences. The most pronounced at multiples of \(45^\circ\), but in the cropped image, each
+\(22^\circ\) artefacts can be seen.
 
-\section{Reconstruciton of Synthetic Data}\label{sec:experiments_synthethic_projection}
+Without repeating to much, similar artefacts can be seen in the three-dimensional case, depicted in
+\autoref{fig:3dsinogram_shepp_logan}. The Siddon's method performs worst. Artefacts can be found in
+the Joseph's projector, but are few and subtle. Basically no artefacts can be found in the blob
+based projector. However, for the B-Spline based projector the lateral slices of the projection
+\(45^\circ\) shows clear strip like artefacts. They are not visible slices for the next closest
+projection angles before and after. The adjacent views are shown in
+\autoref{fig:sinogram_bspline_3d_closeup}, with the same slice again in the middle. The artefacts
+are present every \(90^\circ\), i.e.\ at \(45^\circ\), \(135^\circ\), \(225^\circ\), and
+\(315^\circ\). Note also, the brightness difference is notable again.
 
-\inlinetodo{Have a detailed explanation of the setup, including the geometry setup, reconstructio
-	solver, parameters choice and such. Have an overview of the phantoms, from very basic
-	(rectangular phantom) to complex (`medical' data)}
+\begin{figure}[h]
+	\centering
 
-In this chapter, many different reconstruction tasks are presentend to show different behaviour
-under different conditions. All reconstructions are performed using the Fast Iterative
-Shrinkage-Thresholding (FISTA) Algorithm \insertref{FISTA ref}. Usually, \(25\) iterations are
-performed for the reconstruction unless mentioned otherwise. The regularization parameter is tuned
-for each reconstruction to perform best visually. It is given in tables respective tables for the
-reconstruction containing the error metrics~\ref{tab:error_metric_shepp_logan}.
+	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+			\rotatebox[origin=c]{90}{\bfseries \(45^\circ\) projection\strut}
+			\begin{subfigure}{0.3125\textwidth}
+				\stackinset{c}{}{t}{-.2in}{\bfseries Blob based\strut}{%
+					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection_3d/3dsinogram_Blob_48.png}}
+				\label{fig:sinogram_blob_3d_slice_48}
+			\end{subfigure}%
+			\begin{subfigure}{0.3125\textwidth}
+				\stackinset{c}{}{t}{-.2in}{\bfseries B-Spline based\strut}{%
+					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection_3d/3dsinogram_BSpline_48.png}}
+				\label{fig:sinogram_bspline_3d_slice_48}
+			\end{subfigure}%
+			\begin{subfigure}{0.3125\textwidth}
+				\stackinset{c}{}{t}{-.2in}{\bfseries Siddon's based\strut}{%
+					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection_3d/3dsinogram_Siddon_48.png}}
+				\label{fig:sinogram_siddon_3d_slice_48}
+			\end{subfigure}%
+			\begin{subfigure}{0.3125\textwidth}
+				\stackinset{c}{}{t}{-.2in}{\bfseries Joseph's based\strut}{%
+					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection_3d/3dsinogram_Joseph_48.png}}
+				\label{fig:sinogram_joseph_3d_slice_48}
+			\end{subfigure}%
+		}}
+
+	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+			\rotatebox[origin=c]{90}{\bfseries \(180^\circ\) projection\strut}
+			\begin{subfigure}{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection_3d/3dsinogram_Blob_192.png}
+				\label{fig:sinogram_blob_3d_slice_192}
+			\end{subfigure}%
+			\begin{subfigure}{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection_3d/3dsinogram_BSpline_192.png}
+				\label{fig:sinogram_bspline_3d_slice_192}
+			\end{subfigure}%
+			\begin{subfigure}{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection_3d/3dsinogram_Siddon_192.png}
+				\label{fig:sinogram_siddon_3d_slice_192}
+			\end{subfigure}%
+			\begin{subfigure}{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection_3d/3dsinogram_Joseph_192.png}
+				\label{fig:sinogram_joseph_3d_slice_192}
+			\end{subfigure}%
+		}}
+
+	\caption{Lateral slices of the forward projector of the \(3\)d Shepp-Logan phantom. Top row:
+		lateral slice of the projection of \(45^\circ\). Bottom row: lateral slice of the
+		projection of \(180^\circ\). Form left to right: forward projections using the blob
+		based projector, B-Spline projector, Siddon's projector and Joseph's projector.
+	}\label{fig:3dsinogram_shepp_logan}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+
+	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+			\begin{subfigure}{0.43\textwidth}
+				\stackinset{c}{}{t}{-.2in}{}{%
+					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection_3d/3dsinogram_BSpline_47.png}}%
+				\label{fig:sinogram_bspline_3d_closeup1}
+			\end{subfigure}%
+			\begin{subfigure}{0.43\textwidth}
+				\stackinset{c}{}{t}{-.2in}{}{%
+					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection_3d/3dsinogram_BSpline_48.png}}%
+				\label{fig:sinogram_bspline_3d_closeup2}
+			\end{subfigure}%
+			\begin{subfigure}{0.43\textwidth}
+				\stackinset{c}{}{t}{-.2in}{}{%
+					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection_3d/3dsinogram_BSpline_49.png}}%
+				\label{fig:sinogram_bspline_3d_closeup3}
+			\end{subfigure}%
+		}}
+	\caption{Closeup of line artefacts found at the lateral slice of the projector using B-Spline
+		basis functions. From left to right: slices of the projectors at \(44.0625^\circ\),
+		\(45^\circ\), \(45.9375^\circ\)}\label{fig:sinogram_bspline_3d_closeup}
+\end{figure}
+
+\section{Reconstruction of Synthetic Data}\label{sec:experiments_synthethic_projection}
+
+After the forward projection, numerous experiments using synthetic data is presented. In total 3
+different phantoms are used, ranging from simple to complex. The first phantom is just a plain
+rectangle. The rectangle is centered in the image and the image has a constant value of \(1\) inside
+the rectangle, and \(0\) everywhere else. It is included as certain artefacts are spoted with ease
+in such an easy setting. The next phantom, is the Shepp-Logan phantom~\cite{shepp_fourier_1974}. It
+resembles a human head and is a standard test phantom. Due to its purely synthetic nature, it is
+simple to compute error measures for reconstructions. The last phantom used is a rather complex one.
+It is an example reconstruction of an human abdomen. However, the sinogram is generated from the
+original image and it will be compared to it. Therefore, it is still a synthetic test, though the
+complexity of the data resembles realistic medical data. All three phantoms are shown in
+\autoref{fig:experiment_overview_phantoms}. Please note, that for all cases, the inverse
+crime~\cite{wirgin_inverse_2004} is committed.
+
+\begin{figure}[h]
+	\centering
+	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+			\begin{subfigure}[t]{0.40\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/phantoms/rectangle_phantom.png}
+				\caption{Rectangular Phantom}\label{fig:overview_rectanglular_phantom}
+			\end{subfigure}%
+			\begin{subfigure}[t]{0.40\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/phantoms/shepp_logan.png}
+				\caption{Shepp-Logan Phantom}\label{fig:overview_shepp_logan_phantom}
+			\end{subfigure}%
+			\begin{subfigure}[t]{0.40\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/phantoms/abdomen_512_normalized.png}
+				\caption{Reconstruction of a lateral slice of human abdomen used as phantom}\label{fig:overview_medical_phantom}
+			\end{subfigure}%
+		}}
+	\caption{Overview of the different phantoms used for the synthetic tests. From left to
+		right: Rectangular phantom, Shepp-Logan phantom, lateral cross-section human
+		abdoman. All phantoms are are displayed with a windowed to values in the range \([0,
+				1]\).}\label{fig:experiment_overview_phantoms}
+\end{figure}
+
+For all 3 phantoms the general setup is chosen to be the same. First in this section only
+two-dimensional reconstructiosn are performed. The resolution of the phantom is \(512 \times 512\)
+pixels. No additional noise was added. The sinogram is computed with each projector method and a
+total of \(512\) projection angles equally spaced in an \(180^\circ\) arc around the object. Note
+that the \(180^\circ\) projection angle is excluded, as it already does not provide additional
+information. The one-dimensional detector has a resolution of \(\lfloor 512 * \sqrt{2} \rfloor =
+724\)
+
+As the reconstruction are performed using elsa, and elsa is itself unitless, distances are given in
+respect to the size of voxels.   The size of voxels is \(1\) for all
+dimensions. The distance from the simulated X-ray source is \(51200\) units away from the rotation
+center (i.e. the center of the volume), and the principal point of the detector is \(512\) units
+away.
+
+The iterative reconstruction algorithm is \gls{FISTA}. The reoncsurctions for the rectangle and
+Shepp-Logan phantom are run each for \(50\) iterations, and \(300\) iterations for the medical
+phantom with the default regularization parameter of \(0.5\). This default regularization parameter
+yielded among the best results.
+
+In the following sections, the experiments for each phantom are presented and directly discussed.
+
+\subsection{Rectangular Phantom}
 
 \begin{figure}[h]
 	\centering
@@ -529,69 +698,61 @@ reconstruction containing the error metrics~\ref{tab:error_metric_shepp_logan}.
 			\rotatebox[origin=c]{90}{\bfseries Reconstruciton\strut}
 			\begin{subfigure}{0.3125\textwidth}
 				\stackinset{c}{}{t}{-.2in}{}{%
-					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_blob_croped.png}}
+					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_cropped_windowed_Blob.png}}
 				\caption{Blob based projector}%
 				\label{fig:rectangle_recon_artifacts_blob}
-			\end{subfigure}
+			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
 				\stackinset{c}{}{t}{-.2in}{}{%
-					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_bspline_croped.png}}
+					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_cropped_windowed_BSpline.png}}
 				\caption{B-Spline based projector}%
 				\label{fig:rectangle_recon_artifacts_bspline}
-			\end{subfigure}
+			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
 				\stackinset{c}{}{t}{-.2in}{}{%
-					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_siddon_croped.png}}
+					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_cropped_windowed_Siddon.png}}
 				\caption{Siddon's projector}%
 				\label{fig:rectangle_recon_artifacts_siddon}
-			\end{subfigure}
+			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
 				\stackinset{c}{}{t}{-.2in}{}{%
-					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_joseph_croped.png}}
+					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_cropped_windowed_Joseph.png}}
 				\caption{Joseph's projector}%
 				\label{fig:rectangle_recon_artifacts_joseph}
-			\end{subfigure}
+			\end{subfigure}%
 		}}
 
 	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
 			\rotatebox[origin=c]{90}{\bfseries Difference to phantom\strut}
 			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{}{%
-					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2ddifference_Blob_croped.png}}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_difference_cropped_windowed_Blob.png}
 				\caption{Blob based projector}%
 				\label{fig:rectangle_recon_difference_blob}
-			\end{subfigure}
+			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{}{%
-					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2ddifference_BSpline_croped.png}}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_difference_cropped_windowed_BSpline.png}
 				\caption{B-Spline based projector}%
 				\label{fig:rectangle_recon_difference_bspline}
-			\end{subfigure}
+			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{}{%
-					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2ddifference_Siddon_croped.png}}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_difference_cropped_windowed_Siddon.png}
 				\caption{Siddon's projector}%
 				\label{fig:rectangle_recon_difference_siddon}
-			\end{subfigure}
+			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{}{%
-					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2ddifference_Joseph_croped.png}}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_difference_cropped_windowed_Joseph.png}
 				\caption{Joseph's projector}%
 				\label{fig:rectangle_recon_difference_joseph}
-			\end{subfigure}
+			\end{subfigure}%
 		}}
+
 	\makebox[\textwidth]{
 		\makebox[1.3\textwidth]{%
-			\begin{subfigure}[b]{0.3125\textwidth}
-				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2ddifference_Blob_BSpline_croped.png}
-				\caption{Blob to B-Spline}%
-				\label{fig:rectangle_recon_difference_blob_bspline}
-			\end{subfigure}
 			\begin{subfigure}[b]{0.3125\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dphantom_rectangle.png}
 				\caption{Rectangular phantom}%
 				\label{fig:rectangle_recon_phantom}
-			\end{subfigure}
+			\end{subfigure}%
 		}}
 	\caption{\subref{fig:rectangle_recon_artifacts_blob}--\subref{fig:rectangle_recon_artifacts_joseph}
 		crop of top left corner of the reconstruction rectangle with different projectors
@@ -599,214 +760,550 @@ reconstruction containing the error metrics~\ref{tab:error_metric_shepp_logan}.
 		absolute normalized difference of reconstructed image and the phantom in
 		\subref{fig:rectangle_recon_phantom}. In order from left to right and top down, the
 		differences of the reconstruction using the Blob based, B-Spline, Siddon's and
-		Joseph's projector and the original phantom.
-		\subref{fig:rectangle_recon_difference_blob_bspline} difference of reconstructions
-		using the blob and B-Spline based projector. \subref{fig:rectangle_recon_phantom}
-		Rectangular phantom with marked region denoting the croped region of the images in
-		\subref{fig:rectangle_recon_artifacts_blob}--\subref{fig:rectangle_recon_difference_blob_bspline}
+		Joseph's projector and the original phantom. The window for each image is given on
+		the right side for each image spearately \subref{fig:rectangle_recon_phantom}
+		Rectangular phantom with marked region denoting the cropped region of the images in
+		\subref{fig:rectangle_recon_artifacts_blob}--\subref{fig:rectangle_recon_difference_joseph}
 	}%
 	\label{fig:rectangle_recon_artifacts}
 \end{figure}
 
-Looking at \autoref{fig:rectangle_recon_artifacts}, the original phantom is depicted at the bottom
-(\autoref{fig:rectangle_recon_phantom}). It is a square, centered in the middle of the frame with a
-constant value of 1. There, the first row show the blob and B-Spline based projectors, and the
-second row the Siddon's and Joseph's projector. Clearly, in both the reconstruction of Siddon's and
-Joseph's artifacts can be seen, which are not present in the blob and B-Spline based ones. These are
-again due to the nature of the ray-driven approaches and the thin support of the rays.
+The reconstruction of the simple rectangular phantom is mostly useful to clearly see the artifacts
+each method. In \autoref{fig:rectangle_recon_artifacts} a crop of the reconstruction can be seen.
+There, one can see both for the Siddon's and Joseph's projector ring artifacts in both the center
+and the corner of the rectangle. None of these kind of artefacts can be seen in the blob and
+B-Spline based projectors. Looking at the second row with the differences images. These artefacts
+are more clearly visible. Plus the edge of the rectangle is a cleaner in bot the blob and B-Spline
+based projector compared to the Siddon's and Joseph's projector.
 
-Looking at the normalized absolute differences, shown in the second row of
-\autoref{fig:rectangle_recon_artifacts}, the artifacts already visible in the previous figure are
-again clearly visible. Interestingly, both the blob based projector and the B-Spline based on are
-cleaner than the other approaches. They do exhibit a touch of glow around the corner, but they are
-pretty consistent. Especially, compare to Siddon's method, the glow around the corner is quite
-noisy. This is also true for the Siddon's based one, but it's less severe. \todo{Add difference of
-	blob to bspline one} No noticeable difference between the blob and B-Spline based projectors can be
-notices.
+\begin{table}[h]%
+	\centering
+	\csvreader[
+		head to column names,
+		separator=semicolon,
+		tabular = cccccc,
+		table head = \toprule \textbf{Projector} & \textbf{\gls{MSE}} \downarrow &
+		\textbf{\gls{NRMSE}} \downarrow & \textbf{\gls{PSNR}} (dB) \uparrow & \textbf{\gls{SSIM}} \uparrow \\\midrule,
+		table foot = \bottomrule
+	]{figures/experiments/reconstruction_rectangle/metrics.csv}{}{%
+		\csvlinetotablerow%
+	}
+	\caption{Error metrics for the reconstruction of the rectangular phantom using 50 iterations
+		of FISTA}%
+	\label{tab:error_metric_rectangle}
+\end{table}
+
+The metrics discussed in \autoref{sec:error_measurements} for the reconstruction are shown in
+\autoref{tab:error_metric_rectangle}. All \(l_2\) based norms (i.e. \gls{MSE}, \gls{NRMSE} and
+\gls{PSNR}) are lower for the projectors based on Siddon's and Joseph's method. But all of them are
+quite close to each other (around \(1e-4\) for \gls{MSE}). Notably they are all in the same order of
+magnitude. \gls{SSIM} is similar as well for all, only the Siddon's method falls behin by a bit.
+
+\subsection{Shepp-Logan Phantom}
 
 \begin{figure}[h]
 	\centering
 	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
-			\begin{subfigure}[b]{0.3125\textwidth}
-				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dreconstruction_blob.png}
-				\caption{Blob based projector}%
-				\label{fig:reconstruction_shepp_logan_blob}
-			\end{subfigure}
-			\begin{subfigure}[b]{0.3125\textwidth}
-				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dreconstruction_bspline.png}
-				\caption{B-Spline based projector}%
-				\label{fig:reconstruction_shepp_logan_bspline}
-			\end{subfigure}
-			\begin{subfigure}[b]{0.3125\textwidth}
-				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dreconstruction_siddon.png}
-				\caption{Siddon's projector}%
-				\label{fig:reconstruction_shepp_logan_siddon}
-			\end{subfigure}
-			\begin{subfigure}[b]{0.3125\textwidth}
-				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dreconstruction_joseph.png}
-				\caption{Joseph's projector}%
-				\label{fig:reconstruction_shepp_logan_joseph}
-			\end{subfigure}
-		}} \\
+			\rotatebox[origin=c]{90}{\bfseries Reconstruction\strut}
+			\begin{subfigure}{0.3125\textwidth}
+				\stackinset{c}{}{t}{-.2in}{\bfseries Blob based\strut}{%
+					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dreconstruction_windowed_Blob.png}}
+				\caption{}\label{fig:reconstruction_shepp_logan_blob}
+			\end{subfigure}%
+			\begin{subfigure}{0.3125\textwidth}
+				\stackinset{c}{}{t}{-.2in}{\bfseries B-Spline based\strut}{%
+					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dreconstruction_windowed_BSpline.png}}
+				\caption{}\label{fig:reconstruction_shepp_logan_bspline}
+			\end{subfigure}%
+			\begin{subfigure}{0.3125\textwidth}
+				\stackinset{c}{}{t}{-.2in}{\bfseries Siddon's\strut}{%
+					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dreconstruction_windowed_Siddon.png}}
+				\caption{}\label{fig:reconstruction_shepp_logan_siddon}
+			\end{subfigure}%
+			\begin{subfigure}{0.3125\textwidth}
+				\stackinset{c}{}{t}{-.2in}{\bfseries Joseph's\strut}{%
+					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dreconstruction_windowed_Joseph.png}}
+				\caption{}\label{fig:reconstruction_shepp_logan_joseph}
+			\end{subfigure}%
+		}}
+
+	\makebox[\textwidth]{
+		\makebox[1.3\textwidth]{%
+			\rotatebox[origin=c]{90}{\bfseries Zoom into difference\strut}
+			\begin{subfigure}{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dreconstruction_difference_cropped_windowed_Blob.png}
+				\caption{}\label{fig:reconstruction_shepp_logan_cropped_blob}
+			\end{subfigure}%
+			\begin{subfigure}{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dreconstruction_difference_cropped_windowed_BSpline.png}
+				\caption{}\label{fig:reconstruction_shepp_logan_cropped_bspline}
+			\end{subfigure}%
+			\begin{subfigure}{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dreconstruction_difference_cropped_windowed_Siddon.png}
+				\caption{}\label{fig:reconstruction_shepp_logan_cropped_siddon}
+			\end{subfigure}%
+			\begin{subfigure}{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dreconstruction_difference_cropped_windowed_Joseph.png}
+				\caption{}\label{fig:reconstruction_shepp_logan_cropped_joseph}
+			\end{subfigure}%
+		}}
+
 	\makebox[\textwidth]{
 		\makebox[1.3\textwidth]{%
 			\begin{subfigure}[b]{0.3125\textwidth}
-				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2ddifference_blob.png}
-				\caption{blob based projector}%
-				\label{fig:reconstruction_shepp_logan_diff_blob}
-			\end{subfigure}
-			\begin{subfigure}[b]{0.3125\textwidth}
-				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2ddifference_bspline.png}
-				\caption{b-spline based projector}%
-				\label{fig:reconstruction_shepp_logan_diff_bspline}
-			\end{subfigure}
-			\begin{subfigure}[b]{0.3125\textwidth}
-				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2ddifference_siddon.png}
-				\caption{siddon's projector}%
-				\label{fig:reconstruction_shepp_logan_diff_siddon}
-			\end{subfigure}
-			\begin{subfigure}[b]{0.3125\textwidth}
-				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2ddifference_joseph.png}
-				\caption{joseph's projector}%
-				\label{fig:reconstruction_shepp_logan_diff_joseph}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dphantom_rectangle.png}
+				\caption{}\label{fig:rectangle_shepp_logan_phantom}
 			\end{subfigure}
 		}}
-	\caption{Top row: Reconstruction of Shepp-Logan phantom using FISTA, Bottom row: differences
-		to ground truth}%
+
+	\caption{\subref{fig:reconstruction_shepp_logan_blob}--\subref{fig:reconstruction_shepp_logan_joseph}
+		Reconstruction of the Shepp-Logan phantom using the (from left to right) the
+		projectors using the blob and B-Spline basis function followed by the projector
+		based on the Siddon's and Joseph's method.
+		\subref{fig:reconstruction_shepp_logan_cropped_blob}--\subref{fig:reconstruction_shepp_logan_joseph}
+		crop into the difference of each reconstruction with the original phantom, the same
+		order of projectors is given. The window is given for each image individually.
+		\subref{fig:rectangle_shepp_logan_phantom} the original phantom including a red
+		rectangle indicating the croped region.
+	}%
 	\label{fig:reconstruction_shepp_logan}
 \end{figure}
 
-Without trying to repeat the results to often, as a last synthetic data set, the reconstruction of
-the Sheep-Logan phantom is shown the top row of \autoref{fig:reconstruction_shepp_logan}. Similarly,
-to before both, the blob and B-Spline based projector exhibit no ring like artifacts and look quite
-clean compared to both the Siddon and Joseph projectors. And again no noticeable difference, can be
-seen between the blob and B-Spline projectors. \todo{also add difference between blob and B-Spline
-	based one}. This is again noticeable in the differences given in the bottom row of
-\autoref{fig:reconstruction_shepp_logan}
+The reconstruction for the Shepp-Logan phantom is shown in figure
+\autoref{fig:reconstruction_shepp_logan}. The top row shows the final reconstruction, the middle row
+a crop into the difference image, and the bottom shows the region cropped into. For the first two
+rows the reconstruction are performed using (from left to right) the projector using the blob basis
+function, the B-Spline basis function, the Siddon's method and the Joseph's method.
 
-\autoref{tab:error_metric_shepp_logan} shows the different error metrics for the reconstruction of
-the Shepp-Logan phantom. They are all quite similar and all in the neighbourhood of \(0.00002\)
-(MSR), \(0.001\) (RMSR), \(0.5\) (PSNR) or \(0.01\) (SSIM). \todo{validate via python/matlab
-	scripts}
+As expected, the Siddon's method shows clear ring artifacts (best seen in
+\autoref{fig:reconstruction_shepp_logan_siddon}). They are also present in the Joseph's method, but
+they stand out less. Finally, both projectors based on the blob and B-Spline basis functions show no
+sign of ring artefacts. Neither in the first row, nor in the cropped difference image.
 
-\begin{table}%
+\begin{table}[h]%
 	\centering
 	\csvreader[
 		head to column names,
 		separator=semicolon,
 		tabular = cccccc,
-		table head = \toprule \textbf{Projector} & \textbf{MSE} \downarrow & \textbf{NRMSE} \downarrow & \textbf{PSNR} \uparrow & \textbf{SSIM} \uparrow \\\midrule,
+		table head = \toprule \textbf{Projector} & \textbf{\gls{MSE}} \downarrow &
+		\textbf{\gls{NRMSE}} \downarrow & \textbf{\gls{PSNR}} \uparrow & \textbf{\gls{SSIM}} \uparrow \\\midrule,
 		table foot = \bottomrule
 	]{figures/experiments/reconstruction_shepp_logan/metrics.csv}{}{%
 		\csvlinetotablerow%
 	}
-	\caption{Error metrics for the reconstruction of the Shepp-Logan phantom using FISTA}%
+	\caption{Error metrics for the reconstruction of the Shepp-Logan phantom running for \(50\)
+		iterations of FISTA.}%
 	\label{tab:error_metric_shepp_logan}
 \end{table}
 
-\subsection{Few Angle Reconstruction}\label{sec:experiments_few_angle}
+The metrics (listed in \autoref{tab:error_metric_shepp_logan}). Interestingly, the visually worst
+reconstruction (Siddon's one), performs best regarding \(l_2\) based metrics (i.e.\ \gls{MSE},
+\gls{NRMSE} and \gls{PSNR}). However, the visual perception is backed up by the \gls{SSIM}. The
+Siddon's method performs quite a bit worse there (around \(8\%\) compared to both the blob and
+B-Spline one), and both the blob and B-Spline based projector can outperform the Joseph's projector.
+Though against the later one, it is a small difference.
 
-\begin{table}%
+\subsection{Human Abdomen}
+
+\begin{figure}[h]
+	\centering
+	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+			\rotatebox[origin=c]{90}{\bfseries Reconstruction\strut}
+			\begin{subfigure}{0.3125\textwidth}
+				\stackinset{c}{}{t}{-.2in}{\bfseries Blob based\strut}{%
+					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_medical/2dreconstruction_windowed_Blob.png}}
+				\caption{}\label{fig:reconstruction_medical_blob}
+			\end{subfigure}%
+			\begin{subfigure}{0.3125\textwidth}
+				\stackinset{c}{}{t}{-.2in}{\bfseries B-Spline based\strut}{%
+					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_medical/2dreconstruction_windowed_BSpline.png}}
+				\caption{}\label{fig:reconstruction_medical_bspline}
+			\end{subfigure}%
+			\begin{subfigure}{0.3125\textwidth}
+				\stackinset{c}{}{t}{-.2in}{\bfseries Siddon's \strut}{%
+					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_medical/2dreconstruction_windowed_Siddon.png}}
+				\caption{}\label{fig:reconstruction_medical_siddon}
+			\end{subfigure}%
+			\begin{subfigure}{0.3125\textwidth}
+				\stackinset{c}{}{t}{-.2in}{\bfseries Joseph's\strut}{%
+					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_medical/2dreconstruction_windowed_Joseph.png}}
+				\caption{}\label{fig:reconstruction_medical_joseph}
+			\end{subfigure}%
+		}}
+
+	\makebox[\textwidth]{
+		\makebox[1.3\textwidth]{%
+			\rotatebox[origin=c]{90}{\bfseries Zoom into difference\strut}
+			\begin{subfigure}{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_medical/2dreconstruction_difference_cropped_windowed_Blob.png}
+				\caption{}\label{fig:reconstruction_medical_cropped_blob}
+			\end{subfigure}%
+			\begin{subfigure}{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_medical/2dreconstruction_difference_cropped_windowed_BSpline.png}
+				\caption{}\label{fig:reconstruction_medical_cropped_bspline}
+			\end{subfigure}%
+			\begin{subfigure}{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_medical/2dreconstruction_difference_cropped_windowed_Siddon.png}
+				\caption{}\label{fig:reconstruction_medical_cropped_siddon}
+			\end{subfigure}%
+			\begin{subfigure}{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_medical/2dreconstruction_difference_cropped_windowed_Joseph.png}
+				\caption{}\label{fig:reconstruction_medical_cropped_joseph}
+			\end{subfigure}%
+		}}
+
+	\makebox[\textwidth]{
+		\makebox[1.3\textwidth]{%
+			\begin{subfigure}[b]{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_medical/abdomen_512_normalized_rectangle.png}
+				\caption{}\label{fig:medical_phantom_marked}
+			\end{subfigure}
+		}}
+
+	\caption{\subref{fig:reconstruction_medical_blob}--\subref{fig:reconstruction_medical_joseph}
+		Reconstruction of the medical phantom using the different projectors as a basis.
+		From left, to right: the projector based on the blob basis, B-Spline basis, Siddon's
+		method and finally Joseph's method. The second row
+		(\subref{fig:reconstruction_medical_blob}--\subref{fig:reconstruction_medical_joseph})
+		shows a crop into the difference image to the phantom data. The reconstructed image
+		used the same projector as the reconstruction in the row above.
+		\subref{fig:medical_phantom_marked} the original phantom including a red rectangle
+		indicating the croped region.
+	}%
+	\label{fig:reconstruction_medical}
+\end{figure}
+
+The final phantom taken into account is the reconstruction of the human abdomen. The reoncsurctions
+is shown in \autoref{fig:reconstruction_medical}. After the \(300\) solver iterations, all
+reconstruction look decent. However, no great difference can be seen on this scale. Looking at the
+cropped images in the second row of \autoref{fig:reconstruction_medical}, one can see that the the
+new projectors a cleaner compared especially to Siddon's based projector. Interestingly, the window
+interval is a touch, but notibly higher for both the blob and B-Spline basis functions.
+
+\begin{table}[h]%
 	\centering
 	\csvreader[
 		head to column names,
 		separator=semicolon,
 		tabular = cccccc,
-		table head = \toprule \textbf{Projector} & \textbf{MSE} \downarrow & \textbf{NRMSE} \downarrow & \textbf{PSNR} \uparrow & \textbf{SSIM} \uparrow \\\midrule,
+		table head = \toprule \textbf{Projector} & \textbf{\gls{MSE}} \downarrow &
+		\textbf{\gls{NRMSE}} \downarrow & \textbf{\gls{PSNR}} \uparrow & \textbf{\gls{SSIM}} \uparrow \\\midrule,
 		table foot = \bottomrule
-	]{figures/experiments/reconstruction_fewangles/metrics.csv}{}{%
+	]{figures/experiments/reconstruction_medical/metrics.csv}{}{%
 		\csvlinetotablerow%
 	}
-	\caption{error metric for reconstruction of shepp-logan phantom using fista with few angles}%
-	\label{tab:error_metric_shepp_logan_few_angles}
+	\caption{Error metrics for the reconstruction of the medical phantom using FISTA running for
+		\(300\) iterations}%
+	\label{tab:error_metric_medical}
 \end{table}
+
+Interestingly, the \gls{SSIM} (right-most column in \autoref{tab:error_metric_medical}) for the blob
+based projector is significantly lower compared to the other methods. The \(l_2\) based norms only
+show a slightly worse performance of the blob based projector. This behaviour is consistent and ran
+multiple times to ensure the correctness of this result.
+
+\subsection{Behavior in the Presence of Noise}
+
+Another interesting case is a detailed experiment with noisy data. The medical sample already
+provided a sample including noise. But there it is ingrained in the phantom and hence can not be
+analyzed independently. For this, the same overall setup was used as for the Shepp-Logan phantom in
+the previous section, but additionally \(1\%\) of Gaussian noise is added to the sinogram before the
+reconstruction process starts. I.e\ the mean of the Gaussian is \(0\) and the standard deviation is
+set to be \(1\%\) of the value range of the sinogram. Further, the reconstruction is run for \(150\)
+iterations, instead of \(50\), all the other parameters are set exactly as in the above case.
 
 \begin{figure}[h]
 	\centering
+	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+			\rotatebox[origin=c]{90}{\bfseries Reconstruction\strut}
+			\begin{subfigure}{0.3125\textwidth}
+				\stackinset{c}{}{t}{-.2in}{\bfseries Blob based\strut}{%
+					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_noise/2dreconstruction_windowed_Blob.png}}
+				\caption{}\label{fig:reconstruction_noise_blob}
+			\end{subfigure}%
+			\begin{subfigure}{0.3125\textwidth}
+				\stackinset{c}{}{t}{-.2in}{\bfseries B-Spline based\strut}{%
+					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_noise/2dreconstruction_windowed_BSpline.png}}
+				\caption{}\label{fig:reconstruction_noise_bspline}
+			\end{subfigure}%
+			\begin{subfigure}{0.3125\textwidth}
+				\stackinset{c}{}{t}{-.2in}{\bfseries Siddon's\strut}{%
+					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_noise/2dreconstruction_windowed_Siddon.png}}
+				\caption{}\label{fig:reconstruction_noise_siddon}
+			\end{subfigure}%
+			\begin{subfigure}{0.3125\textwidth}
+				\stackinset{c}{}{t}{-.2in}{\bfseries Joseph's\strut}{%
+					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_noise/2dreconstruction_windowed_Joseph.png}}
+				\caption{}\label{fig:reconstruction_noise_joseph}
+			\end{subfigure}%
+		}}
+
 	\makebox[\textwidth]{
 		\makebox[1.3\textwidth]{%
-			\begin{subfigure}[b]{0.3125\textwidth}
-				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2dreconstruction_blob.png}
-				% \caption{blob based projector}%
-				% \label{fig:reconstruction_fewangles_blob}
-			\end{subfigure}
-			\begin{subfigure}[b]{0.3125\textwidth}
-				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2dreconstruction_bspline.png}
-				% \caption{b-spline based projector}%
-				% \label{fig:reconstruction_fewangles_bspline}
-			\end{subfigure}
-			\begin{subfigure}[b]{0.3125\textwidth}
-				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2dreconstruction_siddon.png}
-				% \caption{siddon's projector}%
-				% \label{fig:reconstruction_fewangles_siddon}
-			\end{subfigure}
-			\begin{subfigure}[b]{0.3125\textwidth}
-				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2dreconstruction_joseph.png}
-				% \caption{joseph's projector}%
-				% \label{fig:reconstruction_fewangles_joseph}
-			\end{subfigure}
+			\rotatebox[origin=c]{90}{\bfseries Zoom into difference\strut}
+			\begin{subfigure}{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_noise/2dreconstruction_difference_cropped_windowed_Blob.png}
+				\caption{}\label{fig:reconstruction_noise_cropped_blob}
+			\end{subfigure}%
+			\begin{subfigure}{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_noise/2dreconstruction_difference_cropped_windowed_BSpline.png}
+				\caption{}\label{fig:reconstruction_noise_cropped_bspline}
+			\end{subfigure}%
+			\begin{subfigure}{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_noise/2dreconstruction_difference_cropped_windowed_Siddon.png}
+				\caption{}\label{fig:reconstruction_noise_cropped_siddon}
+			\end{subfigure}%
+			\begin{subfigure}{0.3125\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_noise/2dreconstruction_difference_cropped_windowed_Joseph.png}
+				\caption{}\label{fig:reconstruction_noise_cropped_joseph}
+			\end{subfigure}%
 		}}
 	\makebox[\textwidth]{
 		\makebox[1.3\textwidth]{%
 			\begin{subfigure}[b]{0.3125\textwidth}
-				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2ddifference_blob.png}
-				% \caption{blob based projector}%
-				% \label{fig:reconstruction_diff_fewangles_blob}
-			\end{subfigure}
-			\begin{subfigure}[b]{0.3125\textwidth}
-				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2ddifference_bspline.png}
-				% \caption{b-spline based projector}%
-				% \label{fig:reconstruction_diff_fewangles_bspline}
-			\end{subfigure}
-			\begin{subfigure}[b]{0.3125\textwidth}
-				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2ddifference_siddon.png}
-				% \caption{siddon's projector}%
-				% \label{fig:reconstruction_diff_fewangles_siddon}
-			\end{subfigure}
-			\begin{subfigure}[b]{0.3125\textwidth}
-				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2ddifference_joseph.png}
-				% \caption{joseph's projector}%
-				% \label{fig:reconstruction_diff_fewangles_joseph}
+				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_noise/2dphantom_rectangle.png}
+				\caption{}\label{fig:phantom_noise_marked}
 			\end{subfigure}
 		}}
-	\makebox[\textwidth]{
-		\makebox[1.3\textwidth]{%
-			\begin{subfigure}[b]{0.3125\textwidth}
-				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2dreconstruction_blob_croped.png}
-				% \caption{blob based projector}%
-				% \label{fig:reconstruction_crop_fewangles_blob}
-			\end{subfigure}
-			\begin{subfigure}[b]{0.3125\textwidth}
-				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2dreconstruction_bspline_croped.png}
-				% \caption{b-spline based projector}%
-				% \label{fig:reconstruction_crop_fewangles_bspline}
-			\end{subfigure}
-			\begin{subfigure}[b]{0.3125\textwidth}
-				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2dreconstruction_siddon_croped.png}
-				% \caption{siddon's projector}%
-				% \label{fig:reconstruction_crop_fewangles_siddon}
-			\end{subfigure}
-			\begin{subfigure}[b]{0.3125\textwidth}
-				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_fewangles/2dreconstruction_joseph_croped.png}
-				% \caption{joseph's projector}%
-				% \label{fig:reconstruction_crop_fewangles_joseph}
-			\end{subfigure}
-		}}
-	\caption{top row: Reconstruction of Shepp-Logan phantom with few angles, middle row:
-		differences to ground truth, bottom row: crop into portion of the reconstruction,from left
-		to right: the blob based projector, the B-Spline based projector, Siddon's projector,
-		Joseph's projector}%
-	\label{fig:reconstruction_fewangles}
+
+	\caption{\subref{fig:reconstruction_noise_blob}--\subref{fig:reconstruction_noise_joseph}
+		Reconstruction of the Shepp-Logan phantom, when \(1\%\) of Gaussian noise is added
+		to the sinogram. From left, to right: the projector based on the blob basis,
+		B-Spline basis, Siddon's method and finally Joseph's method. The second row
+		(\subref{fig:reconstruction_noise_cropped_blob}--\subref{fig:reconstruction_medical_cropped_joseph})
+		shows a crop into the difference image to the phantom data. The reconstructed image
+		used the same projector as the reconstruction in the row above.
+		\subref{fig:phantom_noise_marked} the original phantom including a red rectangle
+		indicating the croped region.
+	}%
+	\label{fig:reconstruction_noise}
 \end{figure}
 
-\subsection{Behaviour in the Presence of Noise}
+Both the blob and B-Spline based projectors handle gaussian noise nicely, as it can be seen in
+\autoref{fig:reconstruction_noise}. They do show some for of artefacts, but that is to be expected
+in the presence of noise. The center elipses are quite clean and the top most circle shows some
+artefacts. However, it is quite a bit better controlled than the Siddon's and Joseph's method.
 
-\inlinetodo{extent elsa example to be able to add noise}
+\begin{table}[h]%
+	\centering
+	\csvreader[
+		head to column names,
+		separator=semicolon,
+		tabular = cccccc,
+		table head = \toprule \textbf{Projector} & \textbf{\gls{MSE}} \downarrow &
+		\textbf{\gls{NRMSE}} \downarrow & \textbf{\gls{PSNR}} \uparrow & \textbf{\gls{SSIM}} \uparrow \\\midrule,
+		table foot = \bottomrule
+	]{figures/experiments/reconstruction_noise/metrics.csv}{}{%
+		\csvlinetotablerow%
+	}
+	\caption{Error metrics for the reconstruction of the noisy Shepp-Logan phantom using FISTA
+		running for \(150\) iterations}%
+	\label{tab:error_metric_noise}
+\end{table}
+
+This is also backed up by the error metrics given in \autoref{tab:error_metric_noise}. Both the
+blob and B-Spline basis function based projectors perform better according to the \gls{SSIM}. And
+with a decent lead ad that as well. Again they are both worse in the \gls{MSE} based metrics, but
+just a bit at that.
 
 \section{Quality Summary}\label{sec:experiments_quality_projection}
 
-\subsection{Reduced artifacts in Forward Projection}\label{sec:experiments_artifacts_forward}
+This section is a summary of the already discussed qualitative impression. As expected from the
+literature, Siddon's method performs the worst among the methods compared. It shows clear ring like
+artefacts in both the forward projection and the final reconstruction. In the forward projection is
+performs specifically poor at angles around each \(90^\circ\). Furthermore, it poorly handles noise.
+It should be noted however, that the Siddon's method performs equally well or sometimes better than
+the other methods if one only looks at the \(l_2\) based error metrics (\gls{MSE}, \gls{NRMSE} and
+\gls{PSNR}).
 
-\subsection{Reduced artifacts in Reconstruction}\label{sec:experiments_artifacts_reconstruction}
+The Joseph's projector performs better. Is shows less artefacts in the forward projector, the
+reconstructions are cleaner and noise is handled better. Thourghout the tests, it performs basically
+identically in all \(l_2\) based error metrics, and beats the Siddon's method regarding the
+\gls{SSIM} in all experiments.
 
 \section{Performance Overview}\label{sec:experiments_performance_projection}
+
+To investigate the runtime performance characteristics of the blob and B-Spline based projectors two
+experiments are conducted. One for the two-dimensional and the other for the three-dimensional case.
+The experiments run either the forward or the backward projector in a tight loop for a fixed number
+of times. For the benchmarking of the forward projection, the phantom is generated once and then
+reused for each iteration. For the backward projection, the sinogram is computed once and the
+reused. After each iterator the elapsed time is stored and the next iteration is started. To ensure
+both data and code is in cache, 2 warmup iterations are run. For both dimensions, only the size of
+the original phantom changes. The number of projection positions is keep the same, to ensure only
+the phantom size induces changes in the runtime.
+
+The two-dimensional case uses projections positions (\(512\)) and \(50\) iterations to ensure a
+large enough sample size. Phantom sizes range from \(64 \times 64\) to \(512 \times 512\).
+In the three-dimensional case, only \(64\) projection positions are used and the phantom sizes range
+from \(32 \times 32 \times 32\) to \(64 \times 64 \times 64\).
+
+\begin{table}[h]%
+	\centering
+	\csvreader[
+		head to column names,
+		separator=semicolon,
+		tabular = cccccc,
+		table head = \toprule \textbf{Dimension} & \textbf{Siddon} & \textbf{Joseph} \downarrow &
+		\textbf{B-Spline based} \downarrow & \textbf{Blob based} \uparrow \\\midrule,
+		table foot = \bottomrule
+	]{figures/experiments/perf_testing/speedup.csv}{}{%
+		\csvlinetotablerow%
+	}
+	\caption{Mean runtime slowdown over all compared sizes of the different projector methods,
+		with the Siddon's projector as a baseline. The slowdown is the average over all the
+		different experiment sizes. The first row shows the slow down for the
+		two-dimensional case and the second row, for the three-dimensional case.}%
+	\label{tab:runtime_slowdown}
+\end{table}
+
+\autoref{tab:runtime_slowdown} summaries the performance results. The results are given as slow
+downs compared to the Siddon's projector. Hence, the B-Spline and Blob based projector are around
+\(6\) to \(7\) times slower than the Siddon projector in the two-dimensional case. This is inline
+with the finding of \citeauthor*{momey_b-spline_2012}~\cite{momey_b-spline_2012} (though they
+compare against the distance-driven projector).
+
+The performance drop for the three-dimensional case is close to another \(6\) time slowdown. But as
+the number of visited voxels grows from \(5\) visited voxels to \(25\) in the three-dimensional
+case, this is only to be expected.
+
+In \autoref{fig:performance_2d_lineplot} the mean results and their standard deviations are ploted
+for the two-dimensional case, and in \autoref{fig:performance_3d_lineplot} the results for the
+three-dimensional case are plotted. Noticeably, the method's scale similarly as both the Siddon's
+and Joseph's method, but the performance drop can be seen there as well.
+
+\begin{figure}[h]
+	\centering
+
+	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+			% \rotatebox[origin=c]{90}{\bfseries Zoom into difference\strut}
+			\begin{subfigure}{0.65\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/perf_testing/plot_2d_line_forward.png}
+				\caption{Runtime for the \(2\)d-forward projection}\label{fig:performance_2d_lineplot_forward}
+			\end{subfigure}%
+			\begin{subfigure}{0.65\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/perf_testing/plot_2d_line_backward.png}
+				\caption{Runtime for the \(2\)d-backward projection}\label{fig:performance_2d_lineplot_backward}
+			\end{subfigure}%
+		}}
+
+	\caption{Runtime in seconds for the 4 different projection methods, both for the forward
+		projection \subref{fig:performance_2d_lineplot_forward} and backward
+		projection \subref{fig:performance_2d_lineplot_backward}. Lightly shaded area around
+		the line plot show the tolerance interval based on the stdandard deviation of the
+		samples for each size. Both axis use a base 2 logarithmic scale. Number of angles is
+		fixed to \(512\) for all experiments.}%
+	\label{fig:performance_2d_lineplot}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+
+	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+			% \rotatebox[origin=c]{90}{\bfseries Zoom into difference\strut}
+			\begin{subfigure}{0.65\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/perf_testing/plot_3d_line_forward.png}
+				\caption{Runtime for the \(3\)d-forward projection}\label{fig:performance_3d_lineplot_forward}
+			\end{subfigure}%
+			\begin{subfigure}{0.65\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/perf_testing/plot_3d_line_backward.png}
+				\caption{Runtime for the \(3\)d-backward projection}\label{fig:performance_3d_lineplot_backward}
+			\end{subfigure}%
+		}}
+
+	\caption{Runtime seconds for the 4 different projection methods, both for the
+		three-dimensional forward projection \subref{fig:performance_2d_lineplot_forward}
+		and backward projection \subref{fig:performance_2d_lineplot_backward}. Lightly
+		shaded area around the line plot show the tolerance interval based on the stdandard
+		deviation of the samples for each size. Both axis use a base 2 logarithmic scale.
+		Number of angles is fixed to \(512\) for all experiments.}%
+	\label{fig:performance_3d_lineplot}
+\end{figure}
+
+\autoref{fig:performance_2d_violin_forward} and \autoref{fig:performance_2d_violin_backward}
+shows a detailed break down of the two-dimensional measurements from the previous plots. They are
+split into the forward and backward projection and each projector has an individual plot. The blob
+and B-Splien based projectors performance quite consistent compared to the Siddon's and Joseph's,
+i.e. they have only few outliers.
+
+\inlinetodo{Maybe make this a little more detailed, but idk just look at the plots and you see
+	what's up}
+
+\begin{figure}[h]
+	\centering
+
+	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+			% \rotatebox[origin=c]{90}{\bfseries Zoom into difference\strut}
+			\begin{subfigure}{0.65\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/perf_testing/plot_2d_violin_forward_Blob.png}
+				\caption{}\label{fig:performance_2d_violin_forward_blob}
+			\end{subfigure}%
+			\begin{subfigure}{0.65\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/perf_testing/plot_2d_violin_forward_BSpline.png}
+				\caption{}\label{fig:performance_2d_violin_forward_bspline}
+			\end{subfigure}%
+		}}
+
+	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+			% \rotatebox[origin=c]{90}{\bfseries Zoom into difference\strut}
+			\begin{subfigure}{0.65\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/perf_testing/plot_2d_violin_forward_Siddon.png}
+				\caption{}\label{fig:performance_2d_violin_forward_siddons}
+			\end{subfigure}%
+			\begin{subfigure}{0.65\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/perf_testing/plot_2d_violin_forward_Joseph.png}
+				\caption{}\label{fig:performance_2d_violin_forward_joseph}
+			\end{subfigure}%
+		}}
+
+	\caption{Violing plot for the forward projection of a selection of the sizes, individually
+		given for the different projectors. Plot for the blob based projector
+		\subref{fig:performance_2d_violin_forward_blob} B-Spline based
+		\subref{fig:performance_2d_violin_forward_bspline}, Siddon's
+		\subref{fig:performance_2d_violin_forward_siddons} and Joseph's
+		\subref{fig:performance_2d_violin_forward_joseph}. The median is given as the white
+		line, the thicker line is the interquantile range, the thin bars give the give the
+		minimum and maximum respectively and the points outside of the minimum and maximum
+		are the outliers. \(y\)-axes is in logarithm scale.}%
+	\label{fig:performance_2d_violin_forward}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+
+	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+			% \rotatebox[origin=c]{90}{\bfseries Zoom into difference\strut}
+			\begin{subfigure}{0.65\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/perf_testing/plot_2d_violin_backward_Blob.png}
+				\caption{}\label{fig:performance_2d_violin_backward_blob}
+			\end{subfigure}%
+			\begin{subfigure}{0.65\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/perf_testing/plot_2d_violin_backward_BSpline.png}
+				\caption{}\label{fig:performance_2d_violin_backward_bspline}
+			\end{subfigure}%
+		}}
+
+	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+			% \rotatebox[origin=c]{90}{\bfseries Zoom into difference\strut}
+			\begin{subfigure}{0.65\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/perf_testing/plot_2d_violin_backward_Siddon.png}
+				\caption{}\label{fig:performance_2d_violin_backward_siddon}
+			\end{subfigure}%
+			\begin{subfigure}{0.65\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/perf_testing/plot_2d_violin_backward_Joseph.png}
+				\caption{}\label{fig:performance_2d_violin_backward_joseph}
+			\end{subfigure}%
+		}}
+
+	\caption{Violing plot for the backward projection of a selection of the sizes, individually
+		given for the different projectors. Plot for the blob based projector
+		\subref{fig:performance_2d_violin_forward_blob} B-Spline based
+		\subref{fig:performance_2d_violin_forward_bspline}, Siddon's
+		\subref{fig:performance_2d_violin_forward_siddons} and Joseph's
+		\subref{fig:performance_2d_violin_forward_joseph}. The median is given as the white
+		line, the thicker line is the interquantile range, the thin bars give the give the
+		minimum and maximum respectively and the points outside of the minimum and maximum
+		are the outliers. \(y\)-axes is in logarithm scale.}%
+	\label{fig:performance_2d_violin_backward}
+\end{figure}

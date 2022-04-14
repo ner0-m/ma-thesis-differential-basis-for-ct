@@ -14,7 +14,7 @@ import pyqtgraph as pg
 from scipy.ndimage import gaussian_filter
 
 
-def readedf(filename):
+def readedf(filename, from_elsa=True):
     # Issue 1: The 4th dimensions is read as (3,0,1,2)
     try:
         f = open(filename, "r", encoding="utf8", errors="ignore")
@@ -79,7 +79,10 @@ def readedf(filename):
         )
 
     if nrOfDimensions == 2:
-        data = data.reshape(header_dict["Dim_2"], header_dict["Dim_1"])
+        if from_elsa:
+            data = data.reshape(header_dict["Dim_2"], header_dict["Dim_1"])
+        else:
+            data = data.reshape(header_dict["Dim_1"], header_dict["Dim_2"])
 
     if nrOfDimensions == 3:
         data = data.reshape(

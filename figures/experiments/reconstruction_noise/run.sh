@@ -25,28 +25,19 @@ metrics=${script_dir}/metrics.py
 crop=${script_dir}/crop.py
 windowed=${script_dir}/windowed.py
 
-# setup csv log file for error metrics data
-touch "metrics.csv"
-echo "Projector;MSE;NRMSE;PSNR;SSIM" > "metrics.csv"
-
-iters="${RUN_ITERS:-50}"
+iters="${RUN_ITER:-150}"
 size="${RUN_SIZE:-512}"
 
-phantom="SheppLogan"
 # for proj in "Blob" "BSpline" "Siddon" "Joseph"; do
 #     echo "====================================================="
 #     echo "Reconstruction Rectangle using ${proj} projector"
 #     echo "====================================================="
-#     ${runner} --arc 180 --iters ${iters} --size ${size} --projector ${proj} --solver FISTA --phantom ${phantom} --output-dir ${output_dir} --analyze | tee ${proj}.log
+#     ${runner} --noise Gaussian --noise-stddev 0.01 --arc 180 --iters ${iters} --size ${size} --projector ${proj} --solver FISTA --phantom SheppLogan --output-dir ${output_dir} | tee ${proj}.log
 # done
 
-crop_size=$( echo "x = ${size} * 0.45; scale = 0; x / 1" | bc -l)
+crop_size=$( echo "x = ${size} * 0.4; scale = 0; x / 1" | bc -l)
 left_shift=$( echo "x = ${size} * 0.3; scale = 0; x / 1" | bc -l)
-down_shift=$( echo "x = ${size} * 0.25; scale = 0; x / 1" | bc -l)
-
-printf "Convert phantom to png..."
-convert "${output_dir}/2dphantom.pgm" "${output_dir}/2dphantom.png"
-printf "done\n"
+down_shift=$( echo "x = ${size} * 0.17; scale = 0; x / 1" | bc -l)
 
 printf "Creating difference images..."
 for proj in "Blob" "BSpline" "Siddon" "Joseph"; do
@@ -77,24 +68,6 @@ printf "Overlay red rectangle over phantom..."
 python ${rectangle} 2dphantom.edf --width ${crop_size} --height ${crop_size} --padding-left ${left_shift} --padding-top ${down_shift}
 printf "done\n"
 
-printf "Add window interval to reconstruction images..."
-for proj in "Blob" "BSpline" "Siddon" "Joseph"; do
-    ${windowed} "${output_dir}/2dreconstruction_${proj}.edf"
-
-    # Move to better namming
-    mv "${output_dir}/2dreconstruction_${proj}_windowed.png" "${output_dir}/2dreconstruction_windowed_${proj}.png"
-done
-printf "done\n"
-
-printf "Add window interval to reconstruction images..."
-for proj in "Blob" "BSpline" "Siddon" "Joseph"; do
-    ${windowed} "${output_dir}/2dreconstruction_difference_${proj}.edf"
-
-    # Move to better namming
-    mv "${output_dir}/2dreconstruction_difference_${proj}_windowed.png" "${output_dir}/2dreconstruction_difference_windowed_${proj}.png"
-done
-printf "done\n"
-
 printf "Add window interval to cropped difference images..."
 for proj in "Blob" "BSpline" "Siddon" "Joseph"; do
     ${windowed} --padding ${left_shift} ${down_shift} ${crop_size} ${crop_size} "${output_dir}/2dreconstruction_difference_${proj}.edf"
@@ -113,19 +86,40 @@ for proj in "Blob" "BSpline" "Siddon" "Joseph"; do
 done
 printf "done\n"
 
+printf "Add window interval to reconstruction images..."
 for proj in "Blob" "BSpline" "Siddon" "Joseph"; do
-    python ${metrics} 2dphantom.edf 2dreconstruction_${proj}.edf | tee ${proj}.log
+    ${windowed} "${output_dir}/2dreconstruction_${proj}.edf"
 
-    # extract error metrics from log
-    mse=$(cat "${proj}.log" | grep -oh "^MSE\s=\s[0-9]*[\.][0-9]*e[-|+][0-9]*" | cut -d= -f2 | xargs)
-    rmse=$(cat "${proj}.log" | grep -oh "NRMSE\s=\s[0-9]*[\.][0-9]*e[-|+][0-9]*" | cut -d= -f2 | xargs)
-    psnr=$(cat "${proj}.log" | grep -oh "PSNR\s=\s[0-9]*[.][0-9]*" | cut -d= -f2 | xargs)
-    ssim=$(cat "${proj}.log" | grep -oh "SSIM\s=\s[0-9]*[.][0-9]*$" | cut -d= -f2 | xargs)
-
-    # write error metrics it to file
-    if [[ "${proj}" = "BSpline" ]]; then
-        printf "B-Spline;${mse};${rmse};${psnr};${ssim}\n" >> "metrics.csv"
-    else
-        printf "${proj};${mse};${rmse};${psnr};${ssim}\n" >> "metrics.csv"
-    fi
+    # Move to better namming
+    mv "${output_dir}/2dreconstruction_${proj}_windowed.png" "${output_dir}/2dreconstruction_windowed_${proj}.png"
 done
+printf "done\n"
+
+printf "Add window interval to reconstruction difference images..."
+for proj in "Blob" "BSpline" "Siddon" "Joseph"; do
+    ${windowed} "${output_dir}/2dreconstruction_difference_${proj}.edf"
+
+    # Move to better namming
+    mv "${output_dir}/2dreconstruction_difference_${proj}_windowed.png" "${output_dir}/2dreconstruction_difference_windowed_${proj}.png"
+done
+printf "done\n"
+
+# setup csv log file for error metrics data
+# touch "metrics.csv"
+# echo "Projector;MSE;NRMSE;PSNR;SSIM" > "metrics.csv"
+# for proj in "Blob" "BSpline" "Siddon" "Joseph"; do
+#     python ${metrics} 2dphantom.edf 2dreconstruction_${proj}.edf | tee ${proj}.log
+#
+#     # extract error metrics from log
+#     mse=$(cat "${proj}.log" | grep -oh "^MSE\s=\s[0-9]*[\.][0-9]*e[-|+][0-9]*" | cut -d= -f2 | xargs)
+#     rmse=$(cat "${proj}.log" | grep -oh "NRMSE\s=\s[0-9]*[\.][0-9]*e[-|+][0-9]*" | cut -d= -f2 | xargs)
+#     psnr=$(cat "${proj}.log" | grep -oh "PSNR\s=\s[0-9]*[.][0-9]*" | cut -d= -f2 | xargs)
+#     ssim=$(cat "${proj}.log" | grep -oh "SSIM\s=\s[0-9]*[.][0-9]*$" | cut -d= -f2 | xargs)
+#
+#     # write error metrics it to file
+#     if [[ "${proj}" = "BSpline" ]]; then
+#         printf "B-Spline;${mse};${rmse};${psnr};${ssim}\n" >> "metrics.csv"
+#     else
+#         printf "${proj};${mse};${rmse};${psnr};${ssim}\n" >> "metrics.csv"
+#     fi
+# done

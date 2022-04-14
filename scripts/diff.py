@@ -9,6 +9,9 @@ parser = argparse.ArgumentParser(
 parser.add_argument("truth", type=Path, help="Path to edf file to be windowed")
 parser.add_argument("compare", type=Path, help="Path to edf file to be windowed")
 parser.add_argument(
+    "output", type=Path, help="Path and name of output files (without extension)"
+)
+parser.add_argument(
     "--normalize", action=argparse.BooleanOptionalAction, help="Normalize input first"
 )
 parser.add_argument("--show", action=argparse.BooleanOptionalAction, help="Show figure")
@@ -39,29 +42,12 @@ def plot_windowed(data, ax, vmin=None, vmax=None):
 if __name__ == "__main__":
     ground_truth = args.truth
     compare = args.compare
-    stem = ground_truth.stem
+    output = args.output
+    stem = compare.stem
 
-    from difflib import SequenceMatcher
-
-    match = SequenceMatcher(None, ground_truth.stem, compare.stem).find_longest_match()
-    name = ground_truth.stem[match.a : match.b + match.size].split("_")[0]
-
-    import re
-
-    proj1 = re.search("(Blob|BSpline|Siddon|Joseph)", stem).group()
-    proj2 = re.search("(Blob|BSpline|Siddon|Joseph)", compare.stem).group()
-
-    outputedf = ground_truth.parents[0].joinpath(
-        Path(f"{name}_difference_{proj1}_{proj2}.edf")
-    )
-
-    outputpng = ground_truth.parents[0].joinpath(
-        Path(f"{name}_difference_{proj1}_{proj2}.png")
-    )
-
-    output_window = ground_truth.parents[0].joinpath(
-        Path(f"{name}_difference_{proj1}_{proj2}_windowed.png")
-    )
+    outputedf = ground_truth.parents[0].joinpath(Path(f"{output}.edf"))
+    outputpng = ground_truth.parents[0].joinpath(Path(f"{output}.png"))
+    output_window = ground_truth.parents[0].joinpath(Path(f"{output}_windowed.png"))
 
     import edf
 
@@ -83,6 +69,6 @@ if __name__ == "__main__":
 
     fig, ax = plt.subplots(1, 1, figsize=(10, 10))
     plot_windowed(diff, ax)
-    plt.savefig(output_window, bbox_inches='tight', pad_inches=0)
+    plt.savefig(output_window, bbox_inches="tight", pad_inches=0)
     if args.show:
         plt.show()

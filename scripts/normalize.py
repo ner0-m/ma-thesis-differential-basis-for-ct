@@ -7,14 +7,9 @@ parser = argparse.ArgumentParser(
     description="Read file and create plot including window bar"
 )
 parser.add_argument("path", type=Path, help="Path to edf file to be windowed")
-parser.add_argument("--min", help="Window Min")
-parser.add_argument("--max", help="Window Max")
 parser.add_argument(
-    "--padding",
-    nargs=4,
-    help="Padding of windowi (margin left x margin top x width x height)",
+    "--from-elsa", action=argparse.BooleanOptionalAction, help="Show figure"
 )
-parser.add_argument("--show", action=argparse.BooleanOptionalAction, help="Show figure")
 
 args = parser.parse_args()
 
@@ -37,24 +32,20 @@ def plot_windowed(data, ax, vmin=None, vmax=None):
 if __name__ == "__main__":
     path = args.path
     stem = path.stem
-    output_window = path.parents[0].joinpath(Path(stem + "_windowed.png"))
-    min = args.min
-    max = args.max
+    output_normalized = path.parents[0].joinpath(Path(stem + "_normalized.png"))
+    output_edf = path.parents[0].joinpath(Path(stem + "_normalized.edf"))
 
     import edf
+    import numpy as np
 
-    data = edf.readedf(path)
-
-    if args.padding:
-        (ml, mt, w, h) = args.padding
-        data = data[int(mt):int(mt)+int(w), int(ml):int(ml)+int(h)]
-        output_window = path.parents[0].joinpath(Path(stem + "_cropped_windowed.png"))
+    data = edf.readedf(path, from_elsa=args.from_elsa)
+    data = (data - np.min(data)) / np.ptp(data)
+    edf.writeedf(data, output_edf)
 
     import matplotlib.pyplot as plt
 
     fig, ax = plt.subplots(1, 1, figsize=(10, 10))
-    plot_windowed(data, ax, vmin=min, vmax=max)
 
-    plt.savefig(output_window, bbox_inches="tight", pad_inches=0)
-    if args.show:
-        plt.show()
+    im = ax.imshow(np.rot90(np.fliplr(data), k=1), cmap="gray")
+    ax.axis("off")
+    plt.savefig(output_normalized, bbox_inches="tight", pad_inches=0)

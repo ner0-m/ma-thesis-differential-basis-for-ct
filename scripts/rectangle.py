@@ -45,4 +45,5 @@ if __name__ == "__main__":
         facecolor="none",
     )
     ax.add_patch(rect)
+    plt.axis('off')
     plt.savefig(output, bbox_inches="tight", pad_inches=0)

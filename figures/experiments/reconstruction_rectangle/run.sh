@@ -19,52 +19,81 @@ if [[ ! -d "${elsa_dir}" ]]; then
 fi
 
 runner=${elsa_dir}bin/examples/example_argparse
-diff=${elsa_dir}bin/examples/example_difference
+diff=${script_dir}/diff.py
 rectangle=${script_dir}/rectangle.py
 metrics=${script_dir}/metrics.py
+crop=${script_dir}/crop.py
+windowed=${script_dir}/windowed.py
 
 # setup csv log file for error metrics data
 touch "metrics.csv"
 echo "Projector;MSE;NRMSE;PSNR;SSIM" > "metrics.csv"
 
-iters="${RUN_ITERS:-25}"
-size="${RUN_SIZE:-256}"
+iters="${RUN_ITERS:-50}"
+size="${RUN_SIZE:-512}"
 
 # for proj in "Blob" "BSpline" "Siddon" "Joseph"; do
 #     echo "====================================================="
 #     echo "Reconstruction Rectangle using ${proj} projector"
 #     echo "====================================================="
-#     ${runner} --iters ${iters} --size ${size} --projector ${proj} --solver FISTA --phantom Rectangle --output-dir ${output_dir} --analyze | tee ${proj}.log
+#     ${runner} --arc 180 --iters ${iters} --size ${size} --projector ${proj} --solver FISTA --phantom Rectangle --output-dir ${output_dir} --analyze | tee ${proj}.log
 # done
 
-echo "====================================================="
-# printf "Creating difference between Blob and B-Spline projector"
-# ${diff} "${output_dir}/2dreconstruction_Blob.edf" "${output_dir}/2dreconstruction_BSpline.edf" "${output_dir}/2ddifference_Blob_BSpline"
-# printf "done\n"
+crop_size=$( echo "x = ${size} * 0.45; scale = 0; x / 1" | bc -l)
+left_shift=$( echo "x = ${size} * 0.15; scale = 0; x / 1" | bc -l)
+down_shift=$( echo "x = ${size} * 0.15; scale = 0; x / 1" | bc -l)
 
-echo "====================================================="
+printf "Converting phantom files to png..."
+convert "${output_dir}/2dphantom.pgm" "${output_dir}/2dphantom.png"
+printf "done\n"
 
-# printf "Converting pgm files to png..."
-# for f in *.pgm; do
-#     # convert pgm to pgn
-#     convert ./"$f" ./"${f%.pgm}.png"
-# done
-# printf "done\n"
+printf "Creating difference images..."
+for proj in "Blob" "BSpline" "Siddon" "Joseph"; do
+    # and create a center crop
+    ${diff} "${output_dir}/2dphantom.edf" "${output_dir}/2dreconstruction_${proj}.edf" "${output_dir}/2dreconstruction_difference_${proj}"
+done
+printf "done\n"
 
-# crop_size=$( echo "x = ${size} * 0.45; scale = 0; x / 1" | bc -l)
-# left_shift=$( echo "x = ${size} * 0.15; scale = 0; x / 1" | bc -l)
+printf "Creating cropped images of reconstruction..."
+for proj in "Blob" "BSpline" "Siddon" "Joseph"; do
+    ${crop} --width ${crop_size} --height ${crop_size} --padding-top ${down_shift} --padding-left ${left_shift}  "${output_dir}/2dreconstruction_${proj}.edf"
 
-# printf "Creating croped images..."
-# for proj in "Blob" "BSpline" "Siddon" "Joseph"; do
-#     # and create a center crop
-#     convert "${output_dir}/2dreconstruction_${proj}.png" -crop ${crop_size}x${crop_size}+${left_shift}+${down_shift} "2dreconstruction_croped_${proj}.png"
-#     python ../../../scripts/windowed.py 2dreconstruction_${proj}.edf
-# done
+    # Move to better namming
+    mv "${output_dir}/2dreconstruction_${proj}_cropped.png" "${output_dir}/2dreconstruction_cropped_${proj}.png"
+done
+printf "done\n"
 
-# printf "done\n"
-# echo "====================================================="
-# python ../../../scripts/windowed.py 2dphantom.edf
-# python ${rectangle} 2dphantom.edf --width ${crop_size} --height ${crop_size} --padding-left ${left_shift} --padding-top ${left_shift}
+printf "Creating cropped images of difference images..."
+for proj in "Blob" "BSpline" "Siddon" "Joseph"; do
+    ${crop} --width ${crop_size} --height ${crop_size} --padding-top ${down_shift} --padding-left ${left_shift}  "${output_dir}/2dreconstruction_difference_${proj}.edf"
+
+    # Move to better namming
+    mv "${output_dir}/2dreconstruction_difference_${proj}_cropped.png" "${output_dir}/2dreconstruction_difference_cropped_${proj}.png"
+done
+printf "done\n"
+
+printf "Overlay red rectangle over phantom..."
+python ${rectangle} 2dphantom.edf --width ${crop_size} --height ${crop_size} --padding-left ${left_shift} --padding-top ${left_shift}
+printf "done\n"
+
+
+printf "Add window interval to cropped difference images..."
+for proj in "Blob" "BSpline" "Siddon" "Joseph"; do
+    ${windowed} --padding ${left_shift} ${down_shift} ${crop_size} ${crop_size} "${output_dir}/2dreconstruction_difference_${proj}.edf"
+
+    # Move to better namming
+    mv "${output_dir}/2dreconstruction_difference_${proj}_cropped_windowed.png" "${output_dir}/2dreconstruction_difference_cropped_windowed_${proj}.png"
+done
+printf "done\n"
+
+printf "Add window interval to cropped reconstruction images..."
+for proj in "Blob" "BSpline" "Siddon" "Joseph"; do
+    ${windowed} --padding ${left_shift} ${down_shift} ${crop_size} ${crop_size} "${output_dir}/2dreconstruction_${proj}.edf"
+
+    # Move to better namming
+    mv "${output_dir}/2dreconstruction_${proj}_cropped_windowed.png" "${output_dir}/2dreconstruction_cropped_windowed_${proj}.png"
+done
+printf "done\n"
 
 for proj in "Blob" "BSpline" "Siddon" "Joseph"; do
     python ${metrics} 2dphantom.edf 2dreconstruction_${proj}.edf | tee ${proj}.log
