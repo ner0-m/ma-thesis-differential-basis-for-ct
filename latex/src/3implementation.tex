@@ -1134,10 +1134,10 @@ both data and code is in cache, 2 warmup iterations are run. For both dimensions
 the original phantom changes. The number of projection positions is keep the same, to ensure only
 the phantom size induces changes in the runtime.
 
-The two-dimensional case uses projections positions (\(512\)) and \(50\) iterations to ensure a
-large enough sample size. Phantom sizes range from \(64 \times 64\) to \(512 \times 512\).
-In the three-dimensional case, only \(64\) projection positions are used and the phantom sizes range
-from \(32 \times 32 \times 32\) to \(64 \times 64 \times 64\).
+The two-dimensional case uses a constant \(512\) projections positions and \(50\) iterations to
+ensure a large enough sample size. Phantom sizes range from \(64 \times 64\) to \(512 \times 512\).
+In the three-dimensional case, only \(64\) projection positions are used, the phantom sizes range
+from \(32 \times 32 \times 32\) to \(64 \times 64 \times 64\) and only \(25\) iterations are run.
 
 The experiments are run on an system with an AMD Ryzen 7 3700X with \(8\) cores, \(16\) threads. The
 CPU has a base clock of \(3.6\) GHz, but is able to boost up to \(4.4\) GHz under load, under
