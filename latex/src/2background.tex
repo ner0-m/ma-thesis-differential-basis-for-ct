@@ -96,51 +96,83 @@ Transformation and the X-ray Transformation is given in \autoref{chap:radon_tran
 Again, note how the mathematical description closes the gap between different concepts of
 measuring X-ray attenuation, refraction and scattering.
 
-The remainder of this chapter will introduce a mainly two different imaging modalities and their
-applications: X-ray attenuation CT, and differential X-ray phase-contrast CT\@. This should
-also help to gain an intuition for the mathematical introduction and definitions in the following
-chapters. This part will cover briefly the acquisition of measurements and the physical process
-behind it. \todo{what else will I talk about?}
+The remainder of this chapter will mainly introduce X-ray attenuation CT. This mostly involves the
+derivation of the forward model, but it also includes the basic physical aspect necessary to
+understand the derivation. Further, differential X-ray phase-contrast CT is introduced and the
+common aspects of the forward model both modalities share are highlighted. This should also help to
+gain an (visual) intuition for the mathematical introduction and definitions in the following
+chapters.
 
-Out of scope are physical details will not be discussed. Rather, they will be striped down and
-simplified to what is necessary and useful for the scope of this thesis. However, as much as
+Out of scope are physical details. Rather, they will be striped down and simplified to what is
+necessary and useful for the scope of this thesis and the concepts presented. However, as much as
 possible, resources for the interested reader are cited in the corresponding sections.
 
 \section{X-ray Attenuation CT}\label{sec:xray_attenuation_ct}
 
-The discovery of X-rays by Wilhelm Conrad Röntgen~\cite{rontgen_uber_1895} and its usages have
-already been discussed\todo{have they}.
-\todo{Cite (medical) applications for each method, write a little more}
+The discovery of X-rays by Wilhelm Conrad Röntgen~\cite{rontgen_uber_1895} and its impact in medical
+diagnostics have are tremendous. For the first time it was possible to 'look inside` an object
+without opening it. As touched on in the introduction (\ref{chap:introduction}), this was used
+to find and plan the removal of metal objects in bodies.
 
-The breakthrough for X-ray attenuation CT came with the a series of publications of by
+\citeauthor*{cormack_representation_1963}~\cite{cormack_representation_1963} laid the mathematical
+foundations for X-ray attenuation CT. However, the breakthrough of X-ray attenuation CT scanners
+only happened with the publication series of
 \citeauthor{hounsfield_computerized_1973}\cite{hounsfield_computerized_1973},
 \citeauthor{ambrose_computerized_1973}\cite{ambrose_computerized_1973} and
-~\citeauthor{perry_computerized_1973}\cite{perry_computerized_1973}. The mathematical foundation was
-laid but many, but importantly as already mentioned~\citeauthor{radon_uber_1917}, but also
-\citeauthor{cormack_representation_1963}\cite{cormack_representation_1963}.
+~\citeauthor{perry_computerized_1973}\cite{perry_computerized_1973}.
 
-Before looking into the mathematical background, let's first discuss the high-level level
-functionality of X-ray attenuation CT's. The projections of the CT scanner are acquired in a
+X-ray attenuation CT is an easy principle. The projections of the CT scanner are acquired using a
 simple setup. The object one wants to scan is between the X-ray source and the detector. Without
 going into details, X-ray sources for common CT scanners are vacuum tubes, which convert electrical
 power to radiation. The detector consists of an array of pixels, which reacts sensitive to X-rays.
 Then for each projection a `photo' is taken, the object is rotated in relation to the source and
 detector, and then the next acquisitions is performed and so on. It is of no importance for the
-reconstruction, if the object of interested is rotated or the source and detector are rotated. For
-a detailed overview see \citeauthor{buzug_computed_2008}~\cite[Chapter~2]{buzug_computed_2008}.
+reconstruction, if the object of interested is rotated or the source and detector are rotated. For a
+detailed overview see \citeauthor{buzug_computed_2008}~\cite[Chapter~2]{buzug_computed_2008}.
 
-\inlinetodo{Figure showing attenuation in wave model (i.e.\ reduction of amplitude of wave)}
+The objectiv of tomographic reconstruction for X-ray attenuation, is the retrieval of the
+attenuation coefficient for the complete object of interest. To achieve this, numouers projections
+are necessary. Each projection is the X-ray shadow of the measured object.
+\autoref{fig:sinogram_example_abdomen} shows three different projections for such an object. In this
+specific case, the object of interest was rotated relative to the X-ray source and detector.
+The graph on the right of each subimage, shows the measured projections values. The higher this
+value is, the larger the attenuation (i.e.\ the darker the X-ray shadow) of the line hitting the
+projection plane at this position.
 
-For a simple study of the physical process in X-ray attenuation CT, we'll start with the analysis of
-a single X-ray going through an object with a homogeneous (i.e.\ single constant) attenuation
-coefficient (see \autoref{fig:x-ray_homogeneous_attenuation}). The object one desires to investigate,
-is between a X-ray source and a detector. The X-ray source generates X-rays with a certain intensity
-\(I_0\). After the X-ray traverses the object, the detector measures a reduced intensity denoted as
-\(I_1\). The connection between \(I_0\) and \(I_1\) is determined by the attenuation coefficient
-\(\mu\) and the distance traveled through the matter \(s\). It is given by
+\begin{figure}
+	\centering
+	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+			\begin{subfigure}{0.42\textwidth}
+				\includegraphics[width=\textwidth]{./figures/sinogram_example/abdomen_sinogram_0.png}
+				\label{fig:sinogram_example_0_degree}
+			\end{subfigure}%
+			\begin{subfigure}{0.42\textwidth}
+				\includegraphics[width=\textwidth]{./figures/sinogram_example/abdomen_sinogram_45.png}
+				\label{fig:sinogram_example_45_degree}
+			\end{subfigure}%
+			\begin{subfigure}{0.42\textwidth}
+				\includegraphics[width=\textwidth]{./figures/sinogram_example/abdomen_sinogram_90.png}
+				\label{fig:sinogram_example_90_degree}
+			\end{subfigure}%
+		}}%
+	\caption{Three different projections of an object. In this case the X-ray source would be on
+		the far left and generating parallel X-rays. From left to right: A projection from
+		\(0^\circ\), \(45^\circ\) and \(90^\circ\). A single projection is the X-ray shadow
+		of the desired object. It is also the sum of the attenuation coefficient of the
+		integral along the infinite set of lines perpendicular to the projection plane (the
+		line showing the attenuation values on the right)}\label{fig:sinogram_example_abdomen}
+\end{figure}
+
+For a simple study of the physical process in X-ray attenuation CT, one can start with the analysis
+of a single X-ray going through an object with a homogeneous (i.e.\ single constant) attenuation
+coefficient (see \autoref{fig:x-ray_homogeneous_attenuation}). The object one desires to
+investigate, is between a X-ray source and a detector. The X-ray source generates X-rays with a
+certain intensity \(I_0\). After the X-ray traverses the object, the detector measures a reduced
+intensity denoted as \(I_1\). The connection between \(I_0\) and \(I_1\) is determined by the
+attenuation coefficient \(\mu\) and the distance traveled through the matter \(s\). It is given by
 \[ I_1 = I_0 e^{-\mu s} \]
 
-\begin{figure}[t]
+\begin{figure}
 	\centering
 	\def\svgwidth{0.75\textwidth}
 	\import{./figures/homogeneous_attenuation}{homogeneous_attenuation.pdf_tex}
@@ -153,11 +185,11 @@ is between a X-ray source and a detector. The X-ray source generates X-rays with
 
 Extending this model to accommodate changing or varying attenuation coefficients, one needs to
 replace the constant coefficient \(\mu\), by a function \(\mu: \mathbb{R}^2 \mapsto \mathbb{R}\)
-(for now, this is keep in the two-dimensional case). Then the measured intensity is given by the
+(for now, this is kept in the two-dimensional case). Then the measured intensity is given by the
 integral along the line the ray travels along \(L\) of the function \(\mu\), see
 \autoref{fig:x-ray_nonhomogeneous_attenuation} for an illustration.
 
-\begin{figure}[t]
+\begin{figure}
 	\centering
 	\def\svgwidth{0.75\textwidth}
 	\import{./figures/nonhomogeneous_attenuation}{nonhomogeneous_attenuation.pdf_tex}
@@ -176,31 +208,71 @@ Then the connection between the initial intensity, and measured intensity is con
 	- \ln \frac{I}{I_0} = \int_L \mu (x) \, \mathrm{d}x
 \end{equation}
 The right-hand side of \autoref{eq:beer-Lambert-law} is the line integral of the attenuation
-coefficient function \(\mu\) along the line \(L\). Such a transformation of a function is referred
-to as the \textit{Radon Transform}~\cite{radon_uber_1917} (see~\cite{radon_determination_1986} for
-the English translation). The challenge of X-ray attenuation CT, is to reconstruct the attenuation
-coefficients \(\mu\) from a finite set of measurements.
+coefficient function \(\mu\) along the line \(L\). The line integrals for all lines which are
+parallel to each other, are preceisly the above mentioned projections. This is what is examplenary
+shown in \autoref{fig:sinogram_example_abdomen} for 3 different projection angles.
 
-Expanding the view to many rays, one can think of a single projection as the X-ray shadow of the
-object. As already mentioned one needs many such projections to successfully reconstruct an image.
-The image, which consists of all the projections, i.e.\ it is a stack of the measured
-projections, is referred to as \textit{sinogram}
+To successfully reconstruct an object from its projection one needs many projections from different
+angles. The resulting measruments can be stacked together to an image. This is referred to as
+\textit{sinogram}. The name originates from the sinoadial pattern a point draws in such an image,
+see \autoref{fig:sinogram_simple_complete} for an example. There the sinogram for a single point in
+the phantom is shown (together with the simple phantom) on the left. Further, the sinogram for the
+abdomen used throughout this chapter can be seen in \autoref{fig:sinogram_complete}. The vertical
+lines mark the projections taken in \autoref{fig:sinogram_example_abdomen}.
 
-\inlinetodo{Talk about forward projection somewhere in the next chapter and connect back to here}
-\inlinetodo{Plot of single projection, Figure of sinogram and why it's called this way}
+\begin{figure}
+	\centering
+	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+			\begin{subfigure}{0.325\textwidth}
+				\includegraphics[width=\textwidth]{./figures/sinogram_example/simple_phatom.png}
+				\caption{}\label{fig:sinogram_simple_phantom}
+			\end{subfigure}
+			\begin{subfigure}{0.325\textwidth}
+				\includegraphics[width=\textwidth]{./figures/sinogram_example/simple_sinogram.png}
+				\caption{}\label{fig:sinogram_simple_complete}
+			\end{subfigure}
+			\begin{subfigure}{0.325\textwidth}
+				\includegraphics[width=\textwidth]{./figures/sinogram_example/abdomen_512.png}
+				\caption{}\label{fig:sinogram_abdomen_phantom}
+			\end{subfigure}
+			\begin{subfigure}{0.325\textwidth}
+				\includegraphics[width=\textwidth]{./figures/sinogram_example/abdomen_sinogram.png}
+				\caption{}\label{fig:sinogram_abdomen_complete}
+			\end{subfigure}
+		}}
+	\caption{Examples of sinograms. The name originates from the pattern a single points draw in
+		the sinogram. This can be seen in
+		\subref{fig:sinogram_simple_phantom}--\subref{fig:sinogram_simple_complete}. The
+		sinogram for the abdomen data used throughout the chapter
+		\subref{fig:sinogram_abdomen_phantom} can be in
+		\subref{fig:sinogram_abdomen_complete}. The vertical lines mark the projections
+		depicted in \autoref{fig:sinogram_example_abdomen}.
+	}\label{fig:sinogram_complete}
+\end{figure}
 
-Lastly, getting back to the high level of overview of CT scanners. There exist a couple of common
-geometric setups. I.e\ the relation between X-ray source, the direction of the rays and the position
-of the detector. By now rather uncommon, but important for certain theoretical results is the
-parallel beam scanner. There all rays traverse the object parallel to each other. Another, common
-setting is the fan-bean geometry. It is a two-dimensional setting, where the X-rays are emitted
-from a point-source and are not parallel to each other, but rather (as the name suggest) have a fan
-like pattern. Further, the detector is curved. The last discussed geometry is the so-called cone
-beam geometry. As one can conclude form its name, the rays travels in a cone like fashion from the
-point source. The detector is typically flat. A detailed discussion is given in
-e.g.\ \cite{buzug_computed_2008}.
+The first to proof that a function (in this case the \(\mu\)) can be described via its line
+integral, was first shown by \textit{Radon Transform}~\cite{radon_uber_1917}
+(see~\cite{radon_determination_1986} for the English translation). Further details on the Radon
+Transform can be found in \autoref{chap:radon_transform_and_related}. However, for here it should be
+noted, that the line integral of a function is the basis of many different imaging modalites.
 
-\begin{figure}[t]
+Stepping back, to again a more practical approach. CT scanners evolves over time. Hence there do
+exists many different, so-called, generations of CT scanners. The first, and mostly interesting ones
+because a lot of the theory is build for those initially, are CT scanners, with a parallel beam
+geometry (see \autoref{fig:parallel_beam_geometry}. There all rays are generated in parallel to each
+other and hit the detector. This is achieved by having a X-ray source and the detector shift
+perpendicular to the projection direction.
+
+Another, common setting is the fan-bean geometry as shown in \autoref{fig:fan_beam_geometry}. It is
+a two-dimensional setting, where the X-rays are emitted from a point-source and are not parallel to
+each other, but rather (as the name suggest) have a fan like pattern. Further, the detector is often
+curved. Other common geometry setups include inherently three-dimensional setup using a cone-line
+beam shape and a two-dimensional detector. Newer CT scanners, also rely on multiple sources. A
+detailed discussion is given in e.g.\ \cite{buzug_computed_2008}. Most of the geometric setups are
+introduced to either reduce the acquisition time or increase the spatial resolution of the
+reconstruction.
+
+\begin{figure}
 	\centering
 	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
 			\begin{subfigure}{0.6\textwidth}
@@ -210,14 +282,6 @@ e.g.\ \cite{buzug_computed_2008}.
 			\begin{subfigure}{0.6\textwidth}
 				\incfigmaybe{./figures/fan_beam_setup}
 				\caption{Fan Beam Setup}\label{fig:fan_beam_geometry}
-			\end{subfigure}%
-		}}%
-
-	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
-			\begin{subfigure}{0.6\textwidth}
-				\incfigmaybe{./figures/cone_beam_setup}
-				\caption{Cone Beam setup\inlinetodo{Cone beam geometry figure is
-						ugly}}\label{fig:cone_beam_geometry}
 			\end{subfigure}%
 		}}%
 	\caption{Geometry setup of CT scanners}\label{fig:ct_geometry_setup}
@@ -562,7 +626,8 @@ intersection length between the blob and the ray. The projected value only depen
 from the X-ray to the blob center. This is a very nice property. This makes implementations quite
 efficient.
 
-\inlinetodo{figure for parameters for projected basis, figure for parameters for basis}
+\inlinetodo{figure for parameters for projected basis, figure for parameters for basis,
+	\cite{benkarroum_blob_2015}}
 \inlinetodo{Derivative of Blob basis function}
 
 From an implementation standpoint, the half integer order of the modified Kaiser-Bessel function
@@ -849,7 +914,7 @@ the past. The algorithm was introduced in the tomographic space by
 
 \begin{definition}[Landweber Iteration]\label{def:landweber_iteration}
 	Given a linear system of equations as defined in \autoref{def:inverse_problem}, the
-        \textit{Landweber iteration} finds a solution to the corresponding least squares problem. The update
+	\textit{Landweber iteration} finds a solution to the corresponding least squares problem. The update
 	step for \(k = 0, 1, \dots\) is given by
 	\[
 		c^{(k+1)} = c^{(k)} + \lambda^{(k)} A^T(m - Ac^{(k)})
@@ -897,9 +962,9 @@ intersect at a single point, but rather at in close proximity to each other.
 	\[
 		c^{(k+1)} = c^{(k)} + \lambda^{j(k)} \frac{m_{j(k)} - \langle a_{j(k)}, c^{j(k)} \rangle}{\norm{a_{j(k)}}}a_{j(k)}
 	\]
-        where \(\lambda^{(k)} \in \left(0, 1\right]\) is a sequence of relaxation parameters, and
-        \(j(k)\) is a mapping to select an appropriate row for each iteration. In the simple case
-        \(j(k) = (k \mod J) + 1\), but it can also be randomized~\cite{strohmer_randomized_2007}.
+	where \(\lambda^{(k)} \in \left(0, 1\right]\) is a sequence of relaxation parameters, and
+	\(j(k)\) is a mapping to select an appropriate row for each iteration. In the simple case
+	\(j(k) = (k \mod J) + 1\), but it can also be randomized~\cite{strohmer_randomized_2007}.
 \end{definition}
 
 The original Kaczmarz method had \(\lambda(k) = 1\, \forall k \in \mathbb{N}\), lowering the
