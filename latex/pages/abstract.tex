@@ -3,5 +3,45 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \noindent%
+Numerous different applications in engineering can be mathematically described by so called
+\textit{inverse problems}. All applications, where an initial quantity is recovered only from a set
+of observations, can be described as such. One large application is \textit{tomographic
+	reconstruction}. There, the observed measurements are always a finite set of projections.
+Tomographic reconstruction covers important imaging modalities such as X-ray attenuation computed
+tomography (CT). CT scanners based on X-ray attenuation have been a major innovation in medical
+diagnostics. It provides a way to non-intrusively obtain images from the inside of objects. However,
+it is known that X-ray attenuation based imaging modalities lack soft-tissue contrast
+\cite{pfeiffer_phase_2006}. Other imaging modalities can overcome this issue, on example is
+differential phase-contrast CT.
 
-Something Something such a nice abstract
+No matter the exact imaging modalities, in order to find a solution to the inverse problem in the
+field of tomographic reconstruction, the problem domain has to be discretized. A common approach is
+the \textit{series expansion}. There the original signal, is described by a linear combination of a
+coefficient vector with a set of basis functions. Arguably, the most common choice of basis function
+is the pixel (or voxel) basis function. Other alternatives have been proposed, such as
+\textit{spherically symmetric} (blob)~\cite{lewitt_multidimensional_1990} or \textit{B-Spline}
+~\cite{unser_fast_1991} basis function. Especially, spherically symmetric basis function have been
+popular in tomographic reconstruction. Both basis function provide a higher accuracy compared to
+voxel basis functions. But importantly, they are continuously differentiable (at least under certain
+conditions). This is an important property, especially in the context of differential phase-contrast
+CT\@.
+
+Another common ground for tomographic reconstruction, apart from the reconstruction from
+projections, is the mathematical description of the, so called, \textit{forward model}. The forward
+model is the description of the process of acquisition of the projections. For all mentioned method
+throughout this thesis, this model is based on the line integral. I.e.\ the projections are acquired
+from a (possibly infinite) set of infinitely thin lines tracing through the desired problem domain.
+
+As with the problem domain itself, the line integral also has to be discretized. Special software,
+often referred to as projectors, handles the computation of the line integral. Most commonly used
+projection software inherently assume the voxel basis function as a discretization model of the
+problem domain. However, this creates issues for imaging modalities that assume a differentiable
+signal in the problem domain, such as differential phase-contrast CT.
+
+In the scope of this thesis, two such projectors are implemented for the tomographic reconstruction
+framework \textit{elsa}. One projector is based on spherically symmetric and the other on B-Spline
+basis functions. Both projectors significantly outperform proven projector methods such as proposed
+by \citeauthor*{siddon_fast_1985}~\cite{siddon_fast_1985} or
+\citeauthor*{joseph_improved_1982}~\cite{joseph_improved_1982} in terms of accuracy. However, due
+the overlapping nature of the basis functions, the computational burden is increased. This lays the
+foundation for first-class support of differential phase-contrast CT in elsa.
