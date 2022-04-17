@@ -18,10 +18,10 @@ differential phase-contrast CT, X-ray dark-field contrast CT, light-field tomogr
 imaging, nondestructive material testing~\cite{carpio_inverse_2008}. All of these problems are part
 of the class of so-called \textit{inverse problems}.
 
-A little detour to motivate the importance of inverse problems: The Hubble Space Telescope was
-launched into space in 1990. However, it initially had an issue with the spherical aberration in
-its optics. A hardware fix was deployed in 1993. But due to the cost of the operation in general,
-the images of the telescope were still used and a lot of processing went into the images. A lot of
+A little detour to emphasize, how ubiquitously inverse problems are: The Hubble Space Telescope was
+launched into space in 1990. However, it initially had an issue with the spherical aberration in its
+optics. A hardware fix was deployed in 1993. But due to the cost of the operation in general, the
+images of the telescope were still used and lots of processing went into the images. Numerous
 different techniques were used to recover as much information as possible. This includes techniques
 involving the solution of inverse problem similar as discussed in this thesis. The details are out
 of scope, but the interested reader can look into~\cite{white_restoration_1992,adorf_hubble_1995}.
@@ -595,9 +595,14 @@ Another transformations, which is not considered in this thesis is the Cone-Beam
 (c.f.~\cite[Chapter~2]{carpio_inverse_2008}). Also other important topics such as the Riesz
 potential are left out.
 
-\chapter{Image Representation}\label{chap:e_representation}
+\chapter{Signal Representation}\label{chap:signal_representation}
 
-Images as defined in \autoref{def:signal}, are continuous functions. However, if one wishes to use
+Recall from the beginning, three main steps need to be performed, to reconstruct a problem in the
+tomographic setting. In the previous chapters, the first of the three steps --- defining the forward
+model --- is covered. This chapter is completely devoted to the second step: The discretization of
+the problem space.
+
+Signals as defined in \autoref{def:signal}, are continuous functions. However, if one wishes to use
 computers to solve the reconstruction tasks, there exists a need for discretization, as computers
 are inherently discrete. Hence, one wishes to represent an signal in a discrete fashion.
 
@@ -990,7 +995,7 @@ rows, as already in this simple illustration, roughly half the entries of the ro
 
 \section{Iterative Reconstruction}\label{sec:iterative_reconstruction}
 
-As explained in \autoref{chap:image_representation}, the problems considered in this thesis are
+As explained in \autoref{chap:signal_representation}, the problems considered in this thesis are
 ill-posed. Hence, care has to be taken when solving the linear system of equations in
 \autoref{eq:system_lin_equation}. A common approach is to considered least squares problem instead.
 

@@ -40,8 +40,14 @@ signal in the problem domain, such as differential phase-contrast CT.
 
 In the scope of this thesis, two such projectors are implemented for the tomographic reconstruction
 framework \textit{elsa}. One projector is based on spherically symmetric and the other on B-Spline
-basis functions. Both projectors significantly outperform proven projector methods such as proposed
-by \citeauthor*{siddon_fast_1985}~\cite{siddon_fast_1985} or
-\citeauthor*{joseph_improved_1982}~\cite{joseph_improved_1982} in terms of accuracy. However, due
-the overlapping nature of the basis functions, the computational burden is increased. This lays the
-foundation for first-class support of differential phase-contrast CT in elsa.
+basis functions. Two different projections are implemented to firstly, lay the foundation for
+first-class support of differential phase-contrast CT in elsa. But secondly, ensure this approach is
+feasible.
+
+Both projectors significantly outperform proven projector methods such as proposed by
+\citeauthor*{siddon_fast_1985}~\cite{siddon_fast_1985} or
+\citeauthor*{joseph_improved_1982}~\cite{joseph_improved_1982} in terms of accuracy. Typical
+artifacts present in other kind of projectrs are not visible. Both the forward projection and
+reconstructions yield better results in multiple different cases. However, due the overlapping
+nature of the basis functions, the computational burden is increased. This is especially evident for
+the three-dimensional case.

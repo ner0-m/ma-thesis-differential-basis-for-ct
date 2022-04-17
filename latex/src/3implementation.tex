@@ -2,9 +2,9 @@
 
 I want to dedicate a chapter to the C++ framework elsa~\cite{lasser_elsa_2019} developed at the
 \gls{CIIP} research group. As the practical part of my thesis is implemented for elsa, I feel that a
-short introduction is more than appropriated. But, throughout the last 5 years, I've mostly been
+short introduction is more than appropriat. But, throughout the last 5 years, I've mostly been
 working on either elsa, or the predecessor of it. Hence, I also like this to be a part of this
-thesis for personal reasons.
+thesis for personal reasons. \todo{maybe delete personal reason maybe not!}
 
 elsa is a modern, flexible and open-source framework for tomographic reconstruction. I consider elsa
 to have three important goals. First, and maybe most importantly for the user side, it should be
@@ -21,15 +21,17 @@ where \(T\) is the data fidelity term depending on the forward model \(A\), the 
 
 Building the framework around this general problem statement enables the implementation of multiple
 imaging modalities in one framework. Currently, only X-ray attenuation CT is implemented. However,
-from a theoretical standpoint other modalities such as phase-contrast CT, (anisotropic) dark-field
+from a theoretical standpoint other modalities such as phase-contrast CT and (anisotropic) dark-field
 CT can be incorporated. Plus many aspects of the framework are independent of the specific
 application, and reusable. I.e\ one needs no different implementation of algorithms solving the
 above given equations such as \gls{ART}, or \gls{ISTA}\@.
 
 This is a key difference between other frameworks such as the ASTRA
 Toolbox~\cite{van_aarle_fast_2016}, TIGRE~\cite{biguri_tigre_2016} or
-FreeCT~\cite{hoffman_technical_2016}. Though there are frameworks supporting multiple imaging
-modalities, they are not general enough for the research at the \gls{CIIP} research group.
+FreeCT~\cite{hoffman_technical_2016}. All of these framework are known and widely used frameworks in
+the field of tomographic reconstruction. Also, there are other frameworks supporting multiple
+imaging modalities. However, their goal is not such a general approach. This generality is key for
+the research at the \gls{CIIP} research group.
 
 From a software engineering standpoint, a lot of effort is put into reproducibility, maintenance and
 correctness, by following as numerous different best practices as we can and see fit. This includes
@@ -67,7 +69,7 @@ backward projection, the contribution of each detector pixel each a voxel is com
 
 In the first part of this chapter, a detailed overview over existing research and implementations of
 projectors is given. Next details on the projector used for this thesis is given. This is followed
-by a detailed studied of accuracy and performance of the new projector compared to other projection
+by a detailed study of accuracy and performance of the new projector compared to other projection
 methods.
 
 \section{Types of Projectors}\label{sec:projector_types}
@@ -75,7 +77,7 @@ methods.
 One of the first mentions of projector routines can be found in the RECLBL library package
 \insertref{RECLBL}. Namely, the two types of projectors introduced there are the
 \textit{voxel-driven} (or \textit{pixel-driven} for the 2D case) and the \textit{ray driven}. Many
-state-of-the-art projectors still build on the ideas of these projectors.
+state-of-the-art projectors are still based on the ideas of these projectors.
 
 The voxel driven approach is very simple. For the forward projection, each voxel is visited and the
 voxel center is projected onto the detector. Finally, the contribution of the voxel to the detector,
@@ -96,11 +98,10 @@ approaches, this is the state-of-the-art approach and outperforms other approach
 
 This approach was translated to B-Splines in~\cite{momey_b-spline_2012, momey_spline_2015}. There
 B-Splines are assumed to be the basis function at pixel centers, and then the B-Splines are
-projected onto the projector plane. As shown in chapter about B-Spline basis functions
-\insertref{B-Spline chapter}, the projection of \(n\)-dimensional B-Splines yield a
+projected onto the projector plane. As shown in \autoref{chap:signal_representation} about B-Spline
+basis functions \insertref{B-Spline chapter}, the projection of \(n\)-dimensional B-Splines yield a
 \(n-1\)-dimensional B-Spline, hence the projection is simple and
-accurate.~\cite{momey_b-spline_2012} already incorporated both parallel-beam and cone-beam
-geometry.
+accurate.~\cite{momey_b-spline_2012} already incorporated both parallel-beam and cone-beam geometry.
 
 Similarly,~\cite{ziegler_efficient_2006} proposed a footprint approach for blobs. And it was
 improved and ported to the \gls{GPU} by~\cite{bippus_projector_2011}.~\cite{kohler_iterative_2011}
@@ -114,16 +115,18 @@ A conceptually different approach compared to the voxel-based approach, is the \
 approach. There, the key idea is to trace rays through the volume. Typically, the intersection
 length is used as a contribution of a pixel to the detector pixel.
 
-Note that this the forward projection of this approach, is trivially parallelizable. Each ray can be
+Note that the forward projection of this approach, is trivially parallelizable. Each ray can be
 traced independently through the volume.
 
-A classical ray-driven approach was proposed by~\cite{siddon_fast_1985}, often is is referred to as
+A classical ray-driven approach was proposed in~\cite{siddon_fast_1985}, often referred to as
 Siddon's method. There, the exact path length of a ray traversing through a volume is calculated.
 I.e.\ this is the exact calculation of the line integral of a single ray through the volume. More
 recent work like~\cite{jacobs_fast_1998, christiaens_fast_1999, zhao_fast_2004, gao_fast_2012}
 improved on the Siddon's method, especially in efficiency and
 performance.~\cite{de_greef_accelerated_2009, xiao_efficient_2012} ported Siddon's methods to the
 \gls{GPU}\@.
+
+\inlinetodo{Mention the typical artefacts of Siddon's and Joseph's}
 
 \begin{figure}[h]
 	\centering
@@ -134,7 +137,7 @@ performance.~\cite{de_greef_accelerated_2009, xiao_efficient_2012} ported Siddon
 		is used as a weight for the forward and backward projections. The intersection
 		length for each voxel is given by the distance between the points where the ray
 		enters and exists each voxel (marked as black
-		dots).}\label{fig:visualization_siddon_traversal}
+                dots).\inlinetodo{reference this}}\label{fig:visualization_siddon_traversal}
 \end{figure}
 
 Another classic is presented in~\cite{joseph_improved_1982}. It assumes a smooth image and
@@ -148,9 +151,9 @@ direction. And in the of Joseph's based methods, also voxels close by are update
 that parallelization is hindered by the possibility of shared write access to voxels.
 
 Typically, iterative reconstruction algorithms expect that the forward and backward projectors are
-the adjoint of each other \insertref{forward and backward projectors are adjoints}, i.e.\ they are
-\textit{matched} projector pair. This fails for basic pixel- and ray-driven approaches.
-They either introduce artifacts during the forward or backward projections.
+the adjoint of each other, i.e.\ they are \textit{matched} projector pair. This fails for basic
+pixel- and ray-driven approaches. They either introduce artifacts during the forward or backward
+projections.
 
 An entirely different approach is the \textit{distance-driven} approach
 ~\cite{de_man_distance-driven_2002, de_man_distance-driven_2004}. There, the voxel boundaries and
@@ -190,7 +193,7 @@ ensures, each voxel is visited, even if it is only for a small amount.
 For the purpose of this projector, however, the basis functions considered have a support larger
 than a single voxel. Hence, the previous algorithm can be simplified to traverse in a
 \textit{slice-by-slice} fashion. Specifically, this means, that the algorithm only steps a fixed
-width in the leading direction of the given ray. The voxels visited this way are referred to here as
+width in the leading direction of the given ray. The voxels visited this way are referred to as
 \textit{center voxels}, as they are the center of a given slice. Then for each center voxel, the
 neighboring voxels perpendicular to the leading direction are visited for a given distance. The
 distance depends on the specific choice of basis function and their parameters. This is depicted in
@@ -258,21 +261,21 @@ use it as a projector.
 
 \section{Reproducibility}\label{sec:experiments_repoduction}
 
-I want this part to be as as reproducible as possible. Therefore, I ran as much as I can with
-scripts, which can be found in the GitHub repository for this Thesis. You need to checkout elsa
-\todo{add commit hash}, build it including the examples (please see elsa's documentation for that).
-Then you'll be able to run all the scripts, with the last argument being the path to the
-\textit{example\_argparse} binary, which you just build.
+Reproducibility is important to me. Therefore all experiments can be run with the main branch of
+elsa. Please checkout the \href{https://gitlab.lrz.de/IP/elsa}{GitLab repository} so find
+instructions on how to build and run elsa. All experiments are based on the
+\textit{example_argparse} in the \textit{example} folder of the repository.
 
-The experiments are run using elsa. Hence, some further detilas have to be given here. The overall
-the geometric setup elsa follows is as described in
-\citeauthor{hartley_multiple_2003}~\cite{hartley_multiple_2003}. Further, elsa is itself unitless.
-Hence, distances are always given in relation to pixel sizes.
+The experiments are run using elsa. Hence, some necessary details which hold for all the experiment
+setups given later on. The overall geometric setup elsa follows is as described in
+\citeauthor{hartley_multiple_2003}~\cite{hartley_multiple_2003}. The CT projection geometry uses a
+cone beam geometry, with flat detector. Further, elsa is itself unitless. Therefore, all distances
+are given in relation to pixel sizes.
 
 \section{Error measurements}\label{sec:error_measurements}
 
 Error measurements are a delicate topic. They can fake a false sense of security. Metrics might
-indicate a improved result, however visually the result might be worse. Therefore, multiple errors
+indicate an improved result, however visually the result might be worse. Therefore, multiple errors
 are taken into considerations here.
 
 \begin{definition}[Mean Squared Error]
@@ -304,9 +307,9 @@ Another frequently used metric is the \textit{\gls{PSNR}}
 All the so far given metrics are based on the \gls{MSE}, i.e.\ they measure based on exact voxel by
 voxel values. They measure absolute errors and weight them depending on the exact method. However,
 they don't necessarlly have much in common with the visual perception of humans. The
-\textit{\gls{SSIM}}~\cite{wang_image_2004,avanaki_exact_2009} is a perception-based approach. The
-idea for \gls{SSIM} is the relation of close pixels to one another and different values important to
-the human perception.
+\textit{\gls{SSIM}}~\cite{wang_image_2004,avanaki_exact_2009} is a perception-based approach.
+Rather than a pixel to pixel relation, \gls{SSIM} use the relation of pixels in close proximity to
+each other. Plus some other important values important to the human perception.
 \begin{definition}[Structural Similarity Index Measure]
 	given by Given a reference image \(x\) and a comparison image \(\hat{x}\) then the
 	\textit{\glsfirst{SSIM}} is
@@ -317,6 +320,8 @@ the human perception.
 	\(\sigma_x^2\) is the variance of \(x\), \(\sigma_{\hat{x}}^2\) is the variance of
 	\(\hat{x}\), and \(\sigma_{x, \hat{x}}\) is the covariance of \(x\) and \(\hat{x}\)
 \end{definition}
+The promise that the value returned by \gls{SSIM} a value in the range \([0, 1]\), and if the value
+is closer to one, it is 'better` for the human perception.
 
 Throughout the experiment sections, all error metrics are calculated the same way. The error norms
 are computed using the scikit python package~\cite{van_der_walt_scikit-image_2014}. The snippet of
@@ -336,13 +341,14 @@ PSNR = peak_signal_noise_ratio(phantom, reconstruction)
 SSIM = structural_similarity(phantom, reconstruction,
         data_range=phantom.max() - phantom.min())
     \end{minted}
-	\caption{Computation of \gls{MSE}, \gls{NRMSE}, \gls{PSNR} and \gls{SSIM} using the scikit python package.}\label{py:error_metric}
+	\caption{Computation of \gls{MSE}, \gls{NRMSE}, \gls{PSNR} and \gls{SSIM} using the scikit
+		python package.}\label{py:error_metric}
 \end{listing}
 
 \section{Forward Projection}\label{sec:experiments_forward_projection}
 
 As explained in details in the background part of thesis, the forward projection is in the case of
-attenuation X-ray CT, the line integral through the object. It's quality if essential for every
+attenuation X-ray CT, the line integral through the object. Its quality is essential for every
 reconstruction task.
 
 For this section, the sinograms of the Shepp-Logan phantom~\cite{shepp_fourier_1974} (shown in
@@ -356,10 +362,10 @@ detector is \(512\) units away. The one-dimensional flat detector has a resoluti
 
 A similar setup was used for the three-dimensional forward projection. Apart from the difference in
 dimension, it uses as phantom size of \(256 \times 256 \times 256\) voxels. The detector is flat and
-has a along a full \(360^\circ\) circular trajectory around the object. The circular trajectory is
+a complete (i.e.\ \(360^\circ\)) circular trajector around the object is used. The detector has a
 resolution of \(362 \times 362\) pixels. In total \(384\) equally spaced projection poses are
 acquired equivalent to a rotation around the \(y\)-axis, with the center of rotation being the
-center of the volume. The distance to from the source to the center is \(25600\) units and the
+center of the volume. The distance from the source to the center is \(25600\) units and the
 distance from the center of the volume to the principal point of the detector is \(256\) units.
 
 \begin{figure}[h]
@@ -450,9 +456,9 @@ are accatable. There exist differences (as it can be seen in the second and thir
 first and looking at the first row, one should note the extreme difference in displayed values. The
 projectors based on the blob basis functions is noticeably brigther. This is reconfirmed with the
 plot in \autoref{fig:plot_sino_differences}. The plot shows a cross-section slice of the sinogram at
-\(180^\circ\). There is it clear, the blob based projector has a throughout higher intensity value.
+\(180^\circ\). There it is clear, the blob based projector has a throughout higher intensity value.
 This also motivates the choice of absolute normalized differences. Focusing on the overall visible
-artifacts, one can see in the difference images
+artifacts, one can see in the different images
 (\autoref{fig:sino_diff_blob_siddon} -- \autoref{fig:sino_diff_bspline_joseph}), artifacts most
 notably in the differences to the Siddon's projector. The area around angles divadable by
 \(90^\circ\) contains clearly ring like artifacts especially in the boundary portion of the
@@ -769,7 +775,7 @@ In the following sections, the experiments for each phantom are presented and di
 \end{figure}
 
 The reconstruction of the simple rectangular phantom is mostly useful to clearly see the artifacts
-each method. In \autoref{fig:rectangle_recon_artifacts} a crop of the reconstruction can be seen.
+of each method. In \autoref{fig:rectangle_recon_artifacts} a crop of the reconstruction can be seen.
 There, one can see both for the Siddon's and Joseph's projector ring artifacts in both the center
 and the corner of the rectangle. None of these kind of artefacts can be seen in the blob and
 B-Spline based projectors. Looking at the second row with the differences images. These artefacts
@@ -797,7 +803,7 @@ The metrics discussed in \autoref{sec:error_measurements} for the reconstruction
 \autoref{tab:error_metric_rectangle}. All \(l_2\) based norms (i.e. \gls{MSE}, \gls{NRMSE} and
 \gls{PSNR}) are lower for the projectors based on Siddon's and Joseph's method. But all of them are
 quite close to each other (around \(1e-4\) for \gls{MSE}). Notably they are all in the same order of
-magnitude. \gls{SSIM} is similar as well for all, only the Siddon's method falls behin by a bit.
+magnitude. \gls{SSIM} is similar as well for all, only the Siddon's method falls behind by a bit.
 
 \subsection{Shepp-Logan Phantom}
 
@@ -977,8 +983,8 @@ Though against the later one, it is a small difference.
 The final phantom taken into account is the reconstruction of the human abdomen. The reoncsurctions
 is shown in \autoref{fig:reconstruction_medical}. After the \(300\) solver iterations, all
 reconstruction look decent. However, no great difference can be seen on this scale. Looking at the
-cropped images in the second row of \autoref{fig:reconstruction_medical}, one can see that the the
-new projectors a cleaner compared especially to Siddon's based projector. Interestingly, the window
+cropped images in the second row of \autoref{fig:reconstruction_medical}, one can see that the new
+projectors a cleaner compared especially to Siddon's based projector. Interestingly, the window
 interval is a touch, but notibly higher for both the blob and B-Spline basis functions.
 
 \begin{table}[h]%
@@ -1128,7 +1134,7 @@ To investigate the runtime performance characteristics of the blob and B-Spline 
 experiments are conducted. One for the two-dimensional and the other for the three-dimensional case.
 The experiments run either the forward or the backward projector in a tight loop for a fixed number
 of times. For the benchmarking of the forward projection, the phantom is generated once and then
-reused for each iteration. For the backward projection, the sinogram is computed once and the
+reused for each iteration. For the backward projection, the sinogram is computed once and then
 reused. After each iterator the elapsed time is stored and the next iteration is started. To ensure
 both data and code is in cache, 2 warmup iterations are run. For both dimensions, only the size of
 the original phantom changes. The number of projection positions is keep the same, to ensure only

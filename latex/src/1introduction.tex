@@ -1,4 +1,4 @@
-\chapter{Introduction}\label{chap:introduction}
+\chapter{Motivation and Context}\label{chap:introduction}
 
 In \citeyear{rontgen_uber_1895} \citeauthor{rontgen_uber_1895} discovered X-rays. Since then
 different methods based on X-ray have been revolutionizing medical treatment. For the first time it
@@ -26,20 +26,25 @@ using the refraction of X-rays, instead of the attenuation. Specifically, the ph
 perpendicular to the gratings can be measured, therefore, this method is often referred to as
 \textit{differential phase-contrast imaging}.
 
-Further, the same grating interferometer yields further information about small-angle scattering.
-Imaging modalities based on this property are referred to as \textit{X-ray dark-field imaging}.
-Compared to attenuation based imaging. Studies have been proposed for many different medical
-applications, see~\cite[Chapter 1.3.1]{wieczorek_anisotropic_2017} for an overview of the different
-fields. Only recently, the grating interferometer setup was incorporated into a clinical CT
+Additionally, the same grating interferometer yields further information about small-angle
+scattering. Imaging modalities based on this property are referred to as \textit{X-ray dark-field
+	imaging}. Studies have been proposed for many different medical applications, see~\cite[Chapter
+	1.3.1]{wieczorek_anisotropic_2017} for an overview of the different fields. Only recently, the
+grating interferometer setup was incorporated into a clinical CT
 scanner~\cite{viermetz_dark-field_2022}.
 
 This is the working context of the research group \textit{\gls{CIIP}} at the \gls{TUM} around my
 supervisor PD Dr.\ rer.\ nat.\ Tobias Lasser. Specifically, at the research group the open-source
-C++ framework \textit{elsa} is developed for use in tomographic reconstruction. Currently, it only
-supports X-ray attenuation CT\@. As the previous paragraphs should make clear, there exists high
-interest to support imaging modalities based on X-ray differential phase-contrast and X-ray
-dark-field contrast. This thesis is a step into this direction, specifically in the direction to
-support differential phase-contrast in elsa.
+C++ framework \textit{elsa} is developed for use in tomographic reconstruction. One goal of elsa, is
+to provide open access to the research done at the group, plus it should improve the reproducibility
+of the work done. Therefore, support for imaging modalities such as phase-contrast or dark-field
+imaging enables the research group to increase the accessibility and reproducibility of their
+research. But like many other known frameworks, elsa currently only supports X-ray attenuation CT\@.
+But for the accessibility and reproducibility reasons, there exists high interest to support both
+X-ray phase-contrast and dark-field imaging modalities in elsa. This support should include both
+common, state-of-the-art and novel algorithms for tomographic reconstruction. Without common and
+current state-of-the-art algorithms, no proper evaluation and/or comparison to novel techniques can
+be made.
 
 Though, they are different modalities they do have a common basis. All of the above mentioned
 imaging modalities can be sorted in the group of \textit{tomographic reconstruction}, which itself
@@ -52,12 +57,14 @@ The forward model for these modalities assumes X-rays traveling throughout some 
 line. Hence, some quantity (i.e.\ the attenuation coefficients of an object) can be integrated along
 the path of the X-ray. This is just a line. Such a quantity can be fully described by the infinite
 set of lines from different projection angles. This has been proven multiple times over history.
-However, most often it is attributed to \citeauthor*{radon_uber_1917} in \citeyear{radon_uber_1917}.
-Therefore, the integral transform, which maps a function into its set of line integrals is referred
-to as \textit{Radon Transform}. Others than \citeauthor*{radon_uber_1917},
-\citeauthor*{cormack_representation_1963} rediscovered it without the knowledge of the work done by
-\citeauthor*{radon_uber_1917}. \citeauthor*{cormack_representation_1963} laied the theoretical
-foundation of modern CT scanners. For that, both \citeauthor*{cormack_representation_1963} and
+However, most often it is attributed to \citeauthor*{radon_uber_1917} in \citeyear{radon_uber_1917}
+~\cite{radon_user_1917}. Therefore, the integral transform, which maps a function into its set of
+line integrals is referred to as \textit{Radon Transform}. Other than \citeauthor*{radon_uber_1917},
+\citeauthor*{cormack_representation_1963}~\cite{cormack_representation_1963} rediscovered it without
+the knowledge of the work done by \citeauthor*{radon_uber_1917}.
+\citeauthor*{cormack_representation_1963} laied the theoretical foundation of modern CT scanners.
+And \citeauthor*{hounsfield_computerized_1973}~\cite{hounsfield_computerized_1973} build the first
+working prototypes. For that, both \citeauthor*{cormack_representation_1963} and
 \citeauthor*{hounsfield_computerized_1973} received the Nobel Prize in Medizine 1979.
 
 To successfully reconstruct a signal from its projections, a couple of key steps need to be
@@ -97,9 +104,6 @@ This implicitly includes a discretization of the signal in the new basis functio
 should be noted, that at no point in time the problem domain is transformed to a new basis
 functions.
 
-\inlinetodo{Do a little historical detour from Lewitt to box splines Also I want to mention the
-	Radon Transform here somewhere!}
-
 \section{Outline}\label{sec:outline}
 
 As already mentioned, there are three steps involved to tomographic reconstruction on computers.
@@ -113,10 +117,10 @@ description of X-ray attenuation CT\@ and differential phase-contrast CT is also
 includes an introduction to the physical and mechanical mechanism of the different methods.
 
 Next, based on the more engineering oriented approach, the mathematical basic forward model for
-tomographic reconstruction is described in \autoref{chap:radon_transform_and_related}. There
+tomographic reconstruction is described in \autoref{chap:radon_transform_and_related}. There,
 important mathematical concepts, such as the Radon Transform, are introduced and discussed.
 
-With that, the first of the three steps is discussed. In \autoref{chap:image_representation}, the
+With that, the first of the three steps is discussed. In \autoref{chap:signal_representation}, the
 discretization of the problem is discussed in detail. This includes the discussion of the pixel- or
 voxel-basis function, the family of spherically symmetric basis function introduced by
 \citeauthor*{lewitt_multidimensional_1990} and B-Splines basis functions.
