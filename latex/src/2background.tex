@@ -289,8 +289,6 @@ reconstruction.
 
 \section{Phase-Contrast CT}\label{sec:phasecontrast_ct}
 
-\inlinetodo{Phase forward model as a goal of this chapter}
-
 In the X-ray attenuation CT setup, X-rays are only considered exhibiting attenuation. However, as
 visible light, X-rays are also refracted and scattered. Methods based on refraction can measure the
 phase-shift of the X-ray. These phase-contrast imaging modalities in general provide a general
@@ -332,7 +330,32 @@ phase-shift introduced by the object. However, the interference patterns can not
 resolved by the detector. However, performing multiple measurements with a later shifted analyzer
 grating, creates a intensity modulation of the detector read-out. This is referred to as
 \textit{phase stepping}. Apart from the additional stepping necessary, the process of acquiring
-measurements is similar to the one in conventional X-ray attenuation CT\@.
+measurements is similar to the one in conventional X-ray attenuation CT\@. The different possible
+values measured using phase-stepping are illustrated in \autoref{fig:grating_setup_what_happens}.
+In this setup attenuation is reflected by drop of the average intensity. Compared to that,
+phase-shifts, leads to a lateral displacement of the interferometer pattern, and scattering reduces
+the amplitude of the oscillation.
+
+\begin{figure}
+	\centering
+	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+			\begin{subfigure}{0.42\textwidth}
+				\includegraphics[width=\textwidth]{./figures/phase_contrast/plot_attenuation.png}
+			\end{subfigure}%
+			\begin{subfigure}{0.42\textwidth}
+				\includegraphics[width=\textwidth]{./figures/phase_contrast/plot_phase.png}
+			\end{subfigure}
+			\begin{subfigure}{0.42\textwidth}
+				\includegraphics[width=\textwidth]{./figures/phase_contrast/plot_scattered.png}
+			\end{subfigure}
+		}}
+	\caption{Visualization of the measured intensity changing measured at the detector, when
+		performing phase-stepping. Attenuation is measured by a drop of the average
+		intensity value (left most plot). Phase-shift leads to a lateral shift of the
+		intensity signal (center plot). And scattering drops in amplitude (left plot)}%
+	\label{fig:grating_setup_what_happens}
+\end{figure}
+
 
 The intensity signal \(I(x, y)\) measured in each pixel \((x, y)\) oscillates as a function of the
 stepping direction. The phases \(\varphi(x, y)\) of the intensity oscillations in each pixel are
@@ -373,17 +396,15 @@ detector technology, but it is sufficient to measure the refraction index. Albei
 notated, that the angles are very small.
 
 \inlinetodo{Think about a figure showing the drop in average, shift and reduced amplitude, as in
-	\cite{Hahn_statistical_2014} Figure 2.3}
+	\cite{hahn_statistical_2014} Figure 2.3}
 
 With that out of the way, we can see, that the forward model for differential phase-contrast is also
 connected to the line integral. In this case the function integrated is not the attenuation
 coefficient \(\mu\), but the refractive index decrement \(\delta\).
 
-As a small excursion. X-rays do also exhibit scattering, though the scattering angles are small. The
-above described setup also measures the scattering component of the scanned object. Compared to
-phase-shifts, which lead to a lateral displacement of the interferometer pattern, scattering reduces
-the amplitude of the oscillation. This is different from attenuation, which causes a drop of the
-average intensity. Imaging modalities based on the scattering component are referred to as
+As a small excursion. As already eluded to a bit. The grating based setup can in addition to
+attenuation and phase also measure scattering of the X-rays. Though, the scattering angles are
+small, it is possible. Imaging modalities based on the scattering component are referred to as
 \textit{dark-field}. The setup described above only measures scattering perpendicular to the
 gratings. Hence, it is also possible to rotate the object around the central beam axis, i.e.\ in the
 plane of the gratings. This opens the door for so call directional or \gls{AXDT}. The connection to
