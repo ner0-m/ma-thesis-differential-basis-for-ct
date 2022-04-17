@@ -87,11 +87,11 @@ I.e.\ if the resolution of the detector is finer compared to the volume, detecto
 be assigned a value. \todo{describe back projector properly as well}
 
 Instead of projecting the voxel center and interpolating, one can project the complete voxel onto
-the projector plane. This approach was taken by~\cite{long_3d_2010, long_3d_nodate} and is usually
+the projector plane. This approach was taken by~\cite{long_3d_2010, long_3d_2010-1} and is usually
 referred to as separable footprint. They use trapezoidal functions to approximate the footprint both
 accurately and efficiently. Hence, the contribution of voxels to the detector pixels is based on
 these trapezoidal functions. It as also been ported to \gls{GPU} as shown in~\cite{wu_gpu_2011,
-	xie_effective_2015, chapdelaine_new_nodate}. To the best of my knowledge, for voxel based
+	xie_effective_2015, chapdelaine_new_2018}. To the best of my knowledge, for voxel based
 approaches, this is the state-of-the-art approach and outperforms other approaches.
 
 This approach was translated to B-Splines in~\cite{momey_b-spline_2012, momey_spline_2015}. There
@@ -512,7 +512,7 @@ Lastly looking at the difference between the blob and and B-Spline based project
 	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
 			\begin{subfigure}[t]{0.3125\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_difference_Blob_BSpline.png}
-				\caption{Sinogram with marked region of crops}\label{fig:sinogram_crop_overview}
+				\caption{Sinogram with marked region of crops}\label{fig:sinogram_difference_blob_bspline_crop}
 			\end{subfigure}
 			\begin{subfigure}[t]{0.3125\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_Blob_rectangle.png}
@@ -522,7 +522,7 @@ Lastly looking at the difference between the blob and and B-Spline based project
 	\caption{\subref{fig:sinogram_blob_center_crop}--\subref{fig:sinogram_joseph_center_crop}
 		crop into the sinogram shown in \autoref{fig:sinogram_shepp_logan}. Showing a part
 		of the projections of around \(180\)° to \(225\)°.
-		\subref{fig:sinogram_difference_blob_siddon_crop}--\subref{fig:sinogram_difference_bspline_joseph_crop}
+		\subref{fig:sinogram_difference_blob_siddon_crop}--\subref{fig:sinogram_difference_blob_bspline_crop}
 		same cropped region as the first row, but showing the absolute normalized
 		differences. \subref{fig:sinogram_crop_overview} sinogram with rectangle marking the
 		cropped region images in
