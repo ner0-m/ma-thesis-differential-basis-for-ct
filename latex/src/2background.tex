@@ -37,6 +37,10 @@ of scope, but the interested reader can look into~\cite{white_restoration_1992,a
 	(the physical model).
 \end{definition}
 
+As Hilbert spaces, are complete vector spaces with a scalar product \(\langle\cdot,\cdot\rangle\)
+is defined. Hence, they make sufficiently nice spaces to work in. For the purposes of this thesis,
+usually these spaces are subspaces of \(\mathbb{R}^n\).
+
 I want to point out a minor, but important detail. Different imaging modalities, which vary
 drastically in scope of physical properties, can be mathematically reduces to a common concept. This
 enables reasoning on common ground. Improvements in one field, can benefit other fields. Further, a
@@ -77,14 +81,14 @@ In the specific field of tomographic reconstruction, the challenge is to reconst
 from a finite set of projections. Specifically, most of the applications considered are projections
 from X-ray sources. However, other imaging modalities such as light field microscopy exists.
 
-An essential aspect of tomographic reconstruction is the so called \textit{forward model}. It is
-the mathematical abstraction of the physical measuring process (\(A\) in
-\autoref{def:inverse_problem}). Throughout this thesis, X-rays are treated as infinitely thin rays,
-and therefore, mathematically a single X-ray going through the object can be model using a line.
-Along its path through the object interacts with the matter and once it passed through it will hit
-some kind of detector \todo{Add figure for idea of line integral}. This can either measure the
-attenuation of the X-ray, the refraction or the scattering, but the mathematical abstraction is very
-similar.
+An essential aspect of tomographic reconstruction is the so called \textit{forward model}. It is the
+mathematical abstraction of the physical measuring process (\(A\) in \autoref{def:inverse_problem}).
+A mathematical approach and definition is given in \autoref{def:forward-model}. Throughout this
+thesis, X-rays are treated as infinitely thin rays, and therefore, mathematically a single X-ray
+going through the object can be model using a line. Along its path through the object interacts with
+the matter and once it passed through it will hit some kind of detector . This can either measure
+the attenuation of the X-ray, the refraction or the scattering, but the mathematical abstraction is
+very similar.
 
 This idea was already studied by \citeauthor{radon_uber_1917}. Hence, the resulting transformation
 modeling the projection of an object to its projection is often referred to as the \textit{Radon
@@ -298,19 +302,16 @@ of phase-contrast based imaging modules and derive the forward model used in suc
 modalities. Specifically, emphasise is put on the similarities in the forward model regarding X-ray
 attenuation CT\@.
 
-\inlinetodo{Other methods to measure phase: Diffraction-Enhanved imaging, crystal-interferometer
-	phase-contrast imaging, propagation-based phase-contrast imaging}
-
 There are different ways to measure the refractions and thus the phase-contrast. A setup, which
-gained a lot of trackion lately is the setup proposed by
+gained a lot of traction lately is the setup proposed by
 ~\cite{pfeiffer_phase_2006,pfeiffer_hard-x-ray_2008}. The setup is based on Talbot-Lau
 interferometry. It allows both the retrieval of the X-ray refraction and scattering information
 (which can be used for dark-field imaging). The setup consists as with conventional X-ray
 attenuation imaging of the X-ray source and the detector. Additionally, 3 gratings are placed in the
 setup: the \textit{source grating} G0, the \textit{phase-grating} G1 and the \textit{analyzer
-	grating} G2. G1 is placed between the X-ray source and the object, the other two are placed between
-the object and the detector. The source grating creates sufficiently high coherence, which allows
-for a periodic interference behind the phase grating. Using the analyzer grating allows for
+	grating} G2. G1 is placed between the X-ray source and the object, the other two are placed
+between the object and the detector. The source grating creates sufficiently high coherence, which
+allows for a periodic interference behind the phase grating. Using the analyzer grating allows for
 conventional X-ray detectors to be used. For a detailed discussion about the exact placement of the
 gratings, see~\cite{donath_inverse_2009}.
 
@@ -356,11 +357,11 @@ the amplitude of the oscillation.
 	\label{fig:grating_setup_what_happens}
 \end{figure}
 
-
-The intensity signal \(I(x, y)\) measured in each pixel \((x, y)\) oscillates as a function of the
-stepping direction. The phases \(\varphi(x, y)\) of the intensity oscillations in each pixel are
-connected to the refraction angle \(\alpha(x, y)\), the distance \(d\) between G1 and G2 and the
-period \(p_2\) of the analyzer grating G2 by~\cite{weitkamp_x-ray_2005}
+Now that the setup is described, the next step is the derivation of the forward model. The intensity
+signal \(I(x, y)\) measured in each pixel \((x, y)\) oscillates as a function of the stepping
+direction. The phases \(\varphi(x, y)\) of the intensity oscillations in each pixel are connected to
+the refraction angle \(\alpha(x, y)\), the distance \(d\) between G1 and G2 and the period \(p_2\)
+of the analyzer grating G2 by~\cite{weitkamp_x-ray_2005}
 \[ \varphi = 2 \pi \alpha \frac{d}{p_2} = \frac{\lambda d}{p_2} \frac{\partial \Phi}{\partial x} \]
 
 Using the phenomenological notion of a complex index of refraction, a combined description of
@@ -394,9 +395,6 @@ This section is mostly based on the derivation given in~\cite{hahn_statistical_2
 It should be of note, that it is not possible to directly measure the phase-shift with current
 detector technology, but it is sufficient to measure the refraction index. Albeit, it should be
 notated, that the angles are very small.
-
-\inlinetodo{Think about a figure showing the drop in average, shift and reduced amplitude, as in
-	\cite{hahn_statistical_2014} Figure 2.3}
 
 With that out of the way, we can see, that the forward model for differential phase-contrast is also
 connected to the line integral. In this case the function integrated is not the attenuation
@@ -438,111 +436,129 @@ by the different methods.
 
 \chapter{Radon Transform and its related transform}\label{chap:radon_transform_and_related}
 
-In the previous chapter, the notion of the inverse problem was introduced. There, based on a given
-measurement one tries to reconstruct the original quantity, based on a given model. This chapter is
-mostly devoted to derive and analyze this model. Specifically, in the context of X-ray attenuation
-CT, with a brief outlook into other areas needed for e.g.\ phase-contrast CT\@.
+In the previous chapter, the notion of the inverse problem is introduced. Further a forward model
+for both X-ray attenuation and phase-contrast CT is derived. There the derivation was mostly driven
+by the physical properties of the X-rays. This chapter dives deeper in the mathematical formulations
+of forward models. And specifically important transformations in the field of tomographic
+reconstruction.
 
 The physical model is the link between the unknown signal and it's measurements. Usually, the model
-is referred to as forward model. Let us first state a couple of basic definitions, and then we will
-look into the derivation of the forward model for X-ray attenuation CT\@.
+is referred to as forward model. First a couple of basic definitions are given, followed by a deeper
+dive in to the mathematical formulation of the forward model for X-ray attenuation CT\@.
 
-\begin{definition}[Image]\label{def:image}
+\begin{definition}[Signal]\label{def:signal}
 	Let \(f\colon \mathbb{R}^n \to \mathbb{R}\) be a \(n\)-dimensional continuous function,
-	whose support is bounded. It is referred to it as a \(n\)-dimensional image. And often it will
-	be referred to as image, without the special mention of \(n\)-dimensional.
+	whose support is bounded. It is referred to it as a \(n\)-dimensional signal. And often it
+	will be referred to as signal, without the special mention of \(n\)-dimensional.
 \end{definition}
 
-In the special case of \(n=2\), it is called an \textit{2-dimensional image} or just
-\textit{2D image}. However, if from the context, the two-dimensional is obvious, it will still be
-referred to as image. In case of \(n=3\), it is called a \textit{volume}.
+Other names for signal are common, such as \textit{image}. However, image is often an overloaded
+term and can be misunderstood. Hence, it does not suit to a general notion. However, in specific
+cases, such as the reconstruction of a two-dimensional function, it works well and thus, I will
+refer to images as two-dimensional signal. But limited to the solution domain of the inverse
+problem. The word image, in my opinion, also does not suit for example the sinogram, as it is not in
+the sense an image, but rather a stacked form of many measured signals. The same is true for
+volumes. In the three-dimensional setting, this is exactly the kind of signal on wishes to
+reconstruct.
+
+A note for completeness sake. cecall \autoref{def:inverse_problem} of the inverse problem. For our
+purposes \(H = \mathbb{R}^I\) and \(K = \mathbb{R}^J\) with \(I \in \mathbb{N}\) and \(J \in
+\mathbb{N}\) two numbers. Now, the forward model can be defined.
 
 \begin{definition}[Forward Model]\label{def:forward-model}
-	To reconstruct an unknown image \(f\), a set of \(J\) scalar measurements is necessary.
-	A single scalar valued measurement \(m_j\), with \(j \in \{1, \dots, J\}\) is defined in therms
-	of the physical model:
+	To reconstruct an unknown \(I\)-dimensional signal \(f: \mathbb{R}^I \to \mathbb{R}\), a set
+	of \(J\) scalar measurements is necessary. A single scalar valued measurement \(m_j \in
+	\mathbb{R}\), with \(j \in \{1, \dots, J\}\) is defined in therms of the physical model:
 	\[ m_j = \mathscr{M}_j(f)\]
 	where
 	\[ \mathscr{M}_j\colon (\Omega \to \mathbb{R}) \to \mathbb{R} \]
-	and \(\Omega \subseteq \mathbb{R}^n\). The mapping is required to be linear, as this will play an
-	important role later on.
+	and \(\Omega \subseteq \mathbb{R}^I\). The mapping is required to be linear.
 \end{definition}
 
 This is a very general definition. This is useful to mathematically model a wide variety of
-different applications. In fact, all the applications in the previous chapter, can be modeled using
-this general definition.
+different applications. Usually, some restrictions are put upon the function \(f\), such that is has
+compact support, i.e.\ is \(0\) outside a certain region, and that it is sufficiently nice. All the
+applications in the previous chapter, can be modeled using this general definition.
+
+The next sections are devoted to mathematical examples of such forward models. As the maybe most
+important or at least most famous model, the \textit{Radon Transform} is discusses in detail.
+However, for X-ray imaging modalites, the Radon Transform is only a good model for the
+two-dimensional case. Therefore, the special \textit{X-ray Transform} is also presented.
 
 \section{Radon Transform}\label{sec:radon_transform}
 
 Recall from \autoref{sec:xray_attenuation_ct}, the connection between the initial intensity and the
 measured intensity was the line integral of the attenuation coefficients of the material. This
-transformation of a function is known as the \textit{Radon Transform}, which is attributed to Johann
-Radon and his work in \citeyear{radon_uber_1917}~\cite{radon_uber_1917,radon_determination_1986}. It
-was later rediscovered by
-\citeauthor{cormack_representation_1963}~\cite{cormack_representation_1963} in the context of the
-invention of CT scanners.
+transformation of a function is known as the Radon Transform, which is attributed to Johann Radon
+and his work in \citeyear{radon_uber_1917}~\cite{radon_uber_1917,radon_determination_1986}. It was
+later rediscovered by \citeauthor{cormack_representation_1963}~\cite{cormack_representation_1963} in
+the context of the invention of CT scanners. Without any further ado, let us directly dive into the
+definition of the Radon Transform.
 
-Without any further ado, let us directly dive into the definition of the Radon Transform.
-
-\begin{definition}[Radon Transform]
+\begin{definition}[Radon Transform]\label{def:radon_transform}
 	Let \(\Omega \subset \mathbb{R}^n\) and \(f\colon \Omega \to \mathbb{R}\), which is assumed
 	to sufficiently nice. Then the mapping \(\radon{R}f\colon (\mathbb{R}^n \to \mathbb{R})
 	\to (\mathbb{R} \times \mathscr{S}^{n-1} \to \mathbb{R})\) of \(f\), which maps \(f\) into
 	the set of its integrals over the affine hyperplanes of \(\mathbb{R}^{n-1}\), is called the
-	\textit{Radon Transform} (c.f.~\cite{natterer_mathematics_1986,buzug_computed_2008}).
-
+	\textit{Radon Transform} (c.f.~\cite{natterer_mathematics_1986,buzug_computed_2008,carpio_inverse_2008}).
 \end{definition}
-Specifically, given the unit direction \(\theta \in \mathcal{S}^{n-1}\), one can define the
-hyperplane \(\mathcal{H}^{n-1}(\theta)\) through the origin and perpendicular to \(\theta\).
-The Radon Transform \(\radon\) of \(f\) is defined by the line integral over the
-hyperplane perpendicular to the direction \(\theta\) with signed distance \(s \in
-\mathbb{R}\) to the origin
-\[ \radon f(\theta, s) = \int_{\mathcal{H}^{n-1}(\theta)} f(x + s\theta) \, \, \mathrm{d}x \]
+
+Specifically, given the unit direction \(\theta \in \mathcal{S}^{n-1}\) and a scalar \(s \in
+\mathbb{s}\), one can define the hyperplane \(\mathcal{H}^{n-1}(\theta, s) = \lbrace x \in
+\mathbb{R}^n \, \colon \langle x, \theta \rangle = s  \rbrace\) with distance \(s\) to the origin
+and perpendicular to \(\theta\). The Radon Transform \(\radon\) of \(f\) is defined by the line
+integral over the hyperplane \(\mathcal{H}^{n-1}(\theta, s)\):
+\[ \radon f(\theta, s) = \radon_\theta f(s) = \int_{\langle x, \theta \rangle = s} f(x) \, \, \mathrm{d}x \]
 
 Note that for \(n=2\) the hyperplanes are lines, and hence match the forward model for X-ray
 imaging. For the 3-dimensional case, this does not fit anymore. For this case, the so called X-ray
 Transform \(\xray\) was developed~\cite{solmon_x-ray_1976}, which is very similar to the Radon
-Transform, but integrates over lines for all dimensions, instead of hyperplanes.
+Transform, but integrates over lines for all dimensions, instead of hyperplanes. See
+\autoref{sec:xray_transform} for more an the X-ray Transform.
 
-In the two-dimensional case, \(\theta\) is often described by its polar angles \(\phi\) and an
-orthogonal vector \(\theta^\perp\) such that
-\( \theta = (\cos \phi, \sin \phi)\) and \(\theta^\perp = (-\sin\phi, \cos\phi)\)
-then the Radon Transform is described as \( \radon f(\phi, s) = \radon_\phi f(s) = \radon f(\theta^\perp, s)\).
-\todo{is this really important, extract important part out of it}
+Also note that many different notations are common. Specifically in two dimensions, it is common to
+define it via the polar coordinates. Others define a subspace perpendicular to the projection
+direction \(\theta^\perp\). But the basic principal is the same.
 
-As already noted in \autoref{sec:xray_attenuation_ct}, the projections of X-ray attenuation CT, can
-be seen as the shadow of the measured object.
-\inlinetodo{Add figure with object and it's projection}
+The Radon Transform is related to the Fourier Transformation. Also it is a special case of the
+Hankel Transform. Another special case of the Radon Transform is the \textit{Abel Transform}. If the
+function \(f\) is a spherically symmetric function the Radon Transform coincides with the Abel
+Transform~\cite{buzug_computed_2008}.
 
-However, in the setting of tomographic reconstruction, one wishes to reconstruct the original image
-\(f\) from a set of measurements \(g\). Already, \citeauthor*{radon_uber_1917} showed a theoretical
-way of the adjoint operations of the Radon Transform. However, these results are very theoretical.
+Further, if the Radon Transform is defined as a bounded operator. One can define its adjoint
+\(\radon^\ast\) as
+\[ \radon^\ast g (x) = \int_{\mathcal{S}^{n-1}} g(\theta, \langle x, \theta \rangle) \, \, \mathrm{d} \theta \]
+often \(g = \radon f\). The adjoint is often referred to as the \textit{back projection}. Compared
+to the \textit{forward projection} which is \(\radon f\).
+
+In the setting of tomographic reconstruction, one wishes to reconstruct the original signal \(f\)
+from a set of measurements \(m\). Already, \citeauthor*{radon_uber_1917} showed a theoretical way of
+the adjoint operations of the Radon Transform. However, these results are very theoretical. A more
+practical approach uses the connection of the Radon Transform to the Fourier Transform.
 
 \begin{definition}[Fourier Slice Theorem]\label{def:fourier_slice_theorem}
 	Let \(f\colon \mathbb{R}^2 \to \mathbb{R}\) be sufficiently nice and \(\mathscr{F}_n\) the
 	\(n\)-dimensional Fourier transform. Then
-	\[ (\mathscr{F}_2f)(s) = (\mathscr{F}_1(\radon f(\cdot, \phi)))(s) \]
+	\[ (\mathscr{F}_2f)(\theta, s) = (\mathscr{F}_1(\radon_\theta f(\cdot)))(s) \]
 	It is also often referred to as \textit{projection-slice theorem} or \textit{central slice theorem}
 \end{definition}
 
 This is a very powerful theorem. In a more natural language, the \(1\)-dimensional Fourier Transform
-of the projected data measured at the angle \(\phi\), yields a line in the two-dimensional
-representation of the image \(f\). Even more, the line is the line going through the origin with a
-rotation angle \(theta\). Hence, with enough projections, the \(f\) can be described fully in the
-Fourier domain and reconstructed using the inverse \(2\)d Fourier Transform.
-
-\inlinetodo{Add figure for projection line in cartesion space and the same line in fourier space}
+of the projected data measured at the angle \(\theta\), is the same as a line through going the
+origin of the \(2\)-dimensional Fourier Transform of the complete signal. The line is the line going
+through the origin with a rotation angle \(\theta\). Hence, with enough projections, the \(f\) can be
+described fully in the Fourier domain and reconstructed using the inverse \(2\)d Fourier Transform.
 
 However, this method has a couple of drawback. \textit{Enough} projections is quite a vague
 statement and a strong limitation. Especially considering the trend to reduce X-ray dosage and hence
 reducing the number of projections acquired. Further, problems arise as the Fourier domain is
-typically sampled in polar coordinates, but for this representation, we'd like to access them using
-Cartesian. This requires some for of interpolation. See the dissertation of
-\citeauthor{vogel_tomographic_2015}\cite[Chapter~4.1.2]{vogel_tomographic_2015} for a little more
-detailed discussions and very nice illustrative figures. More means to compute the adjoint and
+typically sampled in polar coordinates, but for this representation, one would like to access them
+using Cartesian coordinates. This requires some for of interpolation. See the dissertation of
+\citeauthor{vogel_tomographic_2015}\cite[Chapter~4.1.2]{vogel_tomographic_2015} for a more detailed
+discussions and very nice illustrative figures. More methods to compute the adjoint and
 reconstruction \(f\) are presented in \autoref{chap:tomographic_reconstruction}.
 
-Of further interest to us is the first derivative of the Radon transform. As a variety of image
+Of further interest to us is the first derivative of the Radon transform. As a variety of imaging
 methods build on top of the derivative.
 
 \begin{definition}[Derivative of the Radon Transform]
@@ -562,28 +578,28 @@ The \(n\)-dimensional Radon Transform computed the integral over \(n-1\)-dimensi
 However, for the setting of attenuation X-ray CT, one is interested in the line integration over
 lines in \(n\)-dimensional spaces.
 
-\begin{definition}[X-ray Transform]
+\begin{definition}[X-ray Transform]\label{def:x-ray_transform}
 	Given \(\theta \in \mathscr{S}^{n-1}\) and \(x \in \mathbb{R}^n\), then
-	\[ \xray f(\theta, x) = \int_{-\infty}^{+\infty} f(x + t \theta) \, \mathrm{d}t\]
+	\[ \xray f(\theta, x) = \xray_\theta(x) = \int_{-\infty}^{+\infty} f(x + t \theta) \, \mathrm{d}t\]
 	is the X-ray Transform. It is the integral over the straight line through \(x\) with
 	direction \(\theta\) (c.f.~\cite{natterer_mathematics_1986,solmon_x-ray_1976}).
 \end{definition}
 
 In the two-dimensional case, the Radon Transform and X-ray Transform are equivalent.
 Then, the relation between the Radon Transform and the X-ray Transform is
-\[\xray f(\theta, s\theta^\perp) = \radon f(\theta^\perp, s)\]
-For the case of attenuation X-ray CT, the X-ray Transform is the physical forward model used.
+\[\xray_\theta f(s\theta^\perp) = \radon_{\theta^\perp} f(s)\]
+For the case of attenuation X-ray CT, the X-ray Transform is the physical forward model used. The
+Fourier Slice Theorem \ref{def:fourier_slice_theorem} also holds true for the X-ray Transform.
 
-\inlinetodo{Maybe find the derivative operation as well}
+Another transformations, which is not considered in this thesis is the Cone-Beam Transform
+(c.f.~\cite[Chapter~2]{carpio_inverse_2008}). Also other important topics such as the Riesz
+potential are left out.
 
-Other important transformations, which are not considered in this thesis are the Cone-Beam Transform
-(c.f.~\cite[Chapter~2]{carpio_inverse_2008}), or Abel transform~\cite[Chapter~4.16]{buzug_computed_2008}.
+\chapter{Image Representation}\label{chap:e_representation}
 
-\chapter{Image Representation}\label{chap:image_representation}
-
-Images as defined in \autoref{def:image}, are continuous functions. However, if one wishes to use
+Images as defined in \autoref{def:signal}, are continuous functions. However, if one wishes to use
 computers to solve the reconstruction tasks, there exists a need for discretization, as computers
-are inherently discrete. Hence, one wishes to represent an image in a discrete fashion.
+are inherently discrete. Hence, one wishes to represent an signal in a discrete fashion.
 
 \begin{definition}[Permissible representation]
 	\label{def:permissible_representation}
@@ -602,14 +618,14 @@ For our purposes, we assume the function lies on a regular spaced discrete grid.
 coordinate of the \(\mvec{k}\)-th grid cell. Then, the previous equation can be reformulated:
 \[ \near{f}(\mvec{x}) = \sum_{\mvec{k} \in \mathbb{Z}^n} c_{\mvec{k}} \varphi(x - x_{\mvec{k}}) \]
 This definition follows the notation given in~\cite{momey_new_2011}. This method to discretize an
-image is called \textit{series expansion} and is described in detail in
+signal is called \textit{series expansion} and is described in detail in
 e.g.\ \cite{herman_basis_2015}.
 
-Now, if one applies the Radon transformation to the discretized image: \todo{generalize to all linear physical models}
+Now, if one applies the Radon transformation to the discretized signal: \todo{generalize to all linear physical models}
 \[ \radon\near{f}(\mvec{x}) = \radon\left( \sum_{\mvec{k} \in \mathbb{Z}^n} c_{\mvec{k}} \varphi(\mvec{x} - \mvec{x}_{\mvec{k}}) \right) \]
 Due to the linearity of the Radon Transform this is equivalent to
 \[ \radon\hat{f}(x) = \sum_{\symbfit{k} \in \mathbb{Z}^n} c_{\symbfit{k}}\radon\left( \varphi(x - x_{\symbfit{k}}) \right) \]
-i.e.\ the Radon transformation of the image, only act upon the basis function. Hence, it is
+i.e.\ the Radon transformation of the signal, only act upon the basis function. Hence, it is
 sufficient to study, how the Radon transformation acts upon the individual basis function.
 
 Note that this holds for any linear physical model. Notably, this holds for the X-ray transform and
@@ -642,12 +658,12 @@ the vector \(\mvec{x} \in \mathbb{R}^n\) is larger half the step size, the funct
 \inlinetodo{Add figure showing the centered basis function, show how a continuous function can
 	approximated by pixels}
 
-An image approximated by the voxel basis function, in the series expansion method is equivalent to
+An signal approximated by the voxel basis function, in the series expansion method is equivalent to
 the nearest neighbourhood interpolation.
 
 As pointed out by \citeauthor*{lewitt_multidimensional_1990}
 in~\cite{lewitt_multidimensional_1990,lewitt_alternatives_1992} the voxel-basis function isn't
-necessarily a good choice for biomedical images. Further, it is discontinuous at the boundaries.
+necessarily a good choice for biomedical imaging. Further, it is discontinuous at the boundaries.
 
 The analytical formulation of the Radon transform of the pixel basis function
 (compare~\cite{toft_radon_1996}) is given by:
@@ -770,7 +786,7 @@ tomography~\cite{tran_robust_2013, tran_inverse_2014}, positron emission tomogra
 single-photon emission tomography (SPECT)~\cite{guedon_b-spline_1991, reutter_fully_2007}.
 
 Using B-Splines as a basis function was first presented by~\cite{momey_new_2011,
-	momey_b-spline_2012, momey_spline_2015}. And a similar image representation was adapted for
+	momey_b-spline_2012, momey_spline_2015}. And a similar signal representation was adapted for
 phase-contrast CT in~\cite{nilchian_fast_2013, nilchian_differential_2012, nilchian_spline_2015}.
 They differ in the approximation of the evaluation of the X-ray transform. The former use a
 footprint of the B-Splines, where the later rely on the first derivative of the B-Spline basis
@@ -870,9 +886,9 @@ As tomographic reconstruction problems are inverse problems, many methods depend
 to this space.
 
 Generally, one needs to find solution to the system \(A(f) = m\). There \(A\) is the forward model,
-\(f\) is the \(n\)-dimensional image one seeks to reconstruct, and \(m\) is the measured data, i.e.\
+\(f\) is the \(n\)-dimensional signal one seeks to reconstruct, and \(m\) is the measured data, i.e.\
 the projected data. In the specific case of X-ray attenuation CT, the forward model \(A\) is the
-Radon Transform \(\radon\) or the X-ray Transform \(\xray\), the image \(f\) is the function of
+Radon Transform \(\radon\) or the X-ray Transform \(\xray\), the signal \(f\) is the function of
 attenuation coefficients of the scanned object \(\mu\), and \(m\) is the data measured at the
 detector (including noise).
 
@@ -881,7 +897,7 @@ detector (including noise).
 As already alluded to in the section about the Radon Transform \ref{sec:radon_transform}. There do
 exist closed form analytical inversion methods for the Radon Transform. In the aforementioned
 section, the Fourier Slice Theorem was introduced. Methods exist that use this approach as a means
-to reconstruct the desired image. However, they are not often used in practice in tomographic
+to reconstruct the desired signal. However, they are not often used in practice in tomographic
 reconstruction.
 
 \begin{definition}[Back-Projection]\label{def:back_projection}
