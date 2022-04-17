@@ -289,29 +289,115 @@ reconstruction.
 
 \section{Phase-Contrast CT}\label{sec:phasecontrast_ct}
 
+\inlinetodo{Phase forward model as a goal of this chapter}
+
 In the X-ray attenuation CT setup, X-rays are only considered exhibiting attenuation. However, as
-visible light, X-rays are also refracted and scattered. There exist a variety of different means to
-measure a signal to reconstruct the phase-contrast \todo{add some references for the different
-	signals}. However, here I'll focus on the grating based interferometer as described
-in~\cite{pfeiffer_hard-x-ray_2008}. There a differential phase-contrast is acquired. Thus, this
-method is often referred to as differential phase-contrast CT\@.
+visible light, X-rays are also refracted and scattered. Methods based on refraction can measure the
+phase-shift of the X-ray. These phase-contrast imaging modalities in general provide a general
+advantage in soft-tissue contrast, as the difference in refraction index is higher for soft-tissues
+than for the attenuation coefficient. This chapter aims to introduce basic concepts on the retrieval
+of phase-contrast based imaging modules and derive the forward model used in such imaging
+modalities. Specifically, emphasise is put on the similarities in the forward model regarding X-ray
+attenuation CT\@.
 
-In \autoref{fig:medical_tooth_sample}, one can see a comparison of a reconstruction of a medical
-tooth sample using such a grating based interferometer setup. This should mainly highlight the
-difference in of the methods. One can see the difference in details acquired with each method. In
-this sample, specifically edges are preserved better in the differential phase-contrast image,
-compared to the attenuation based image.
+\inlinetodo{Other methods to measure phase: Diffraction-Enhanved imaging, crystal-interferometer
+	phase-contrast imaging, propagation-based phase-contrast imaging}
 
-\begin{figure}[H]
+There are different ways to measure the refractions and thus the phase-contrast. A setup, which
+gained a lot of trackion lately is the setup proposed by
+~\cite{pfeiffer_phase_2006,pfeiffer_hard-x-ray_2008}. The setup is based on Talbot-Lau
+interferometry. It allows both the retrieval of the X-ray refraction and scattering information
+(which can be used for dark-field imaging). The setup consists as with conventional X-ray
+attenuation imaging of the X-ray source and the detector. Additionally, 3 gratings are placed in the
+setup: the \textit{source grating} G0, the \textit{phase-grating} G1 and the \textit{analyzer
+	grating} G2. G1 is placed between the X-ray source and the object, the other two are placed between
+the object and the detector. The source grating creates sufficiently high coherence, which allows
+for a periodic interference behind the phase grating. Using the analyzer grating allows for
+conventional X-ray detectors to be used. For a detailed discussion about the exact placement of the
+gratings, see~\cite{donath_inverse_2009}.
+
+A key advantage of this grating based setup is the usage of conventional X-ray sources. This makes
+this setup suitable for (bio-) medical applications. Only recently this setup was incorporated in a
+medical grate CT scanner~\cite{viermetz_dark-field_2022}.
+
+The important observation in the grating-based setup, an object placed in the X-ray beam causes a
+refraction of the beam by an angle \(\alpha\) (following~\cite{donath_inverse_2009}) in the
+\(x\)-direction. The refraction angle is connected to the differential phase-shift \(\frac{\partial
+	\Phi}{\partial x}\) by:
+\[ \alpha = \frac{\lambda}{2 \pi} \frac{\partial \Phi}{\partial x} \]
+\(\lambda\) is the X-ray wavelength, and the beam propagates along the \(z\)-axis.
+Simplified, placing an object in the beam, causes a refraction, which results in a displacement of
+the interference pattern created by the gratings. And by the above formula is connect to the
+phase-shift introduced by the object. However, the interference patterns can not be spatially
+resolved by the detector. However, performing multiple measurements with a later shifted analyzer
+grating, creates a intensity modulation of the detector read-out. This is referred to as
+\textit{phase stepping}. Apart from the additional stepping necessary, the process of acquiring
+measurements is similar to the one in conventional X-ray attenuation CT\@.
+
+The intensity signal \(I(x, y)\) measured in each pixel \((x, y)\) oscillates as a function of the
+stepping direction. The phases \(\varphi(x, y)\) of the intensity oscillations in each pixel are
+connected to the refraction angle \(\alpha(x, y)\), the distance \(d\) between G1 and G2 and the
+period \(p_2\) of the analyzer grating G2 by~\cite{weitkamp_x-ray_2005}
+\[ \varphi = 2 \pi \alpha \frac{d}{p_2} = \frac{\lambda d}{p_2} \frac{\partial \Phi}{\partial x} \]
+
+Using the phenomenological notion of a complex index of refraction, a combined description of
+refraction and attenuation can be given. It is defined as
+\[ n = 1 - \delta + i \beta\]
+The real part describes scattering and refraction, and the imaginary part describes attenuation.
+A wave propagating with a wave vector \(\mvec{k}\) thoruhg a medium with refractive index \(n\), can
+be described as
+\[ \Psi(\mvec{r}) = \Psi_0 \cdot e^{i n \mvec{k} \cdot \mvec{r}} = \Psi_0 \cdot
+	e^{i(1-\delta)\mvec{k} \cdot \mvec{r}} \cdot e^{-\beta \mvec{k} \cdot \mvec{r}}\]
+Here the first exponential on the right hand side represents a phase factor and the second an
+attenuation of the wave's amplitute. This model can be used to derive the Beer-Lambert law as it was
+shown in \autoref{eq:beer-Lambert-law} (compare~\cite[Chapter~2.1]{hahn_statistical_2014}). If one
+looks only at the phase related term, it can be reformualted to
+\[ \Psi_P(\mvec{r}) \coloneq \Psi_0 \cdot e^{i \mvec{k} \cdot \mvec{r}} \cdot e^{-i\delta \mvec{k}
+			\cdot \mvec{r}} \]
+Using the fact, that a wave propagating through vacuum is given by
+\[ \Psi_v \coloneq \Psi_0 \cdot e^{i \mvec{k} \cdot \mvec{r}} \]
+the phase-shift term simplifies to
+\[ \Psi_P(\mvec{r}) = \Psi_v \cdot e^{-i\delta \mvec{k} \cdot \mvec{r}} \]
+next similar transformations as with the X-ray attenuation based model can be done. And then the
+phase-shift for a wave travelin through a homogeneous material with a single refraction index \(n\)
+is given by
+\[ \Phi = \delta \mvec{k} \cdot \mvec{r} \]
+As with X-ray attenation, this can be extended to inhomogeneous media, by integrating the refractive
+index decrement function \(\delta\)
+\[ \Phi = \int \delta(x, y, z) k_y \mathrm{d}y \]
+Then the refraction angle \(\alpha\) is given by
+\[ \alpha(x,y) = \frac{\partial}{\partial x} \delta(x, y, z) \mathrm{d}y \]
+This section is mostly based on the derivation given in~\cite{hahn_statistical_2014}.
+It should be of note, that it is not possible to directly measure the phase-shift with current
+detector technology, but it is sufficient to measure the refraction index. Albeit, it should be
+notated, that the angles are very small.
+
+\inlinetodo{Think about a figure showing the drop in average, shift and reduced amplitude, as in
+	\cite{Hahn_statistical_2014} Figure 2.3}
+
+With that out of the way, we can see, that the forward model for differential phase-contrast is also
+connected to the line integral. In this case the function integrated is not the attenuation
+coefficient \(\mu\), but the refractive index decrement \(\delta\).
+
+As a small excursion. X-rays do also exhibit scattering, though the scattering angles are small. The
+above described setup also measures the scattering component of the scanned object. Compared to
+phase-shifts, which lead to a lateral displacement of the interferometer pattern, scattering reduces
+the amplitude of the oscillation. This is different from attenuation, which causes a drop of the
+average intensity. Imaging modalities based on the scattering component are referred to as
+\textit{dark-field}. The setup described above only measures scattering perpendicular to the
+gratings. Hence, it is also possible to rotate the object around the central beam axis, i.e.\ in the
+plane of the gratings. This opens the door for so call directional or \gls{AXDT}. The connection to
+the previous modalities (apart from the similar setup), is also the connection of the line integral.
+Thou more complicated, they still share this common aspect.
+
+\begin{figure}
 	\centering
 	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
 			\begin{subfigure}{0.60\textwidth}
 				\includegraphics[width=\textwidth]{./figures/tooth/tooth_attenuation.png}
-				% \caption{}\label{fig:tooth_attenuation}%
 			\end{subfigure}%
 			\begin{subfigure}{0.60\textwidth}
 				\includegraphics[width=\textwidth]{./figures/tooth/tooth_phasecontrast.png}
-				% \caption{}\label{fig:tooth_phasecontrast}%
 			\end{subfigure}
 		}}
 	\caption{Example reconstruction of a medical tooth sample that was. On the left, the
@@ -323,29 +409,11 @@ compared to the attenuation based image.
 	\label{fig:medical_tooth_sample}
 \end{figure}
 
-\inlinetodo{Figures showing grating setup}
-
-Disregarding many of the physical details, \(\phi(x, z)\) is acquired using the grating
-interferometer. The measurement can be described as
-\[ \phi(x, z) = \frac{2\pi d}{p} \frac{\partial}{\partial x}\int \delta(x, y, z)\mathrm{d}y\]
-Where \(\delta (x, y, z)\) is the refractive index decrement, associated to the real part of the
-complex index of refraction \(n = 1 − \delta + i\beta\), \(d\) the distance between the distance
-between phase grating and analyzer grating and \(p\) is related to phase-stepping. Phase-stepping is
-required to acquire the differential phase-shift signal, but is out of scope for the thesis, see
-~\cite{weitkamp_x-ray_2005} for more information.
-
-As this introduction is rather light on details and the interested reader should look in
-e.g.\ \cite{teuffenbach_grating-based_2017} or~\cite{hahn_statistical_2014}. However, the emphasis
-of this section is: differential phase-contrast CT also depends on the line integral. Therefore,
-similar mathematical methods can be used, as with X-ray attenuation CT\@.
-
-
-% \subsection{X-ray Dark-field Tomography}\label{sec:directional_darkfield}
-%
-% The same grating based measures one more thing. It is also possible to measure (ultra) small angle
-% scattering, which enables the reconstruction of a X-ray dark-field signal.
-%
-% \inlinetodo{Figure of tooth. Some more on this, but not today}
+As a final part of this chapter, \autoref{fig:medical_tooth_sample} presents the reconstruction of a
+medical tooth sample, which was measured with a system as described above. The image of the left
+shows the reconstruction of the attenuation based signal and on the right, the image based on the
+differential phase-contrast is shown. This should mainly highlight, the difference in details gained
+by the different methods.
 
 \chapter{Radon Transform and its related transform}\label{chap:radon_transform_and_related}
 
