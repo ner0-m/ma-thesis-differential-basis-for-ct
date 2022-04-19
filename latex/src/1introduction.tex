@@ -15,7 +15,7 @@ simple X-ray images, X-ray attenuation CT can create cross-sectional images from
 scanned object. Whereas, in tradition X-ray imaging different objects superimpose each other, X-ray
 attenuation CT can distinguish them. Since its introduction, X-ray attenuation CT is a standard tool
 in medical diagnostics. Medical applications include but are by no means limited to the detection of
-infarction, tumours, calcifications, haemorrhage and bone trauma~\cite[Chapter 5]{buchanan_advanced_2012}.
+infarction, tumors, calcifications, hemorrhage and bone trauma~\cite[Chapter 5]{buchanan_advanced_2012}.
 However, X-ray attenuation does lack soft-tissue contrast\cite{pfeiffer_phase_2006}. I.e.\
 tissues with similar attenuation coefficient are hard to distinguish.
 
@@ -28,7 +28,7 @@ perpendicular to the gratings can be measured, therefore, this method is often r
 
 Additionally, the same grating interferometer yields further information about small-angle
 scattering. Imaging modalities based on this property are referred to as \textit{X-ray dark-field
-	imaging}. Studies have been proposed for many different medical applications, see~\cite[Chapter
+	imaging}. Studies have been proposed for numerous different medical applications, see~\cite[Chapter
 	1.3.1]{wieczorek_anisotropic_2017} for an overview of the different fields. Only recently, the
 grating interferometer setup was incorporated into a clinical CT
 scanner~\cite{viermetz_dark-field_2022}.
@@ -65,7 +65,7 @@ the knowledge of the work done by \citeauthor*{radon_uber_1917}.
 \citeauthor*{cormack_representation_1963} laied the theoretical foundation of modern CT scanners.
 And \citeauthor*{hounsfield_computerized_1973}~\cite{hounsfield_computerized_1973} build the first
 working prototypes. For that, both \citeauthor*{cormack_representation_1963} and
-\citeauthor*{hounsfield_computerized_1973} received the Nobel Prize in Medizine 1979.
+\citeauthor*{hounsfield_computerized_1973} received the Nobel Prize in Medicine 1979.
 
 To successfully reconstruct a signal from its projections, a couple of key steps need to be
 performed. First, the forward model has to be described precisely. Next, the problem needs to be
@@ -73,33 +73,34 @@ discretized. This leads to a system of linear equations. The final step is to fi
 this system of linear equations.
 
 Of great interest for this thesis is the discretization aspect. A common approach to discretization
-is the series expansion~\cite{herman_basis_2015}. The signal is described via a of coefficient
-vector and a set of basis functions. The choice of basis function has great influence on the quality
-of the discretization. But not only that, usually signals in tomographic reconstructions are
-considered smooth, i.e.\ continuously differentiable. However, arguably the most common basis
-functions --- the pixel- or voxel- basis function --- is not differentiable at its boundaries. This
-creates problems in imaging modalities that expect a differentiable problem domain, such as
-differentiable phase-contrast imaging. Therefore, it is of interest to investigate basis functions,
-which are continuously differentiable.
+is the series expansion~\cite{herman_basis_2015}. The signal is described via a coefficient vector
+and a set of basis functions. The choice of basis function has great influence on the quality of the
+discretization. But not only that, usually signals in tomographic reconstructions are considered
+smooth, i.e.\ continuously differentiable. However, arguably the most common basis functions --- the
+pixel or voxel basis function --- is not differentiable at its boundaries. This creates problems
+in imaging modalities that expect a differentiable problem domain, such as differentiable
+phase-contrast imaging. Therefore, it is of interest to investigate basis functions, which are
+continuously differentiable.
 
 \citeauthor*{lewitt_multidimensional_1990} introduced a family of spherically symmetric basis
 functions often referred to as \textit{blobs}. It received a lot of attention in the tomographic
-space, as it overcomes quite a few limitations of the pixel- and voxel basis functions. Among
+space, as it overcomes quite a few limitations of the pixel and voxel basis functions. Among
 others, it is continuously differentiable. Another interesting set of basis functions is not as
-common in the tomographc space: Basis-Splines (or usually only B-Spline). B-Splines are mostly known
-from function approximation. There exists a closed form solution for an continuously approximation
-of signals using B-Splines~\cite{unser_fast_1991}. Though, this thesis follows the approach laied out
-by \citeauthor*{momey_new_2011}~\cite{momey_new_2011,momey_b-spline_2012, momey_spline_2015}, a lot
-of the properties are still relevant. B-Spline tend to spherically symmetric functions, but preserve
-a compact support. Further, they are also continuously differential (up to a certain degree).
+common in the tomographic space: Basis-Splines (or usually only B-Spline). B-Splines are mostly
+known from function approximation. There exists a closed form solution for a continuous
+approximation of signals using B-Splines~\cite{unser_fast_1991}. Though, this thesis follows the
+approach laid out by \citeauthor*{momey_new_2011}~\cite{momey_new_2011,momey_b-spline_2012,
+	momey_spline_2015}, a lot of the properties are still relevant. B-Spline tend to spherically
+symmetric functions, but preserve a compact support. Further, they are also continuously
+differential (up to a certain degree).
 
-Once the problem domain is discretized using another basis function apart from the pixel- or
-voxel-basis function, another issue need to be solved. Many method exists to compute the line
-integral. However, most methods assume the pixel- or voxel basis function. Hence, they have to be
-extended to use other basis functions.
+Once the problem domain is discretized using another basis function apart from the pixel or
+voxel basis function, another issue need to be solved. A considerable amount of method exists to
+compute the line integral. However, most methods assume the pixel or voxel basis function. Hence,
+they have to be extended to use other basis functions.
 
 The last two points are the main contribution of this thesis. The approximation of the line integral
-relying on other basis functions than the pixel- or voxel basis functions are implemented in elsa.
+relying on other basis functions than the pixel or voxel basis functions are implemented in elsa.
 This implicitly includes a discretization of the signal in the new basis functions. However, it
 should be noted, that at no point in time the problem domain is transformed to a new basis
 functions.
@@ -108,7 +109,7 @@ functions.
 
 As already mentioned, there are three steps involved to tomographic reconstruction on computers.
 There needs to be an understanding and description of the forward model. The problem needs to be
-discretized and finally a solution needs to be computed. These parts are covered in
+discretized, and finally a solution needs to be computed. These parts are covered in
 \autoref{part:foundation}
 
 The first of these three steps is discussed in \autoref{chap:imaging_modalities}. This discussion
@@ -121,8 +122,8 @@ tomographic reconstruction is described in \autoref{chap:radon_transform_and_rel
 important mathematical concepts, such as the Radon Transform, are introduced and discussed.
 
 With that, the first of the three steps is discussed. In \autoref{chap:signal_representation}, the
-discretization of the problem is discussed in detail. This includes the discussion of the pixel- or
-voxel-basis function, the family of spherically symmetric basis function introduced by
+discretization of the problem is discussed in detail. This includes the discussion of the pixel or
+voxel basis function, the family of spherically symmetric basis function introduced by
 \citeauthor*{lewitt_multidimensional_1990} and B-Splines basis functions.
 
 As a final piece of the puzzle, an introduction to finding a solution to tomographic reconstruction
@@ -130,10 +131,10 @@ problem is given in \autoref{chap:tomographic_reconstruction}. This includes a d
 analytical, iterative reconstruction and regularized reconstruciton algorithms.
 
 Moving away from a mathematical centered discussion, \autoref{part:practical} looks intro the C++
-framework elsa in \autoref{chap:elsa}. This is followed by a detailed discussion of the
-implementational aspects of computing the line integral, with a focus on other basis functions in
-\autoref{chap:projector}. Finally, a detailed evaluation of the new implementations of the line
-integral is conduted in \autoref{chap:experiments}
+framework elsa in \autoref{chap:elsa}. This is followed by a detailed discussion of aspects
+regarding the implementation of computation of the line integral, with a focus on other basis
+functions in \autoref{chap:projector}. Finally, a detailed evaluation of the new implementations of
+the line integral is conducted in \autoref{chap:experiments}
 
 \autoref{part:conclusion} completes the thesis with a summary of the newly implemented projectors in
 \autoref{chap:summary}, and an outlook for future work in \autoref{chap:future_work}.
