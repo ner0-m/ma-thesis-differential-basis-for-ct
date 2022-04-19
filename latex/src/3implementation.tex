@@ -74,19 +74,20 @@ methods.
 
 \section{Types of Projectors}\label{sec:projector_types}
 
-One of the first mentions of projector routines can be found in the RECLBL library package
-\insertref{RECLBL}. Namely, the two types of projectors introduced there are the
+One of the first mentions of projector routines can be found in the RECLBL library
+package~\cite{huesman_reclbl_1977}. Namely, the two types of projectors introduced there are the
 \textit{voxel-driven} (or \textit{pixel-driven} for the 2D case) and the \textit{ray driven}. Many
 state-of-the-art projectors are still based on the ideas of these projectors.
 
 The voxel driven approach is very simple. For the forward projection, each voxel is visited and the
 voxel center is projected onto the detector. Finally, the contribution of the voxel to the detector,
-is computed using some form of interpolation.~\cite{peters_algorithms_1981} used bilinear
-interpolation between the two neighboring detector pixels.~\cite{harauz_interpolation_1983}
-improved on the approach by using bi-cubic spline interpolation. However, the approach is used
+is computed using some form of interpolation. In~\cite{peters_algorithms_1981} bilinear
+interpolation between the two neighboring detector pixels is used.~\cite{harauz_interpolation_1983}
+improves on the approach by using bi-cubic spline interpolation. However, the approach is used
 rarely due to the introduced artifacts (C.f.~\cite[Chapter~3.3]{levakhina_three-dimensional_2014}).
 I.e.\ if the resolution of the detector is finer compared to the volume, detector pixels might never
-be assigned a value. \todo{describe back projector properly as well}
+be assigned a value. The same operation can be performed for the back projection, however instead of
+updating the value at the detector pixel, update the voxel value.
 
 Instead of projecting the voxel center and interpolating, one can project the complete voxel onto
 the projector plane. This approach was taken by~\cite{long_3d_2010, long_3d_2010-1} and is usually
@@ -99,9 +100,9 @@ approaches, this is the state-of-the-art approach and outperforms other approach
 This approach was translated to B-Splines in~\cite{momey_b-spline_2012, momey_spline_2015}. There
 B-Splines are assumed to be the basis function at pixel centers, and then the B-Splines are
 projected onto the projector plane. As shown in \autoref{chap:signal_representation} about B-Spline
-basis functions \insertref{B-Spline chapter}, the projection of \(n\)-dimensional B-Splines yield a
-\(n-1\)-dimensional B-Spline, hence the projection is simple and
-accurate.~\cite{momey_b-spline_2012} already incorporated both parallel-beam and cone-beam geometry.
+basis functions the projection of \(n\)-dimensional B-Splines yield a \(n-1\)-dimensional B-Spline,
+hence the projection is simple and accurate.~\cite{momey_b-spline_2012} already incorporated both
+parallel-beam and cone-beam geometry.
 
 Similarly,~\cite{ziegler_efficient_2006} proposed a footprint approach for blobs. And it was
 improved and ported to the \gls{GPU} by~\cite{bippus_projector_2011}.~\cite{kohler_iterative_2011}
@@ -112,55 +113,67 @@ the forward projection, shared access to the projector pixels might be needed. H
 strategies must be developed.
 
 A conceptually different approach compared to the voxel-based approach, is the \textit{ray-based}
-approach. There, the key idea is to trace rays through the volume. Typically, the intersection
-length is used as a contribution of a pixel to the detector pixel.
+approach. There, the key idea is to trace rays through the volume. Note that the forward projection
+of this approach, is trivially parallelizable. Each ray can be traced independently through the
+volume.
 
-Note that the forward projection of this approach, is trivially parallelizable. Each ray can be
-traced independently through the volume.
+A classical ray-driven approach is proposed in
+\citeauthor*{siddon_fast_1985}~\cite{siddon_fast_1985}, hence often referred to as Siddon's method.
+There, the exact path length of a ray traversing through a volume is calculated. I.e.\ the exact
+calculation of the line integral of a single ray through the volume. This is also illustrated in
+\autoref{fig:visualization_siddon_traversal}. More recent work like~\cite{jacobs_fast_1998,
+	christiaens_fast_1999, zhao_fast_2004, gao_fast_2012} improved on the Siddon's method,
+especially in efficiency and performance.~\cite{de_greef_accelerated_2009, xiao_efficient_2012}
+ported Siddon's methods to the \gls{GPU}\@.
 
-A classical ray-driven approach was proposed in~\cite{siddon_fast_1985}, often referred to as
-Siddon's method. There, the exact path length of a ray traversing through a volume is calculated.
-I.e.\ this is the exact calculation of the line integral of a single ray through the volume. More
-recent work like~\cite{jacobs_fast_1998, christiaens_fast_1999, zhao_fast_2004, gao_fast_2012}
-improved on the Siddon's method, especially in efficiency and
-performance.~\cite{de_greef_accelerated_2009, xiao_efficient_2012} ported Siddon's methods to the
-\gls{GPU}\@.
-
-\inlinetodo{Mention the typical artefacts of Siddon's and Joseph's}
-
-\begin{figure}[h]
+\begin{figure}
 	\centering
 	% Taken from https://tex.stackexchange.com/a/398309
-	\includegraphics[width=\textwidth]{./figures/projectors_siddon/siddon_traversal.png}
+	\includegraphics[width=0.75\textwidth]{./figures/projectors_siddon/siddon_traversal.png}
 	\caption{Visualization of Siddon's method. Siddon's method exactly computes the intersection
 		length of each voxel (text inside each voxel) with a ray (cardinal red line), which
 		is used as a weight for the forward and backward projections. The intersection
 		length for each voxel is given by the distance between the points where the ray
 		enters and exists each voxel (marked as black
-                dots).\inlinetodo{reference this}}\label{fig:visualization_siddon_traversal}
+		dots).}\label{fig:visualization_siddon_traversal}
 \end{figure}
 
 Another classic is presented in~\cite{joseph_improved_1982}. It assumes a smooth image and
 interpolates between neighboring voxels along the ray path. It does so by a in slice-interpolation,
-i.e.\ the voxels perpendicular to the main ray direction are visited.~\cite{graetz_high_2020}
+i.e.\ the voxels perpendicular to the main ray direction are considered.~\cite{graetz_high_2020}
 proposed a branchless \gls{GPU} version of this approach.
 
 The backward projections of ray-driven approaches typically trace the ray from a detector pixel to
 the source and update all visited voxels based on the weights calculated as in the forward
-direction. And in the of Joseph's based methods, also voxels close by are updated. Note again here,
-that parallelization is hindered by the possibility of shared write access to voxels.
+direction. And in the of Joseph's based methods, also voxels close by are also updated. Note again
+here, that parallelization is hindered by the possibility of shared write access to voxels.
+
+The Siddon's and Joseph's method are classic and common approaches for the forward and backward
+projection. However, they do suffer from certain artefacts. This is especially true for Siddon's
+method, due to the interpolation of the Joseph's method less artefacts appear there. These kind of
+artefacts can be seen in the experiments section of this thesis (\autoref{chap:experiments}).
 
 Typically, iterative reconstruction algorithms expect that the forward and backward projectors are
-the adjoint of each other, i.e.\ they are \textit{matched} projector pair. This fails for basic
-pixel- and ray-driven approaches. They either introduce artifacts during the forward or backward
-projections.
+the adjoint of each other, i.e.\ they are \textit{matched} projector
+pair~\cite{zeng_unmatched_2000}. If the system matrix \(A\) is constructed using one projector, it
+the backward projector should constructed \(A^T\), i.e.\ the transpose of the matrix. If the
+abstract view of linear bouded operators is taken, this would be the aforementioned adjoint.
 
-An entirely different approach is the \textit{distance-driven} approach
-~\cite{de_man_distance-driven_2002, de_man_distance-driven_2004}. There, the voxel boundaries and
-detector pixel boundaries are projected onto a common axis, then the overlap is used as a weight.
-This approach is still state of the art, however, is suffers from inaccuracies for projections, which
-are close to \(45^\circ\). A branchless \gls{GPU} version was proposed in~\cite{liu_gpu-based_2017}. The
-distance-driven approach doesn't suffer from any high-frequency artifacts.
+Using an unmatched projector pair might be beneficial, as one projector algorithm might be slower
+for the forward projection than the back projection or wise-versa. Hence, one might want to pick the
+fastest for the forward projection and another for the back projection. However, iterative
+reconstruction algorithms usually expect the backward projection to be the adjoint of the forward
+projection. If this is not met, convergence might not be guaranteed.
+\citeauthor*{zeng_unmatched_2000}~\cite{zeng_unmatched_2000} describes continuous which unmatched
+detector pairs must meet.
+
+An entirely different approach to both the voxel- and ray-driven methods is the
+\textit{distance-driven} approach ~\cite{de_man_distance-driven_2002, de_man_distance-driven_2004}.
+There, the voxel boundaries and detector pixel boundaries are projected onto a common axis, then the
+overlap is used as a weight. This approach is still state of the art, however, is suffers from
+inaccuracies for projections, which are close to \(45^\circ\). A branchless \gls{GPU} version was
+proposed in~\cite{liu_gpu-based_2017}. The distance-driven approach doesn't suffer from any
+high-frequency artifacts.
 
 Projectors based on blobs have been studied for quite some time. Ray-driven approaches are based on
 algorithms proposed in~\cite{matej_practical_1996, popescu_ray_2004}. But rather than assuming a
@@ -264,7 +277,7 @@ use it as a projector.
 Reproducibility is important to me. Therefore all experiments can be run with the main branch of
 elsa. Please checkout the \href{https://gitlab.lrz.de/IP/elsa}{GitLab repository} so find
 instructions on how to build and run elsa. All experiments are based on the
-\textit{example_argparse} in the \textit{example} folder of the repository.
+\textit{example\_argparse} in the \textit{example} folder of the repository.
 
 The experiments are run using elsa. Hence, some necessary details which hold for all the experiment
 setups given later on. The overall geometric setup elsa follows is as described in
@@ -359,6 +372,8 @@ pixel. The sinogram is computed for in total \(768\) projection angles arranged 
 full circle around the object. The source is \(51200\) units away from the image center and the
 detector is \(512\) units away. The one-dimensional flat detector has a resolution of \(\lfloor 512
 * \sqrt{2} \rfloor = 724\) for each pose.
+
+\inlinetodo{Mention usage of cubic B-Spline and parameters for blobs}
 
 A similar setup was used for the three-dimensional forward projection. Apart from the difference in
 dimension, it uses as phantom size of \(256 \times 256 \times 256\) voxels. The detector is flat and
@@ -682,6 +697,8 @@ total of \(512\) projection angles equally spaced in an \(180^\circ\) arc around
 that the \(180^\circ\) projection angle is excluded, as it already does not provide additional
 information. The one-dimensional detector has a resolution of \(\lfloor 512 * \sqrt{2} \rfloor =
 724\)
+
+\inlinetodo{Mention usage of cubic B-Spline and parameters for blobs}
 
 As the reconstruction are performed using elsa, and elsa is itself unitless, distances are given in
 respect to the size of voxels.   The size of voxels is \(1\) for all
@@ -1146,10 +1163,11 @@ In the three-dimensional case, only \(64\) projection positions are used, the ph
 from \(32 \times 32 \times 32\) to \(64 \times 64 \times 64\) and only \(25\) iterations are run.
 
 The experiments are run on an system with an AMD Ryzen 7 3700X with \(8\) cores, \(16\) threads. The
-CPU has a base clock of \(3.6\) GHz, but is able to boost up to \(4.4\) GHz under load, under
-certain conditions. The system has \(16013\) MiB of main memory and the operating system is Linux
-based, running the '5.10.105-1-MANJARO` kernel. As much as possible background tasks are closed
-during the benchmarks and the machines is left running until finished without any user interaction.
+experiments are performed an all \(16\) threads. The CPU has a base clock of \(3.6\) GHz, but is
+able to boost up to \(4.4\) GHz under load, under certain conditions. The system has \(16013\) MiB
+of main memory and the operating system is Linux based, running the '5.10.105-1-MANJARO` kernel. As
+much as possible background tasks are closed during the benchmarks and the machines is left running
+until finished without any user interaction.
 
 \begin{table}[h]%
 	\centering

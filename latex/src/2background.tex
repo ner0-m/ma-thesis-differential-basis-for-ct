@@ -5,6 +5,8 @@ Let \(A\) be an operator, then \(A^\ast\) is the adjoint operation. class of lin
 operators from two vector spaces.
 Hilbert space, Real numbers, matrix, vector, approx linear bounded operators, transpose
 
+\(\mvec{x}\) vector, \(\mvec{x}^{(k)}\) vector at iteration \(k\)
+
 \chapter{Imaging Modalities}\label{chap:imaging_modalities}
 
 Numerous different fields boil down to a very similar problem statement. Based on a given
@@ -525,11 +527,15 @@ Hankel Transform. Another special case of the Radon Transform is the \textit{Abe
 function \(f\) is a spherically symmetric function the Radon Transform coincides with the Abel
 Transform~\cite{buzug_computed_2008}.
 
-Further, if the Radon Transform is defined as a bounded operator. One can define its adjoint
-\(\radon^\ast\) as
-\[ \radon^\ast g (x) = \int_{\mathcal{S}^{n-1}} g(\theta, \langle x, \theta \rangle) \, \, \mathrm{d} \theta \]
-often \(g = \radon f\). The adjoint is often referred to as the \textit{back projection}. Compared
-to the \textit{forward projection} which is \(\radon f\).
+\begin{definition}[Back-Projection]\label{def:back_projection}
+	If the Radon Transform is defined as a bounded operator. One can define its adjoint
+	\(\radon^\ast\) as
+	\[ \radon^\ast g (x) = \int_{\mathcal{S}^{n-1}} g(\theta, \langle x, \theta \rangle) \, \, \mathrm{d} \theta \]
+	Often one defines \(g = \radon f\). The adjoint is often referred to as the \textit{back
+		projection}. Compared to the \textit{forward projection} which is \(\radon f\).
+\end{definition}
+
+\inlinetodo{Add example images for 1, 2, 4, and so on projection angles}
 
 In the setting of tomographic reconstruction, one wishes to reconstruct the original signal \(f\)
 from a set of measurements \(m\). Already, \citeauthor*{radon_uber_1917} showed a theoretical way of
@@ -589,7 +595,7 @@ In the two-dimensional case, the Radon Transform and X-ray Transform are equival
 Then, the relation between the Radon Transform and the X-ray Transform is
 \[\xray_\theta f(s\theta^\perp) = \radon_{\theta^\perp} f(s)\]
 For the case of attenuation X-ray CT, the X-ray Transform is the physical forward model used. The
-Fourier Slice Theorem \ref{def:fourier_slice_theorem} also holds true for the X-ray Transform.
+Fourier Slice Theorem~\ref{def:fourier_slice_theorem} also holds true for the X-ray Transform.
 
 Another transformations, which is not considered in this thesis is the Cone-Beam Transform
 (c.f.~\cite[Chapter~2]{carpio_inverse_2008}). Also other important topics such as the Riesz
@@ -606,47 +612,103 @@ Signals as defined in \autoref{def:signal}, are continuous functions. However, i
 computers to solve the reconstruction tasks, there exists a need for discretization, as computers
 are inherently discrete. Hence, one wishes to represent an signal in a discrete fashion.
 
-\begin{definition}[Permissible representation]
-	\label{def:permissible_representation}
+\begin{definition}[Permissible representation]\label{def:permissible_representation}
 	Let \(f\colon \mathbb{R}^n \to \mathbb{R}\) be a \(n\)-dimensional continuous function,
 	\(N \in \mathbb{N}\) be a positive integer and \(\varphi_n\) a set basis function for
 	\(1 \leq n \leq N\). Then the signal \(f\) can be approximated as a linear combinations
-	of these basis functions and the coefficients \(c_n\):
+	of these basis functions and the coefficients \(c_n\) (c.f.\ \cite{herman_basis_2015}):
 	\[ f \approx \near{f}(\mvec{x}) = \sum_{k=1}^{N} c_k \varphi_k(\mvec{x}) \]
 \end{definition}
 
-\inlinetodo{Have figure of grid above image to represent the discretization}
+\begin{figure}
+	\centering
+	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+			\begin{subfigure}[t]{0.55\textwidth}
+				\resizebox{\textwidth}{!}{%
+					\input{figures/image_representation/grid_representation.pgf}
+				}%
+				\caption{Permissible representation of a signal with regularly spaced coefficients.}\label{fig:permissible_representation_idx}
+			\end{subfigure}
+			\begin{subfigure}[t]{0.55\textwidth}
+				\resizebox{\textwidth}{!}{%
+					\input{figures/image_representation/grid_pixel_representation.pgf}
+				}%
+				\caption{Permissible representation of a signal using pixel-basis function}\label{fig:permissible_representation_pixel}
+			\end{subfigure}
+		}}
+	\caption{Visualization of the permissible representation. In this case the
+		coefficients are spaces equally along the signal.
+		\subref{fig:permissible_representation_idx} shows the coefficients of the
+		permissible representation. \subref{fig:permissible_representation_pixel} shows the
+		same but additionally overlays the pixel-basis function
+	}\label{fig:permissible_representation}
+\end{figure}
 
-For our purposes, we assume the function lies on a regular spaced discrete grid. Then, let
-\(\varphi\) be a zero centered symmetrical basis function, \(\mvec{k} \in \mathbb{Z}^n\) be the
-\(n\)-dimensional index of a grid cell, and \(\vec{x}_{\mvec{k}} \in \mathbb{R}^n\) the center
-coordinate of the \(\mvec{k}\)-th grid cell. Then, the previous equation can be reformulated:
-\[ \near{f}(\mvec{x}) = \sum_{\mvec{k} \in \mathbb{Z}^n} c_{\mvec{k}} \varphi(x - x_{\mvec{k}}) \]
+For our purposes, we assume the function lies on a regular spaced discrete grid (see
+\autoref{fig:permissible_representation}). However, this notation is a little too general for our
+needs. It is sufficient to express everything in terms of a single zero center symmetrical basis
+function. Hence, let \(\varphi\) be such a zero centered symmetrical basis function, \(\mvec{k} \in
+\mathbb{Z}^n\) be the \(n\)-dimensional index of a grid cell, and \(\mvec{x}_{\mvec{k}} \in
+\mathbb{R}^n\) the center coordinate of the \(\mvec{k}\)-th grid cell. Then, the previous equation
+can be reformulated:
+\[ \near{f}(\mvec{x}) = \sum_{\mvec{k} \in \mathbb{Z}^n} c_{\mvec{k}} \varphi(\mvec{x} - \mvec{x}_{\mvec{k}}) \]
 This definition follows the notation given in~\cite{momey_new_2011}. This method to discretize an
 signal is called \textit{series expansion} and is described in detail in
-e.g.\ \cite{herman_basis_2015}.
+e.g.~\cite{herman_basis_2015}.
 
-Now, if one applies the Radon transformation to the discretized signal: \todo{generalize to all linear physical models}
+With that, only a finite number of points are necessary to represent a signal, at least under the
+assumption that functions have compact support. Hence, a discrete representation is found. But the
+quality and accuracy of the representation depends heavily on the chosen basis function. However,
+before more details are given regarding the choice of basis function, it is interesting to
+investigate how the permissible representation behaves under certain transformations.
+
+As it is an important transformation, a closer look is taken at Radon Transformation. Applying the
+Radon Transform yields the following:
 \[ \radon\near{f}(\mvec{x}) = \radon\left( \sum_{\mvec{k} \in \mathbb{Z}^n} c_{\mvec{k}} \varphi(\mvec{x} - \mvec{x}_{\mvec{k}}) \right) \]
 Due to the linearity of the Radon Transform this is equivalent to
-\[ \radon\hat{f}(x) = \sum_{\symbfit{k} \in \mathbb{Z}^n} c_{\symbfit{k}}\radon\left( \varphi(x - x_{\symbfit{k}}) \right) \]
-i.e.\ the Radon transformation of the signal, only act upon the basis function. Hence, it is
-sufficient to study, how the Radon transformation acts upon the individual basis function.
+\[ \radon\hat{f}(\mvec{x}) = \sum_{\symbfit{k} \in \mathbb{Z}^n} c_{\symbfit{k}}\radon\left( \varphi(\mvec{x} - \mvec{x}_{\symbfit{k}}) \right) \]
+Put into natural language, the Radon transformation applied to the permissible representation, only
+act upon the basis function. Hence, it is sufficient to study, how the Radon transformation acts
+upon the individual basis function.
 
 Note that this holds for any linear physical model. Notably, this holds for the X-ray transform and
 the first derivative of the Radon transform. But it is also true for the physical models behind the
 applications discussed in the previous chapter.
-\[ \mathscr{M}_j\near{f}(x) = \sum_{\mvec{k} \in \mathbb{Z}^n} c_{\mvec{k}}\mathscr{M}_j\left( \varphi(\mvec{x} - \mvec{x}_{\mvec{k}}) \right) \]
 
-The key takeaway, is that the forward models related to the imaging modalities discussed in
-\autoref{chap:imaging_modalities} only act on the basis function. Hence, one needs to only study how
-the basis function behave under the given transform.
+The key takeaway, is that the linear operators, such as the forward models related to the imaging
+modalities discussed in \autoref{chap:imaging_modalities}, or the derivative operator only act on
+the basis function. Therefore, part of the next sections is exactly this discussion. Further, the
+aforementioned accuracy discussion is also following in the respective sections. The basis functions
+introduced are: the pixel- or voxel-basis function; the family of spherically-symmetric basis
+functions introduced by \citeauthor*{lewitt_multidimensional_1990}; and an interesting
+generalization of the voxel-basis functions, called B-Splines basis functions.
+
+Before diving depper into each of the basis functions, a high level contextual introduction may
+be helpful. The pixel- or voxel-basis function is ubiquitous. It is everywhere. But that does not
+necessarily make it the best choice or even a good choice. In the field of tomographic
+reconstruction the family of spherically-symmetric basis functions have received a lot of attention.
+Specifically, it is often used in the approximation of the Radon and X-ray Transform. There it is
+often used as a direct replacement of the pixel- or voxel-basis function in the series expansion
+method. Hence, many techniques can be carried over. This is in contrast to the B-Spline basis
+function. The most research in the tomographic field regarding B-Spline is the continuous
+approximation of the signal. I.e.\ a continuous representation of the measurements is constructed,
+such that certain properties of analytical solutions hols (c.f.~\cite{horbelt_discretization_2002}).
+To the best of my knowledge, only~\cite{nilchian_fast_2013}
+and~\cite{momey_new_2011,momey_b-spline_2012,momey_spline_2015} take the comparable approach of the
+series expansion method with B-Splines. Whit this in mind, let us discuss the details of each basis
+function.
 
 \section{Voxel Basis}\label{sec:voxel_basis}
 
-The most likely most well known basis function in imaging is the pixel or voxel basis functions. The
-voxel basis function is a piecewise linear function. The voxel basis function is most likely the
-most widely used basis function. Most literature assumes the voxel basis function implicitly.
+Likely, the most well known basis function in imaging, is the pixel or voxel basis functions.
+Usually, it is referred to as pixel-basis function for two-dimensions, and voxel-basis for the
+three-dimensional case. However, to be agnostic, from here on it will be referred to as voxel-basis
+for any dimension, expect if explicitly the two-dimensional case is referred to.
+
+The voxel basis function is a piecewise linear function. The voxel basis function is most likely the
+most widely used basis function. Most literature assumes the voxel basis function implicitly. The
+permissible representation of a signal using the voxel-basis function can be seen in
+\autoref{fig:permissible_representation_idx}.
 
 The centered voxel basis function of step width \(h\), is given by:
 \begin{equation}\label{eq:voxel_basis_fn}
@@ -660,39 +722,57 @@ Here, the absolute value is coefficient wise, as soon as the absolute value of a
 the vector \(\mvec{x} \in \mathbb{R}^n\) is larger half the step size, the function will return
 \(0\).
 
-\inlinetodo{Add figure showing the centered basis function, show how a continuous function can
-	approximated by pixels}
+The voxel-basis function for the one-dimensional case is just the step function centered around the
+origin. It can be seen in \autoref{fig:pixel_basis_function_1d}. Approximating a signal using the
+voxel-basis function is equivalent to averaging the values of a certain region. Or, phrased
+differently, is is equivalent to the nearest neighbourhood interpolation. This is shown in
+\autoref{fig:pixel_basis_approx_fn}.
 
-An signal approximated by the voxel basis function, in the series expansion method is equivalent to
-the nearest neighbourhood interpolation.
+\begin{figure}
+	\centering
+	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+			\begin{subfigure}[t]{0.55\textwidth}
+				\includegraphicsmaybe[width=\textwidth]{figures/pixel_basis/pixel_basis.png}
+				\caption{One-dimensional voxel-basis function}\label{fig:pixel_basis_function_1d}
+			\end{subfigure}
+			\begin{subfigure}[t]{0.55\textwidth}
+				\includegraphicsmaybe[width=\textwidth]{figures/pixel_basis/pixel_transformation.png}
+				\caption{Approximation of a signal using the voxel-basis function.}\label{fig:pixel_basis_approx_fn}
+			\end{subfigure}
+		}}
+	\caption{Visualization of the voxel basis function. \subref{fig:pixel_basis_function_1d}
+		shows the one-dimensional centered voxel-basis function.
+		\subref{fig:pixel_basis_approx_fn} shows an approximation of a \(\sin\) curve using
+		the voxel-basis function. The staircase approximation is clearly visible.
+	}\label{fig:pixel_basis_function}
+\end{figure}
 
 As pointed out by \citeauthor*{lewitt_multidimensional_1990}
 in~\cite{lewitt_multidimensional_1990,lewitt_alternatives_1992} the voxel-basis function isn't
-necessarily a good choice for biomedical imaging. Further, it is discontinuous at the boundaries.
+necessarily a good choice for biomedical imaging. Not specifically for biomedical images, but this
+can be seen in \autoref{fig:pixel_basis_approx_fn}. The smooth function of a \(\sin\) is crudely
+approximated by a staircase version of the \(\sin\). As usually biomedical images are assumed to be
+smooth, this can result in artefacts. Though, it is possible to increase the resolution of the
+sampling rate and increase accuracy that way. This is rather suboptimal, as at some point physical
+limits are reached in terms of resolution during the measurement process.
 
-The analytical formulation of the Radon transform of the pixel basis function
-(compare~\cite{toft_radon_1996}) is given by:
-\begin{equation}\label{eq:radon_voxel_basis}
-	\radon\varphi^{\text{pixel}}(\rho, \theta) =
-	\begin{cases}
-		0                                                  & x_1 > 0                         \\
-		\sqrt{4 + (x_1 - x_{-1})^2} = \frac{2}{\cos\theta} & x_1 < 1\;\text{and}\;x_{-1} < 1 \\
-		\sqrt{(1 - x_1)^2 + (1 - x_{-1})^2}                & x_1 < 1\;\text{and}\;x_{-1} > 1
-	\end{cases}
-\end{equation}
+Further, the voxel-basis function is discontinuous at the boundaries. And as it can be seen in the
+above figure, the permissible representation is not continuously differentiable. This makes it
+unsuited for certain applications such differential phase-contrast CT. As the derivative is a key
+component forward model, the voxel-basis function needs certain special treatment for such models.
+Usually, some for of analytical differentiation is performed, such as
+in~\cite{xu_investigation_2012}.
 
-As the voxel basis function is discontinuous at the boundaries, there does not exist a way to
-compute the derivative of the radon transform relying on the basis function. Steps such as numerical
-derivation must be used.
-
-\todo{understand this properly and explain this properly}
+There exists an analytical formulation of the Radon Transform. It is given
+in~\cite{toft_radon_1996}. However, usually approximates are used. Some of these are discussed in
+\autoref{chap:projector}.
 
 \section{Blob Basis}\label{sec:blob_basis}
 
-First introduced by Lewitt in~\cite{lewitt_multidimensional_1990}, spherically symmetric volume
-elements (often referred to as blobs) are an alternative to the pixel basis.
-~\cite{lewitt_alternatives_1992} describes how blobs can be used in iterative reconstruction
-algorithms as a basis instead of pixels.
+First introduced by ~\citeauthor*{lewitt_multidimensional_1990}
+in~\cite{lewitt_multidimensional_1990}, spherically-symmetric volume elements (often referred to as
+blobs) are an alternative to the pixel basis.~\cite{lewitt_alternatives_1992} describes how blobs
+can be used in iterative reconstruction algorithms as a basis instead of pixels.
 
 Blob basis functions have been adopted in multiple different fields. Among others electron
 microscopy~\cite{marabini_3d_1998, garduno_optimization_2001}, positron emission tomography
@@ -703,13 +783,22 @@ phase-contrast CT~\cite{kohler_iterative_2011, xu_investigation_2012}, reconstru
 trees~\cite{zhou_blob-based_2008}, breast tomosynthesis~\cite{wu_breast_2010}, reduction of metal
 artifacts~\cite{levakhina_two-step_2010} or computed laminography~\cite{trampert_spherically_2017}.
 
-\inlinetodo{Read papers and assert what blobs brings to the table}
-
-Generally, many fields report increased accuracy with a comparable performance. In other fields,
+Generally, many fields report increased accuracy or improved handling of artefacts. In other fields,
 such as phase-contrast CT, blobs enable the usage of iterative reconstructions without an extra step
 of numerical differentiation.
 
-The generalized Kaiser-Bessel basis function as proposed by Lewitt, is defined as:
+\begin{figure}
+	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+			\begin{subfigure}[t]{0.45\textwidth}
+				\includegraphicsmaybe[width=\textwidth]{figures/blob_basis/blob_2d.png}
+			\end{subfigure}
+		}}%
+	\caption{A visualization of a \(2\)D blob basis function}\label{fig:blob_basis}
+\end{figure}
+
+Now that the advantages of this kind of basis functions should be highlighted. Let us dive into the
+definition. The generalized Kaiser-Bessel basis function as proposed by
+~\citeauthor{lewitt_multidimensional_1990}, is defined as:
 \begin{equation}\label{eq:blob_basis_fn}
 	\varphi^{\text{blob}}_{m, \alpha, a}(r) =
 	\begin{cases}
@@ -718,14 +807,63 @@ The generalized Kaiser-Bessel basis function as proposed by Lewitt, is defined a
 	\end{cases}
 \end{equation}
 where \(I_m\) is the modified Kaiser-Bessel function of the first kind of order \(m\), \(r\) the
-distance to the blob center, \(a\) the blob radius given in units of the grid, and \(\alpha\)
-controlling the shape of the blob. \(m\) controls the continuity of the blob function.
-\inlinetodo{Figures showing 2d blob and different parameters of blob}
+distance to the blob center, \(a\) the blob radius given in units of the grid, \(\alpha\)
+controlling the shape of the blob, and \(m\) controls the continuity of the blob function. A
+visualization of a blob basis function in two dimensions is given in \autoref{fig:blob_basis}.
 
-The Radon Transform \todo{Or the X-ray transform?} of the blob basis function simplifies to the Abel
-Transform~\cite{buzug_computed_2008}. This is possible as the blob basis function is rotationally
-symmetric. Therefore, the Radon Transform of a blob basis function is by
-(c.f.~\cite{lewitt_multidimensional_1990,lewitt_alternatives_1992})
+The influence of the parameters \(\alpha\) and \(m\) is shown in
+\autoref{fig:blob_basis_alphas_order_0}--\autoref{fig:blob_basis_alphas_order_2}. From that it
+should be clear how important the exact choice of parameters is.
+
+Regarding the parameter \(m\), the blob is not continuously differentiable if \(m = 0\). For \(m >
+1\) blob is continuous with \(m - 1\) continuous derivatives, compare~\cite{matej_practical_1996}.
+They also advise to use \(m > 2\) such that the first derivative is also continuous.
+
+Regarding, the other parameters, \(a\) and \(\alpha\),~\cite{matej_practical_1996} already conducted
+investigations regarding good choices of \(\alpha\) and \(a\) for Cartesian grids including an
+optimization methods. A key take-away is that the exact choice depends highly on the concrete
+problem. However, they propose a \textit{standard blob} with parameters with \(a = 2\) and \(\alpha
+= 10.4\). The exact choice of \(\alpha\) is this case is motivated by the aim to find a band-limited
+signal representation. The rational for this is laied out in~\cite{lewitt_multidimensional_1990} and
+also discussed in~\cite{benkarroum_blob_2015}. E.g.~\cite{xu_investigation_2012} follows this
+specific value. But some others use slightly different values for
+\(\alpha\).~\cite{kohler_iterative_2011} uses \(\alpha = 10.826\) and
+~\cite{levakhina_three-dimensional_2014} \(\alpha = 10.83\). It should be noted
+that~\cite{benkarroum_blob_2015} recommends the use of \(\alpha = 13.738507\) and \(a = 2.453144\).
+However, these are not used throughout this thesis, as the computational burden keeps growing with a
+larger value of \(a\). Hence, the experiments conduced in \autoref{chap:experiments} follow the
+values used in~\cite{levakhina_three-dimensional_2014}, which are similar to the standard blob.
+
+\begin{figure}
+	\centering
+	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+			\begin{subfigure}[t]{0.425\textwidth}
+				\includegraphicsmaybe[width=\textwidth]{figures/blob_basis/blob_alphas_order_0.png}
+				\caption{}\label{fig:blob_basis_alphas_order_0}
+			\end{subfigure}%
+			\begin{subfigure}[t]{0.425\textwidth}
+				\includegraphicsmaybe[width=\textwidth]{figures/blob_basis/blob_alphas_order_1.png}
+				\caption{}\label{fig:blob_basis_alphas_order_1}
+			\end{subfigure}%
+			\begin{subfigure}[t]{0.425\textwidth}
+				\includegraphicsmaybe[width=\textwidth]{figures/blob_basis/blob_alphas_order_2.png}
+				\caption{}\label{fig:blob_basis_alphas_order_2}
+			\end{subfigure}%
+		}}%
+	\caption{Influence of blob parameters \(\alpha\) and \(m\) on the shape of blob basis
+		functions. From left to right, \(m = 0\), \(m = 1\) and \(m = 2\). For each \(m\),
+		\(\alpha \in \lbrace 0, 4, 8, 10.83 \rbrace\) is plotted. Only the positive part of
+		the symmetric basis function is shown.
+	}\label{fig:blob_parameter_overview}
+\end{figure}
+
+Apart from its increased accuracy, blobs have another nice property. There exists a close form of
+the Radon and X-ray Transform. The blob basis function as discussed here, are rotationally
+symmetric. Therefore, the X-ray Transform simplifies to the Abel
+Transform~\cite{buzug_computed_2008}. Effectively, this means, that the X-ray Transform is
+independent on the projection angle, but only dependent on the distance from the origin. The Radon
+Transform of the blobs basis function is defined as
+(c.f.~\cite{lewitt_multidimensional_1990,lewitt_alternatives_1992}):
 \begin{align}\label{eq:radon_blob_basis}
 	p(s) & = \int_{-\infty}^{+\infty} \varphi^{\text{blob}}_{m, \alpha, a}\left(t\right) \, \mathrm{d} t                                                                                                       \\
 	     & = 2 \int_0^{\sqrt{(a^2-s^2)}} \varphi^{\text{blob}}_{m, \alpha, a}\left(\sqrt{s^2 - r^2}\right) \, \mathrm{d} r                                                                                     \\
@@ -733,21 +871,18 @@ symmetric. Therefore, the Radon Transform of a blob basis function is by
 \end{align}
 \(s\) is the distance from the X-ray to the blob center, and \(\sqrt{a^2 - s^2}\) is one half of the
 intersection length between the blob and the ray. The projected value only depends on the distance
-from the X-ray to the blob center. This is a very nice property. This makes implementations quite
-efficient.
+from the X-ray to the blob center. This is a very nice property.~\cite{xu_investigation_2012}
+provides an explicit formula for the derivative of the X-ray transform of the blob basis functions,
+as it is required by applications such as differential phase-contrast CT\@.
 
-\inlinetodo{figure for parameters for projected basis, figure for parameters for basis,
-	\cite{benkarroum_blob_2015}}
-\inlinetodo{Derivative of Blob basis function}
-
-From an implementation standpoint, the half integer order of the modified Kaiser-Bessel function
-of the first kind, can be quite nasty. Implementations do exist as it can be seen
-in~\cite{temme_numerical_1975}. However, the floating point implementations are non-trivial. Plus,
-for the case of C++, since C++17 the standard library provides mathematical special functions
+From an implementation standpoint, the half integer order of the modified Kaiser-Bessel function of
+the first kind, can be quite nasty. Implementations do exist as it can be seen
+in~\cite{temme_numerical_1975}. However, the floating point implementations are non-trivial. For the
+case of C++, since C++17 the standard library provides mathematical special functions
 ~\cite{noauthor_c_nodate, noauthor_stdcyl_bessel_i_nodate}. But sadly, it is not yet entirely
-cross-platform, as it is only supported by libstdc++~\cite{noauthor_libstdc_nodate-1}, and not
-libc++. However, for our cases it is sufficient to assume \(m \in \mathbb{N}\). Then the above
-equation can be further simplified.
+portable across systems, as only two out of three major implementations of the standard library.
+Explicitly, is it not implemented in libc++. However, for our cases it is sufficient to assume \(m
+\in \mathbb{N}\). Then the above equation can be further simplified.
 
 The recurrence formulation for the modified Kaiser-Bessel function of the first kind is
 (c.f.~\cite[Chapter~9]{abramowitz_handbook_1972}):
@@ -779,7 +914,7 @@ Splines are common in image and signal processing~\cite{unser_splines_1999}. App
 image interpolation, image transformations, image compressions or the calculation of the first and
 second derivative. A common approach is the approximation of the function or image using Splines and
 then working efficiently on the continuous representation of the splines. For B-Splines
-specifically,~\citeauthor{unser_fast_1991}~\cite{unser_fast_1991} show the continuous image
+specifically,~\citeauthor*{unser_fast_1991}~\cite{unser_fast_1991} show the continuous image
 representation using B-Splines.
 
 This approach was adopted to tomographic reconstruction.~\cite{la_riviere_spline-based_1998}
@@ -797,6 +932,7 @@ They differ in the approximation of the evaluation of the X-ray transform. The f
 footprint of the B-Splines, where the later rely on the first derivative of the B-Spline basis
 function.
 
+Now, first couple of definitions and properties are given.
 \begin{definition}[B-Spline]
 	The most basic definition of a B-Spline of degree \(0\) and unit width is the step function:
 	\begin{equation}
@@ -806,15 +942,15 @@ function.
 			0, & \text{otherwise}
 		\end{cases}
 	\end{equation}
-	Then the univariate B-Spline of degree \(d\) can be constructed by \(d + 1\) convolution of \(\beta^0\)
-	(compare~\cite{momey_new_2011}):
+	Then the univariate B-Spline of degree \(d\) can be constructed by \(d + 1\) convolution of
+	\(\beta^0\) (compare~\cite{momey_new_2011}):
 	\begin{equation}
-		\beta^d(x) = \beta^0 * \beta^{d-1}(x) =
-		\underbrace{\beta^0 * \dots * \beta^0(x)}_{d+1 \text{convolution terms}}
+		\beta^d(x) = \beta^0 * \beta^{d-1}(x) = \underbrace{\beta^0 * \dots * \beta^0(x)}_{d+1 \text{convolution terms}}
 	\end{equation}
 \end{definition}
 \inlinetodo{Add figure for B-Splines of different degree, add function approximation}
-Note that B-Splines of degree \(0\) is just the voxel-basis function.
+Note that B-Splines of degree \(0\) is just the voxel-basis function. This makes the B-Splines a
+nice generalization of the voxel-basis function.
 
 Another way to compute the B-Spline basis of order \(d\) is given in~\cite{unser_fast_1991}:
 \begin{equation}
@@ -822,7 +958,7 @@ Another way to compute the B-Spline basis of order \(d\) is given in~\cite{unser
 \end{equation}
 where \(\binom{d+1}{i}\) is the binomial coefficient.
 
-The derivatives are again B-Spline of degree \(d-1\) (compare~\cite{unser_splines_1999}):
+The derivative is again B-Spline of degree \(d-1\) (compare~\cite{unser_splines_1999}):
 \begin{equation}
 	\frac{\partial \beta^d(x)}{\partial x} = \beta^{d-1}\left(x + \frac{1}{2}\right) -
 	\beta^{d-1}\left(x - \frac{1}{2}\right)
@@ -830,23 +966,29 @@ The derivatives are again B-Spline of degree \(d-1\) (compare~\cite{unser_spline
 B-Splines are continuously differentiable up to order \(d-1\).
 
 B-Splines are separable. Hence, \(n\)-dimensional B-Splines, often referred to as tensor product
-B-Splines, can be constructed the following way:
+B-Splines. They can be constructed the following way:
 \begin{equation}
-	\beta^d(x) = \prod^n_{i=1} \beta^d(x_i)
+	\beta^d(\mvec{x}) = \prod^n_{i=1} \beta^d(x_i)
 \end{equation}
-where \(x \in \mathbb{R}^n\)
+where \(\mvec{x} \in \mathbb{R}^n\).
 
 B-Splines have a couple of really attractive properties. B-Splines are the shortest and smoothest
 scaling functions for a given order of approximation~\cite{momey_b-spline_2012}. They are close to a
-Gaussian function, with a sufficiently large $d$~\cite{momey_b-spline_2012}, all while preserving
+Gaussian function, with a sufficiently large \(d\)~\cite{momey_b-spline_2012}, all while preserving
 compactness. Hence, they tend to spherically symmetric functions, while preserving local support.
 Due to these properties, \citeauthor*{momey_new_2011}\cite{momey_new_2011} argue for B-Splines over
 blobs. Further, they note the need to tune the parameters for of blobs for optimal results, which
-adds complexity.
+adds complexity. This is an important points. During reconstruction, there are many different,
+so-called hyperparameters, such as the blob basis parameters. With more parameters, the complexity
+an the possible combination of parameter choices grows quickly. Hence, optimal finding the optimal
+or at least good hyperparameters for a reconstructions gets harder. Also finding default values can
+be harder, which also increases complexity.
 
 Importantly, blobs fail to satisfy the partition of unity~\cite{nilchian_fast_2013}. A basis
 functions that satisfies the partition of unity, can approximate any input function arbitrarily
-close.~\cite{nilchian_fast_2013} show the importance of the property for tomographic reconstruction.
+close.~\citeauthor*{nilchian_fast_2013}~\cite{nilchian_fast_2013} show the impact of the property
+for tomographic reconstruction. They outperform blob in a similar setting in terms of recosntruction
+quality.
 
 In~\cite{horbelt_discretization_2002}, it was shown that the Radon transform of B-Splines are spline
 bikernel. \citeauthor*{entezari_box_2012} show in~\cite{entezari_box_2012} explicitly how (tensor
@@ -863,10 +1005,9 @@ Hence it is the convolution of two splines of different width (denoted by the su
 referred to as spline bikernels. \citeauthor*{horbelt_discretization_2002} presents an explicit
 formulation to compute it.
 
-To extend this to the \(3\)-dimensional setting, one can look into \textit{box splines}. Box splines
-can be seen as a generalization of B-Splines.
-
-\begin{definition}[Box Spline]
+To extend this to the \(3\)-dimensional setting, one can look into \textit{box splines}. (Tensor
+product) B-Splines are a special case of box splines.
+\begin{definition}[Box Spline]\label{def:box_splines}
 	Box splines are the shadow of a hypercube in \(\mathbb{R}^n\), when projected down to a
 	lower dimension \(\mathbb{R}^d\). Similarly to B-Splines, box splines can be defined via
 	convolution:
@@ -877,8 +1018,9 @@ can be seen as a generalization of B-Splines.
 	is the matrix of directions. Each \(\xi\) defines a direction of the hypercube.
 	\(\Xi\) completely defines the box spline (compare~\cite{de_boor_box_1993})
 \end{definition}
+If \(\Xi\) is the identity matrix, the box spline is the same as the tensor-product B-Spline.
 
-\citeauthor{entezari_box_2012}~\cite{entezari_box_2012} proof that the X-ray transform of a
+\citeauthor*{entezari_box_2012}~\cite{entezari_box_2012} proof that the X-ray transform of a
 \(d\)-variate box spline is a \(d - 1\) variate box spline. Further, it is the box spline defined
 the by projection of the direction matrix \(\Xi\). This means, going back to B-Splines, that for any
 dimension, the X-ray transform of B-Splines are again B-Splines of lower dimension.
@@ -886,11 +1028,10 @@ dimension, the X-ray transform of B-Splines are again B-Splines of lower dimensi
 \chapter{Tomographic Reconstruction}\label{chap:tomographic_reconstruction}
 
 Till this point, the physical models involved in tomographic reconstruction have been presented and
-discretization has been discussed. The last missing piece is the solution to the inverse problem.
-As tomographic reconstruction problems are inverse problems, many methods depend on common solutions
-to this space.
+discretization methods have been discussed. The last missing piece is the solution to the inverse
+problem.
 
-Generally, one needs to find solution to the system \(A(f) = m\). There \(A\) is the forward model,
+Generally, one needs to find solution to the system \(Af = m\). There \(A\) is the forward model,
 \(f\) is the \(n\)-dimensional signal one seeks to reconstruct, and \(m\) is the measured data, i.e.\
 the projected data. In the specific case of X-ray attenuation CT, the forward model \(A\) is the
 Radon Transform \(\radon\) or the X-ray Transform \(\xray\), the signal \(f\) is the function of
@@ -899,37 +1040,29 @@ detector (including noise).
 
 \section{Analytical Reconstruction}\label{sec:analytical_reconstruction}
 
-As already alluded to in the section about the Radon Transform \ref{sec:radon_transform}. There do
-exist closed form analytical inversion methods for the Radon Transform. In the aforementioned
-section, the Fourier Slice Theorem was introduced. Methods exist that use this approach as a means
-to reconstruct the desired signal. However, they are not often used in practice in tomographic
-reconstruction.
+As already alluded to in the section about the Radon Transform in \autoref{sec:radon_transform}.
+There do exist closed form analytical inversion methods for the Radon Transform. In the
+aforementioned section, the Fourier Slice Theorem was introduced. Methods exist that use this
+approach as a means to reconstruct the desired signal. However, they are not often used in practice
+in tomographic reconstruction.
 
-\begin{definition}[Back-Projection]\label{def:back_projection}
-	Let \(f\colon \Omega \to \mathbb{R}\), where \(\Omega \in \mathbb{R}^2\) sufficiently nice.
-	Further, let \(g_\phi \coloneq \radon f\) be the Radon Transform of \(f\) with the
-	projection angle \(\phi\). Then
-	\[ (R^\ast g)(x, y) \coloneq \int_0^\pi g_\phi(x\cos \phi + y \sin\phi) \mathrm{d}\phi \]
-	is the unfiltered back-projection of \(g\) (c.f.~\cite{buzug_computed_2008}).
-	\(\radon^\ast\) denotes the adjoint of Radon Transform.
-\end{definition}
+Recall from the back-projection from \autoref{def:back_projection}. This can be seen as a first kind
+of solution to inverse problem. The result of back-projecting the measured projections is a blurry
+version of the original function. \citeauthor{buzug_computed_2008}~\cite{buzug_computed_2008}
+describes post-processing as a possible solution. However, there exists another option. If the
+projections are filtered in the Fourier domain and then the filtered values are back-projected just
+as before, a sharper image can be obtained. This is referred to as the filtered back-projection
+(FBP)~\cite{ramachandran_three-dimensional_1971}.
 
-\inlinetodo{Add example images for 1, 2, 4, and so on projection angles}
-
-The result of back-projecting the measured projections is a blurry version of the original function.
-\citeauthor{buzug_computed_2008} describes post-processing as a possible solution. However, there
-exists another option. If the projections are filtered in the Fourier domain and then the filtered
-values are back-projected just as before, a sharper image can be obtained. This is referred to as
-the filtered back-projection (FBP)~\cite{ramachandran_three-dimensional_1971}.
+\inlinetodo{Insert Result of blurred non-filtered backprojection version}
 
 \begin{definition}[Filtered Back-Projection]\label{def:filtered_back_projection}
-	Still, let \(f\colon \Omega \to \mathbb{R}\), where \(\Omega \in \mathbb{R}^2\) sufficiently
-	nice, and \(g \coloneq \radon f\) be the Radon Transform of \(f\). Then
-	\[ g^\delta(t, \phi) \coloneq (f \ast g(\cdot, \phi))(t) \]
+	Let \(f\colon \Omega \to \mathbb{R}\), where \(\Omega \in \mathbb{R}^2\) sufficiently nice,
+	and \(g \coloneq \radon f\) be the Radon Transform of \(f\). Then
+	\[ g^\delta(t, \phi) \coloneq (\delta \ast g(\cdot, \phi))(t) \]
 	is the filtered projection. \(\delta(x) \approx \abs{x}\) is a filter, which is convoled
-	with the projection data. Using \(\radon^\ast\) is the adjoint of the Radon Transform
-	as in \autoref{def:back_projection}, then \(\radon^\ast g^\delta\) is the
-	\textit{filtered back-projection}.
+	with the projection data. With the adjoint of the Radon Transform \(\radon^\ast\) as in
+	\autoref{def:back_projection}, then \(\radon^\ast g^\delta\) is the \textit{\gls{FBP}}.
 \end{definition}
 
 The quality of the reconstruction depends on the filter and data acquisition. Further the FBP as
@@ -938,86 +1071,126 @@ beam settings that require rebinning (i.e.\ sorting the projections, such that a
 parallel). However, overall the FBP leads to sharp images and it is widely used in medical CT
 scanners~\cite{pan_why_2009}.
 
-\inlinetodo{Use something like to show packprojection and filtered back projection
+\inlinetodo{Use something like to show back-projection and filtered back projection
 	\href{https://scikit-image.org/docs/dev/auto_examples/transform/plot_radon_transform.html} to create
 	some nice graps and include code to reproduce results. Show how FBP fails}
 
 \section{Towards the Matrix form}\label{sec:matrix_formulation}
 
-The goal of this section is a short run through the steps that are necessary to go from the
-continuous definition of the inverse problem as given in \autoref{def:inverse_problem} to a discrete
-version, with which we can work on computers. In the previous section, the FBP still assumes a
-continuous function to work with, which can create problems during reconstruction. For this reason,
-it is desirable to find a suitable discretization and work with different algorithms.
+As it can be seen in the previous section, the \gls{FBP} leads to overall sharp results. But
+iterative reconstruction algorithm generally outperform it. Importantly, with iterative
+reconstruction algorithms, the X-ray dose can be reduced~\cite{willemink_evolution_2019}. This is
+desired as exposure to X-rays involves health risks.
 
-In \autoref{def:forward-model}, the definition of forward model is given. This forward model
-takes the place of the bounded linear operator \(A\) from \autoref{def:inverse_problem}. However,
-this is all still in the continuous space. Using \autoref{def:permissible_representation}, \(f\) can
-decompose into the sum of coefficients and basis functions:
-\[ f \approx \near{f}(x) = \sum_{k=1}^{N} c_k \varphi_k(\mvec{x}) \]
-as shown for the Radon Transform, the forward model can be applied and rearranging a little using
-the linearity of the operator:
-\[ m_j \approx \mathscr{M}_j(\hat{f}) = \sum_{k=1}^{N} c_k \mathscr{M}_j(\varphi_k) \]
-\(a_{ji} \coloneq \mathscr{M}_j(\varphi_k)\) is the contribution of a single \(k\)th basis function
-to the \(j\)th measurement.
+Before, however, iterative reconstruction algorithms are presented, one needs the correct problem
+statement. So far the forward model \(A\) is still assumed to be continuous. However, this is not
+the desired form for these kind of algorithms. Hence, this section is a short run through the steps
+that are necessary to go from the continuous definition of the inverse problem as given in
+\autoref{def:inverse_problem} to a discrete version.
 
-\inlinetodo{Have an image like Vogel Beyond tomographic Figure 4.7}
-
-Now, the measurements can be stacked to a vector \(m = (m_j) \in \mathbb{R}^J\), the same for
-the coefficients \(c = (c_i) \in \mathbb{R}^I\), and the contributions \(a_{j} = (a_{ji}) \in
-\mathbb{R}^I\). Then a single measurement can be written as a scalar product of the coefficient
-vector and the contribution vector. But also importantly, the linear system can be defined:
-\begin{equation}\label{eq:system_lin_equation}
-	m \approx
-	\begin{bmatrix}
-		\rule[.5ex]{2em}{0.4pt} & a_1^T & \rule[.5ex]{2em}{0.4pt} \\
-		\rule[.5ex]{2em}{0.4pt} & a_2^T & \rule[.5ex]{2em}{0.4pt} \\
-		\vdots                                                    \\
-		\rule[.5ex]{2em}{0.4pt} & a_J^T & \rule[.5ex]{2em}{0.4pt}
-	\end{bmatrix} c \eqcolon A c
+As already shown in¸\autoref{def:permissible_representation}, the signal \(f\) can be described as
+\begin{equation}
+	f \approx \near{f} = \sum_{k=1}^{N} c_k \varphi(\cdot - \mvec{x}_k) = \sum_{k=1}^{N} c_k \varphi_k
 \end{equation}
+choosing any zero centered symmetric basis function for \(\varphi\) (e.g.\ voxel-basis, blobs, or
+B-Splines). \(\varphi_k\) is only a shorted notation. Note, here a linearized index is used not a
+index vector \(\mvec{k}\) as it is shown \autoref{def:permissible_representation}. They are
+equivalent, however, this notation will come on handy here.
 
-This is a regular system of linear equation, it partitions the problem in the measurements, the
-\textit{system matrix} \(A \in \mathbb{R}^{J \times I}\) and the coefficient vector \(c\). Also
-note, that the choice of basis function is integrated into the system matrix. In
-\autoref{fig:matrix_row}, the intuition for the system matrix is illustrated. There, for a single
-measurement \(m_1\), the matrix row \(a_{1} = \begin{bmatrix}a_{1, 1}, a_{1, 2} \cdots
-	a_{1,36}\end{bmatrix}\) is visualized. Each element of the row corresponds to an element of the
-coefficient vector \(\mvec{c}\). One can also guess from this visualization the sparsity of the
-rows, as already in this simple illustration, roughly half the entries of the row are \(0\).
+Using the notation given in \autoref{def:forward-model}, i.e. \(J\) is a set of scalar measurements,
+and a single scalar measurements \(m_j \in \mathbb{R}\) with \(j \in \lbrace 1, \dots, J \rbrace\),
+the scalar measurements can be approximated using the permissible representation of \(f\) using the
+physical model \(\mathscr{M}_j\):
+\begin{equation}
+	m_j \approx \mathscr{M}_j\hat{f} = \sum_{k=1}^{I} c_k \mathscr{M}_j\varphi_k
+\end{equation}
+This is possible due to the linearity of the forward model. \(a_{ji} \coloneq
+\mathscr{M}_j(\varphi_k)\) is the contribution of a basis function to the \(j\)th measurement.
 
 \begin{figure}
 	\centering
-	\input{figures/matrix_row/matrix_row.pgf}
-	\caption{Visualization of weights of a single row of the system matrix. \inlinetodo{Find
-			better explanation, this should be standalone}}\label{fig:matrix_row}
+	\resizebox{0.7\textwidth}{!}{%
+		\input{figures/matrix_row/matrix_row.pgf}
+	}%
+	\caption{Visualization of the idea behind the matrix form of the problem regarding
+		tomographic reconstruction. The problem and measurement domain is discretized and
+		then linearized to a vector. Here the vector for a single measurement is given as
+		\(a_{1,i}\). Weights closer to the ray can be expected have a higher
+		contribution.}\label{fig:matrix_row}
 \end{figure}
+
+For a single measurements \(m_j\), the contributions can be gathered in a single vector \(\mvec{a}_j
+= (a_{j,i}) \in \mathbb{R}^I\). Here, the choice of linearized index comes in handy. Note that the
+dimensionality of the problem space does not matter. The intuition behind this idea is given in
+\autoref{fig:matrix_row}. There,the measurement \(m_1\), the contribution vector \(\mvec{a}_{1} =
+\begin{bmatrix}a_{1, 1}, a_{1, 2} \cdots a_{1,36}\end{bmatrix}^T\) is visualized for a typical
+\(2\)d X-ray setup. As this is two-dimensional setting, the linearized index is rearranged, to fit a
+two-dimensional image. This works for any dimension. From the illustration it should be obvious,
+that contribution further away from the ray, are closer or equal to \(0\). One can guess from this
+visualization the sparsity of the contribution vectors, as already in this simple illustration,
+roughly half the entries of the row are \(0\).
+
+Now, both the measurements and the coefficients can be stacked to a vector, i.e. \(\mvec{m} = (m_j)
+\in \mathbb{R}^J\) and \(\mvec{c} = (c_i) \in \mathbb{R}^I\) respectively. Now, a single measurement
+can be written as a scalar product of the coefficient vector and the contribution vector. But taking
+it a step further. A linear system can be defined:
+\begin{equation}\label{eq:system_lin_equation}
+	\mvec{m} \approx
+	\begin{bmatrix}
+		\rule[.5ex]{2em}{0.4pt} & \mvec{a}_1^T & \rule[.5ex]{2em}{0.4pt} \\
+		\rule[.5ex]{2em}{0.4pt} & \mvec{a}_2^T & \rule[.5ex]{2em}{0.4pt} \\
+		\vdots                                                           \\
+		\rule[.5ex]{2em}{0.4pt} & \mvec{a}_J^T & \rule[.5ex]{2em}{0.4pt}
+	\end{bmatrix} \mvec{c} \eqcolon A \mvec{c}
+\end{equation}
+
+This is a regular system of linear equation, it partitions the problem in the measurements, the
+\textit{system matrix} \(A \in \mathbb{R}^{J \times I}\) and the coefficient vector \(\mvec{c}\).
+It should be noted that it is equivalent to solve for \(mvec{x}\) and solve for \(f\).
+
+As the system matrix is the model of the system of linear equations is it tremendously important.
+The system matrix represents not only the physical process and its approximation. But also the
+imaging geometry and discretization scheme. Of special importance for the scope of this thesis, it
+further integrates the choice of basis function.
 
 \section{Iterative Reconstruction}\label{sec:iterative_reconstruction}
 
-As explained in \autoref{chap:signal_representation}, the problems considered in this thesis are
-ill-posed. Hence, care has to be taken when solving the linear system of equations in
-\autoref{eq:system_lin_equation}. A common approach is to considered least squares problem instead.
+In the previous chapter the linear system of equation is defined. With this iterative reconstruction
+algorithms can be applied. This has several advantages. As explained in
+\autoref{chap:signal_representation}, the problems considered in this thesis are ill-posed. Hence,
+care has to be taken when solving the linear system of equations. Another important aspect is
+mentioned in the previous section. Iterative reconstruction algorithms handle noisy and challenging
+setups better. Such settings include low number of available projections. As described above, it is
+desirable to reduce the number of projections, to lower the X-ray exposure.
 
+A common approach to handle ill-posed problems is to considered least squares problem instead.
 \begin{definition}[Least Squared Problem]\label{def:least_squares_problem}
 	The least squares problem is defined as
-	\[ \argmin_c \frac{1}{2} \norm{Ac - m}^2_2 \]
+	\[ \argmin_{\mvec{c}} \frac{1}{2} \norm{A\mvec{c} - \mvec{m}}^2_2 \]
 	The solution to the least squares problem is given by the normal equation
-	\[ A^T A c = A^T m \]
+	\[ A^T A \mvec{c} = A^T \mvec{m} \]
 \end{definition}
+Note here, that \(A\mvec{c}\) is considered the forward projection and \(A^T \mvec{m}\) is the
+backward projection.
 
-Note here, that \(Ac\) is considered the forward projection and \(A^T m\) is the backward
-projection.
-
-However, the system matrix is usually too large to store in system memory. Therefore, algorithms are
+The system matrix is usually too large to store in system memory. Therefore, algorithms are
 necessary, which do not require the knowledge of the complete system matrix. The software computing
-the system matrix on the fly, is often referred to as projectors. A deep dive into the
-implementation will be conduced in \autoref{chap:projector}.
+the system matrix on the fly, is often referred to as projectors. A deep dive into the algorithms
+for such projectors is conduced in \autoref{chap:projector}.
+
+In the following sections a portion of common and known algorithms in the space of tomographic
+reconstruction are presented. These sections should provide an overview, of what methods exists and
+a brief introduction on how they work. Out of scope is a detailed discussion about convergence of
+the algorithms. Two important classes of of iterative reconstruction algorithm is presented, namely
+\textit{Landweber Iteration} and \textit{\gls{ART}}. Further, a common addition is the use of regularization.
+Hence, the problem formulation regarding regularization is given and two different regularization
+strategies are presented: \textit{Tikhonov} (i.e.\ \(l_2\)) and \(l_1\) regularization. For both
+regularization methods, a short dive into their solutions is given as well.
 
 \subsection{Landweber Iteration}\label{subsec:landweber_iteration}
 
-A well studied class of iterative algorithms is the \textit{landweber
-	iteration}~\cite{landweber_iteration_1951}. It has been discovered in many different ways in
+A well studied class of iterative algorithms is the \textit{Landweber
+	Iteration}~\cite{landweber_iteration_1951}. It has been discovered in many different ways in
 the past. The algorithm was introduced in the tomographic space by
 \citeauthor{gilbert_iterative_1972}~\cite{gilbert_iterative_1972} under the name of
 \gls{SIRT}.
@@ -1027,34 +1200,49 @@ the past. The algorithm was introduced in the tomographic space by
 	\textit{Landweber iteration} finds a solution to the corresponding least squares problem. The update
 	step for \(k = 0, 1, \dots\) is given by
 	\[
-		c^{(k+1)} = c^{(k)} + \lambda^{(k)} A^T(m - Ac^{(k)})
+		\mvec{c}^{(k+1)} = \mvec{c}^{(k)} + \lambda^{(k)} A^T(\mvec{m} - A\mvec{c}^{(k)})
 	\]
 	\(\lambda^{(k)} \in \mathbb{R}\) is a sequence of relaxation parameter that must satisfy
 	\(0 < \lambda^{(k)} < 2 \norm{A^T A}_2^{-1}\quad \forall k \in \mathbb{N}\).
 \end{definition}
 
-Generally, Landweber iterations (in the basic case) only rely on the forward \(Ac^{(k)}\) and backward
-\(A^T m\) projections. The innermost part of the update function, is a forward projection of the
+Generally, Landweber iterations (in the basic case) only rely on the forward \(A\mvec{c}^{(k)}\) and backward
+\(A^T \mvec{m}\) projections. The innermost part of the update function, is a forward projection of the
 current guess. Next, the residual to the measurement is taken and finally the error is back
 projected and used as an update to the current guess.
 
-The basic Landweber iteration is a special case of gradient descent. If \(f(c) = \frac{1}{2}
-\norm{Ac - m}_2^2\), the update can be written in terms of the gradient
+The basic Landweber iteration is a special case of gradient descent. If \(f(\mvec{c}) = \frac{1}{2}
+\norm{A\mvec{c} - \mvec{m}}_2^2\), the update can be written in terms of the gradient
 \[
-	c^{(k+1)} = c^{(k)} - \lambda^{(k)} \nabla f(c^{(k)})
+	\mvec{c}^{(k+1)} = \mvec{c}^{(k)} - \lambda^{(k)} \nabla f(\mvec{c}^{(k)})
 \]
 A generalisation of the Landweber iteration can be given by
 \[
-	c^{(k+1)} = c^{(k)} + \lambda^{(k)} DA^TM(m - Ac^{(k)})
+	\mvec{c}^{(k+1)} = \mvec{c}^{(k)} + \lambda^{(k)} DA^TM(\mvec{m} - A\mvec{c}^{(k)})
 \]
-The expat algorithm and it's convergence behavior, depend on the exact choice of the matrices \(D\)
-and \(M\). The basic Landweber iteration as presented above has \(D = M = I\). If \(D = \frac{1}{J}
-\text{diag}(\norm{a_j}^2_2)^{-1}\), with \(\norm{a_j}^2_2\) being the squared \(L_2\) norm of the
-\(j\)th row of the system matrix~\cite[Chapter~6.2]{hansen_discrete_2010}.
+The exact algorithm and it's convergence behavior, depend on the precise choice of the matrices
+\(D\) and \(M\). The basic Landweber iteration as presented above has \(D = M = I\). If \(D =
+\frac{1}{J} \text{diag}(\norm{\mvec{a}_j}^2_2)^{-1}\), with \(\norm{\mvec{a}_j}^2_2\) being the
+squared \(l_2\) norm of the \(j\)th row of the system matrix, the method is known as
+Cimmino's~\cite[Chapter~6.1]{hansen_discrete_2010}.
+
+Both the vanilla Landweber Iterations and Cimmino's method are known to exhibit semiconvergence.
+Semiconvergence is a term coined by Natter~\cite{natterer_mathematics_1986}, however, I find the
+explanation given by \citeauthor*{hansen_discrete_2010} in~\cite[Chapter~6]{hansen_discrete_2010}
+to be very good.
+
+\begin{definition}[Semiconvergence]\label{def:semiconvergence}
+	Iterative Reconstruction algorithms produce a sequence of approximate solutions
+	\(\mvec{c}^{(1)} \mvec{c}^{(2)}\mvec{c}^{(3)}\mvec{c}^{(4)}, \cdots\). An algorithm is said
+	to exhibit semiconvergence, if the first many \(\mvec{c}^{(k)}\) for \(k = 1, 2, \cdots\),
+	resembles the regularized exact solution, but starts to diverge again for later iterations.
+\end{definition}
+
+The semiconvergence of the Landweber Itations is quite slow.
 
 \subsection{Algebraic Reconstruction Technique}\label{subsec:algebraic_reconstruction_technique}
 
-The \gls{ART} was proposed by \citeauthor{gordon_algebraic_1970}\cite{gordon_algebraic_1970}.
+The \glsfirst{ART} was proposed by \citeauthor{gordon_algebraic_1970}\cite{gordon_algebraic_1970}.
 However, outside of tomography the method is often knows as Kaczmarz
 method~\cite{kaczmarz_approximate_1993}. Though, \gls{ART} is a slight modification of the original
 Kaczmarz method.
@@ -1066,11 +1254,12 @@ the system is overdetermined (\(J > I\)) and noisy, which it usually is, the hyp
 intersect at a single point, but rather at in close proximity to each other.
 
 \begin{definition}[Algebraic Reconstruction Technique]\label{def:art}
-	Given the system of linear equations \(Ac = m\), and an initial solution guess \(c^{(0)} \in
-	\mathbb{R}^I\) (often the zero vector). Then the solution can be iteratively updated for
+	Given the system of linear equations \(A\mvec{c} = \mvec{m}\), and an initial solution guess
+	\(\mvec{c}^{(0)} \in \mathbb{R}^I\) (often the zero vector). Then the solution can be
+	iteratively updated for
 	\(k = 0, 1, \dots\)
 	\[
-		c^{(k+1)} = c^{(k)} + \lambda^{j(k)} \frac{m_{j(k)} - \langle a_{j(k)}, c^{j(k)} \rangle}{\norm{a_{j(k)}}}a_{j(k)}
+		\mvec{c}^{(k+1)} = \mvec{c}^{(k)} + \lambda^{j(k)} \frac{\mvec{m}_{j(k)} - \langle \mvec{a}_{j(k)}, \mvec{c}^{j(k)} \rangle}{\norm{\mvec{a}_{j(k)}}}\mvec{a}_{j(k)}
 	\]
 	where \(\lambda^{(k)} \in \left(0, 1\right]\) is a sequence of relaxation parameters, and
 	\(j(k)\) is a mapping to select an appropriate row for each iteration. In the simple case
@@ -1081,20 +1270,14 @@ The original Kaczmarz method had \(\lambda(k) = 1\, \forall k \in \mathbb{N}\), 
 relaxation parameter can improve the reconstruction in noisy settings. Further, the method can be
 written as a Landweber-type method~\cite{hansen_discrete_2010}, but it's rather uncommon.
 
+The convergence of \gls{ART} is quite fast for the first couple of iterations, but tapers off after
+that and becomes quite slow~\cite{hansen_discrete_2010}. However, there do exist problems if the
+hyperplanes do not intersect at a single points. \gls{ART} also exhibits semiconvergence.
+
 Compared to the Landweber iterations given in the previous section, the Kaczmarz methods accesses
 the rows of the system matrix \(A\) sequentially (but maybe not in ascending order). On the other
 hand Landweber type methods access all rows of the system matrix simultaneously. Hence, the
 `simultaneous' as part of \gls{SIRT}\@.
-
-\inlinetodo{add figure for this}
-
-% \subsection{CG}\label{subsec:conjuage_gradient}
-%
-% CG and such
-%
-% \subsection{First-order methods}\label{subsec:first_order_methods}
-%
-% First other methods such as Gradient Descent and it's derivatives
 
 \section{Regularization}\label{sec:regularization}
 
@@ -1106,21 +1289,23 @@ small perturbations by noise in the measurements, still yields solutions close t
 solutions.
 
 \begin{definition}[Regularized Problem]\label{def:regularized_problem}
-	Let \(R(c)\) be a \textit{penalty function} or \textit{regularizer}, then the least square
-	problem can be expanded to
+	Let \(R(\mvec{c})\) be a \textit{penalty function} or \textit{regularizer}, then the least
+	square problem can be expanded to
 	\[
-		\argmin_c \frac{1}{2} \norm{A c - m}_2^2 + \lambda R(c)
+		\argmin_{\mvec{c}} \frac{1}{2} \norm{A \mvec{c} - \mvec{m}}_2^2 + \lambda R(\mvec{c})
 	\]
-	this is referred to as \textit{regularized problem}. \(lambda\) is a regularization
+	this is referred to as \textit{regularized problem}. \(\lambda\) is a regularization
 	parameter. It denotes the weight of the penalty term.
 \end{definition}
 
-This can also be generalized to other problems. Let \(T(c)\) be a data fidelity term (e.g.\
+This can also be generalized to other problems. Let \(T(\mvec{c})\) be a data fidelity term (e.g.\
 the least squares one, or the negative log-likelihood). Then the regularized problem can be
 described as
-\[ \argmin_c T(c) + \lambda R(c) \]
+\begin{equation}
+	\argmin_{\mvec{c}} T(\mvec{c}) + \lambda R(\mvec{c})
+\end{equation}
 Usually, \(R\) is chosen to be non-linear and often is expected to be continuously differentiable.
-This equation has three parts. The first \(T(c)\) is the data term. It measures how well a
+This equation has three parts. The first \(T(\mvec{c})\) is the data term. It measures how well a
 prediction models the noisy data. However, we do not want to fit the noise in the data. This is the
 second, the regularization term. \(\lambda\) controls the importance or the balance of each the
 previous terms.
@@ -1134,55 +1319,55 @@ norm.
 \begin{definition}[Tikhonov Regularization]\label{def:tikhonov_regularization}
 	The penalty term for Tikhonov regularization is given by
 	\[
-		R(c)_{\text{Tikhonov}} = \norm{\Gamma c}_2^2
+		R(\mvec{c})_{\text{Tikhonov}} = \norm{\Gamma \mvec{c}}_2^2
 	\]
 \end{definition}
 A common case is a simple scaling function i.e.\ \(\Gamma = \alpha I\), thus the Tikhonov
-regularizer penalizes \(c\) with large \(L_2\) norm. Therefore, it is also referred to as
-\(L_2\)-regularization. But also the first and second derivative operator is commonly
+regularizer penalizes \(\mvec{c}\) with large \(l_2\) norm. Therefore, it is also referred to as
+\(l_2\)-regularization. But also the first and second derivative operator is commonly
 used~\cite{golub_tikhonov_1999} The hope is, that Tikhonov regularization suppresses high-frequency
 noise.
 
 On a further note, the Tikhonov regularization can be reformulated to a least squares problem again
-\[
-	\argmin_c \frac{1}{2}
+\begin{equation}
+	\argmin_{\mvec{c}} \frac{1}{2}
 	\left\lVert
 	\begin{pmatrix}
 		A \\
 		\lambda \Gamma
 	\end{pmatrix}
-	c -
+	\mvec{c} -
 	\begin{pmatrix}
-		m \\
+		\mvec{m} \\
 		0
 	\end{pmatrix}
 	\right\rVert_2^2
-\]
+\end{equation}
 Here \(\begin{pmatrix}
 	A \\
 	\lambda \Gamma
 \end{pmatrix}\) is a stacked matrix, with the system matrix on top, and the Tikhonov matrix in the
 bottom. A different commonly used notation is
-\[
-	(A^T A + \lambda \Gamma^T \Gamma)x = A^T m
-\]
+\begin{equation}
+	(A^T A + \lambda \Gamma^T \Gamma)\mvec{c} = A^T \mvec{m}
+\end{equation}
 The problem remains linear and thus can be solved using the previously discussed iterative
 reconstruction algorithms. However, in general, for non Tikhonov regularization this does not hold
 true. Thus, the problem is rendered non-linear and different optimization techniques have to be
 used.
 
-\subsection{\(L_1\)-Regularization}\label{subsec:l1_regularization}
+\subsection{\(l_1\)-Regularization}\label{subsec:l1_regularization}
 
-Another common regularization method is based on the \(L_1\) norm, i.e.\ the sum of absolute
+Another common regularization method is based on the \(l_1\) norm, i.e.\ the sum of absolute
 values.
-\begin{definition}[\(L_1\)-Regularization]\label{def:l1_regularization}
+\begin{definition}[\(l_1\)-Regularization]\label{def:l1_regularization}
 	The penalty term for Tikhonov regularization is given by
+        (compare~\cite{tibshirani_regression_1996,tibshirani_lasso_2013,beck_fast_2009})
 	\[
-		R(c)_{L_1} = \norm{c}_1
+		R(\mvec{c})_{l_1} = \norm{\mvec{c}}_1
 	\]
-	See~\cite{tibshirani_regression_1996,tibshirani_lasso_2013,beck_fast_2009}
 \end{definition}
-Compared to the \(L_2\) regularization, the \(L_1\) regularization enforces sparsity. I.e.\ the
+Compared to the \(l_2\) regularization, the \(l_1\) regularization enforces sparsity. I.e.\ the
 assumption is that the representation is in some way sparse, and should be enforced. Also, it is
 more robust to outliers~\cite{beck_fast_2009}. For information on how these problems can be solved
 see \citeauthor{beck_fast_2009}~\cite{beck_fast_2009}. As it will be used in the experimental
@@ -1191,12 +1376,12 @@ sections, specifically \gls{ISTA} and  \gls{FISTA}.
 \begin{definition}[ISTA]\label{def:ista}
 	The update step for \gls{ISTA} is given by
 	\[
-		c^{(k+1)} = \mathscr{T_\alpha} (c^{(k)} - 2 \lambda A^T (A c^{(k)} - m))
+		\mvec{c}^{(k+1)} = \mathscr{T_\alpha} (\mvec{c}^{(k)} - 2 \lambda A^T (A \mvec{c}^{(k)} - \mvec{m}))
 	\]
 	where \(t\) is an appropriate step size and \(\mathscr{T_\alpha}\) is the shrinkage operator
 	defined by
 	\[
-		\mathscr{T_\alpha}(c)_j = \max(\abs{c_i} - \alpha, 0) \sign(c_j)
+		\mathscr{T_\alpha}(\mvec{c})_j = \max(\abs{\mvec{c}_i} - \alpha, 0) \sign(\mvec{c}_j)
 	\]
 \end{definition}
 Similar to Landweber like methods, the residual of the forward projection current prediction and the
@@ -1206,23 +1391,3 @@ estimate and then the shrinkage operator is applied.
 However, the convergence of \gls{ISTA} is rather slow (compare~\cite{beck_fast_2009} and its
 references). \gls{FISTA} improves on the convergence of \gls{ISTA}, but it is out of scope for this
 thesis. Please refer to \citeauthor{beck_fast_2009}~\cite{beck_fast_2009} for further reading.
-
-% \subsection{TV Regularization}\label{subsec:tv_regularization}
-%
-% \begin{listing}
-% 	\begin{minted}{cpp}
-% int main() {
-%     fmt::print("hello, world\n");
-%     return 0;
-% }
-%     \end{minted}
-% 	\caption{"Some sampe C code"}
-% \end{listing}
-% \begin{listing}
-% 	\begin{minted}{python}
-% import numpy as np
-%
-% np.linspace(0, 1)
-%     \end{minted}
-% 	\caption{"Some sampe python code"}
-% \end{listing}

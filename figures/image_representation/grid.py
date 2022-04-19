@@ -148,11 +148,11 @@ class Detector:
 
 width = 345 * 2
 fig, axes = plt.subplots(1, 1, figsize=set_size(width))
-res = np.array([16, 16])
+res = np.array([8, 8])
 
 high = np.array([512, 512])
-# img = Image(res, high)
-# img.plot(axes)
+img = Image(res, high)
+img.plot(axes)
 
 inc = np.asarray(high / res, dtype=np.int64)
 for ix in range(0, high[0], inc[0]):
@@ -165,13 +165,13 @@ for ix in range(0, high[0], inc[0]):
         y = res[1] - int(iy / inc[1]) - 1
         idx = np.ravel_multi_index(np.array([x, y]), res, order='F')
 
-        text = f"$c_{{{idx}}}$"
-        axes.plot(cx, cy, marker="x", color="k")
+        text = f"$c_{{{idx + 1}}}$"
+        axes.plot(cx, cy, marker="x", color="k", markersize=3)
         axes.annotate(
             f"{text}",
             (cx, cy - (inc[1] * 0.2)),
             color="k",
-            fontsize=16,
+            fontsize=9,
             ha="center",
             va="center",
             zorder=3,
@@ -179,10 +179,10 @@ for ix in range(0, high[0], inc[0]):
 
 source = (-4, 3)
 
-axes.axhline(0, lw=5)
-axes.axhline(512, lw=5)
-axes.axvline(0, lw=5)
-axes.axvline(512, lw=5)
+axes.axhline(0, lw=5, zorder=5)
+axes.axhline(512, lw=5, zorder=5)
+axes.axvline(0, lw=5, zorder=5)
+axes.axvline(512, lw=5, zorder=5)
 
 # axes.plot(source[0], source[1], "ok", ms=3, zorder=3)
 
@@ -211,5 +211,5 @@ axes.set_aspect("equal", "box")
 plt.axis("off")
 axes.set_xlim([0, 512])
 axes.set_ylim([0, 512])
-plt.savefig(f"grid_representation.pgf", dpi=120, bbox_inches="tight", pad_inches=0)
-plt.show()
+plt.savefig(f"grid_pixel_representation.pgf", dpi=120, bbox_inches="tight", pad_inches=0)
+# plt.show()

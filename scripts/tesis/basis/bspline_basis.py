@@ -67,6 +67,8 @@ def bsplines_2d():
     xy = raw.reshape(2, -1).T
 
     b = nd_bspline(xy, 3)
+    print(xy.shape)
+    print(b.shape)
     b_img = b.reshape(raw.shape[1:])
 
     fig = plt.figure()
@@ -86,7 +88,8 @@ def bsplines_derivative():
 
 
 def main():
-    bsplines_derivative()
+    bsplines_2d()
+    # bsplines_derivative()
 
 
 if __name__ == "__main__":
