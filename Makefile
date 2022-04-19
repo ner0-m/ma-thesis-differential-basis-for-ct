@@ -38,6 +38,7 @@ check:
 
 check-html:
 	$(TEXTIDOTE) --output html --check en --dict dict.txt main.tex > $(LATEX_BUILD_DIR)/report.html
+	firefox $(LATEX_BUILD_DIR)/repoart.html
 
 distclean:
 	rm -rf $(FIGURE_DIR)/*.png build/

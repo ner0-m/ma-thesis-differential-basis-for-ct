@@ -1344,7 +1344,7 @@ solutions.
 This can also be generalized to other problems. Let \(T(\mvec{c})\) be a data fidelity term (e.g.\
 the least squares one, or the negative log-likelihood). Then the regularized problem can be
 described as
-\begin{equation}
+\begin{equation}\label{eq:optimization_problem}
 	\argmin_{\mvec{c}} T(\mvec{c}) + \lambda R(\mvec{c})
 \end{equation}
 Usually, \(R\) is chosen to be non-linear and often is expected to be continuously differentiable.
