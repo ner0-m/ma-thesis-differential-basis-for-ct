@@ -42,6 +42,8 @@ check-html:
 distclean:
 	rm -rf $(FIGURE_DIR)/*.png build/
 
+word:
+	pdftotext $(LATEX_BUILD_DIR)/main.pdf - | wc -w
 
 ifdef ELSA_EXAMPLE_ARGPASE_PATH
 figures/experiments/forward_projection:
