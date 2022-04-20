@@ -593,31 +593,31 @@ differences. The most pronounced at multiples of \(45^\circ\), but in the croppe
 	\centering
 
 	\makebox[\textwidth]{ \makebox[1.2\textwidth]{%
-			\rotatebox[x=-5em, y=0em]{90}{\bfseries \(45^\circ\) projection\strut}
+			\rotatebox[x=-4.75em, y=0em]{90}{\bfseries \(45^\circ\) projection\strut}
 			\begin{subfigure}{0.3\textwidth}
-				\stackinset{c}{}{t}{-.2in}{\bfseries Blob based\strut}{%
+				\stackinset{c}{}{t}{-.2in}{\bfseries Blob Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection_3d/3dsinogram_Blob_48.png}}
 				\phantomsubcaption{}\label{fig:sinogram_blob_3d_slice_48}
 			\end{subfigure}%
 			\begin{subfigure}{0.3\textwidth}
-				\stackinset{c}{}{t}{-.2in}{\bfseries Based on Cubic B-Splines\strut}{%
+				\stackinset{c}{}{t}{-.2in}{\bfseries Cubic B-Spline Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection_3d/3dsinogram_BSpline_48.png}}
 				\phantomsubcaption{}\label{fig:sinogram_bspline_3d_slice_48}
 			\end{subfigure}%
 			\begin{subfigure}{0.3\textwidth}
-				\stackinset{c}{}{t}{-.2in}{\bfseries Siddon's based\strut}{%
+				\stackinset{c}{}{t}{-.2in}{\bfseries Siddon's Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection_3d/3dsinogram_Siddon_48.png}}
 				\phantomsubcaption{}\label{fig:sinogram_siddon_3d_slice_48}
 			\end{subfigure}%
 			\begin{subfigure}{0.3\textwidth}
-				\stackinset{c}{}{t}{-.2in}{\bfseries Joseph's based\strut}{%
+				\stackinset{c}{}{t}{-.2in}{\bfseries Joseph's Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection_3d/3dsinogram_Joseph_48.png}}
 				\phantomsubcaption{}\label{fig:sinogram_joseph_3d_slice_48}
 			\end{subfigure}%
 		}}
 
 	\makebox[\textwidth]{ \makebox[1.2\textwidth]{%
-			\rotatebox[x=-4.75em, y=0em]{90}{\bfseries \(180^\circ\) projection\strut}
+			\rotatebox[x=-4.5em, y=0em]{90}{\bfseries \(180^\circ\) projection\strut}
 			\begin{subfigure}{0.3\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection_3d/3dsinogram_Blob_192.png}
 				\phantomsubcaption{}\label{fig:sinogram_blob_3d_slice_192}
@@ -753,27 +753,27 @@ In the following sections, the experiments for each phantom are presented and di
 \begin{figure}[h]
 	\centering
 	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
-			\rotatebox[x=-3em, y=0em]{90}{\bfseries Reconstruction \strut}
+			\rotatebox[x=-4.5em, y=0em]{90}{\bfseries Reconstruction \strut}
 			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{}{%
+				\stackinset{c}{}{t}{-.2in}{\bfseries Blob Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_cropped_windowed_Blob.png}}
 				\caption{Blob based projector}%
 				\label{fig:rectangle_recon_artifacts_blob}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{}{%
+				\stackinset{c}{}{t}{-.2in}{\bfseries Cubic B-Spline Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_cropped_windowed_BSpline.png}}
 				\caption{B-Spline based projector}%
 				\label{fig:rectangle_recon_artifacts_bspline}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{}{%
+				\stackinset{c}{}{t}{-.2in}{\bfseries Siddon's Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_cropped_windowed_Siddon.png}}
 				\caption{Siddon's projector}%
 				\label{fig:rectangle_recon_artifacts_siddon}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{}{%
+				\stackinset{c}{}{t}{-.2in}{\bfseries Joseph's Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_cropped_windowed_Joseph.png}}
 				\caption{Joseph's projector}%
 				\label{fig:rectangle_recon_artifacts_joseph}
@@ -781,7 +781,7 @@ In the following sections, the experiments for each phantom are presented and di
 		}}
 
 	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
-			\rotatebox[x=-2.5em, y=0em]{90}{\bfseries Abs.\ Normalized Difference\strut}
+			\rotatebox[x=-2em, y=0em]{90}{\bfseries Abs.\ Normalized Difference\strut}
 			\begin{subfigure}{0.3125\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_difference_cropped_windowed_Blob.png}
 				\caption{Blob based projector}%
@@ -814,8 +814,9 @@ In the following sections, the experiments for each phantom are presented and di
 		}}
 	\caption{\subref{fig:rectangle_recon_artifacts_blob}--\subref{fig:rectangle_recon_artifacts_joseph}
                 crop of top left corner of the reconstruction rectangle with different projectors.
-                The blob basis function use \(m=2\), \(\alpha=10.83\) and \(a=2\) and cubic
-                B-Splines are used as basis function for the projectors
+                The reconstruction is performed using \(50\) iterations using \gls{FISTA}. The blob
+                basis function use \(m=2\), \(\alpha=10.83\) and \(a=2\) and cubic B-Splines are
+                used as basis function for the projectors
 		\subref{fig:rectangle_recon_difference_blob}--\subref{fig:rectangle_recon_difference_joseph}
 		absolute normalized difference of reconstructed image and the phantom in
 		\subref{fig:rectangle_recon_phantom}. In order from left to right and top down, the
@@ -861,27 +862,27 @@ magnitude. \gls{SSIM} is similar as well for all, only the Siddon's method falls
 
 \subsection{Shepp-Logan Phantom}
 
-\begin{figure}[h]
+\begin{figure}
 	\centering
 	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
-			% \rotatebox[origin=c]{90}{\bfseries Reconstruction\strut}
+			\rotatebox[x=-4.5em, y=0em]{90}{\bfseries Reconstruction\strut}
 			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{\bfseries Blob based\strut}{%
+				\stackinset{c}{}{t}{-.2in}{\bfseries Blob Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dreconstruction_windowed_Blob.png}}
 				\caption{}\label{fig:reconstruction_shepp_logan_blob}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{\bfseries B-Spline based\strut}{%
+				\stackinset{c}{}{t}{-.2in}{\bfseries Cubic B-Spline Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dreconstruction_windowed_BSpline.png}}
 				\caption{}\label{fig:reconstruction_shepp_logan_bspline}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{\bfseries Siddon's\strut}{%
+				\stackinset{c}{}{t}{-.2in}{\bfseries Siddon's Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dreconstruction_windowed_Siddon.png}}
 				\caption{}\label{fig:reconstruction_shepp_logan_siddon}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{\bfseries Joseph's\strut}{%
+				\stackinset{c}{}{t}{-.2in}{\bfseries Joseph's Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dreconstruction_windowed_Joseph.png}}
 				\caption{}\label{fig:reconstruction_shepp_logan_joseph}
 			\end{subfigure}%
@@ -889,7 +890,7 @@ magnitude. \gls{SSIM} is similar as well for all, only the Siddon's method falls
 
 	\makebox[\textwidth]{
 		\makebox[1.3\textwidth]{%
-			\rotatebox[x=-2.5em, y=0em]{90}{\bfseries Abs.\ Normalized Difference\strut}
+			\rotatebox[x=-2em, y=0em]{90}{\bfseries Abs.\ Normalized Difference\strut}
 			\begin{subfigure}{0.3125\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dreconstruction_difference_cropped_windowed_Blob.png}
 				\caption{}\label{fig:reconstruction_shepp_logan_cropped_blob}
@@ -917,12 +918,12 @@ magnitude. \gls{SSIM} is similar as well for all, only the Siddon's method falls
 		}}
 
 	\caption{\subref{fig:reconstruction_shepp_logan_blob}--\subref{fig:reconstruction_shepp_logan_joseph}
-		Reconstruction of the Shepp-Logan phantom using the (from left to right) the
-		projectors using the blob and B-Spline basis function followed by the projector
-		based on the Siddon's and Joseph's method.
-		The parameters for the blob basis function are
-		\(m=2\), \(\alpha=10.83\) and \(a=2\) and cubic B-Splines are used as basis
-		function.
+                Reconstruction of the Shepp-Logan phantom using the (from left to right) the
+                projectors using the blob and B-Spline basis function followed by the projector
+                based on the Siddon's and Joseph's method. The reconstruction is performed using
+                \(50\) iterations of \gls{FIST}. The parameters for the blob basis function are
+                \(m=2\), \(\alpha=10.83\) and \(a=2\) and cubic B-Splines are used as basis
+                function.
 		\subref{fig:reconstruction_shepp_logan_cropped_blob}--\subref{fig:reconstruction_shepp_logan_joseph}
 		crop into the difference of each reconstruction with the original phantom, the same
 		order of projectors is given. The window is given for each image individually.
@@ -969,27 +970,27 @@ Though against the later one, it is a small difference.
 
 \subsection{Human Abdomen}
 
-\begin{figure}[h]
+\begin{figure}
 	\centering
 	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
-			% \rotatebox[origin=c]{90}{\bfseries Reconstruction\strut}
+			\rotatebox[x=-4.5em, y=0em]{90}{\bfseries Reconstruction\strut}
 			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{\bfseries Blob based\strut}{%
+				\stackinset{c}{}{t}{-.2in}{\bfseries Blob Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_medical/2dreconstruction_windowed_Blob.png}}
 				\caption{}\label{fig:reconstruction_medical_blob}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{\bfseries B-Spline based\strut}{%
+				\stackinset{c}{}{t}{-.2in}{\bfseries Cubic B-Spline Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_medical/2dreconstruction_windowed_BSpline.png}}
 				\caption{}\label{fig:reconstruction_medical_bspline}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{\bfseries Siddon's \strut}{%
+				\stackinset{c}{}{t}{-.2in}{\bfseries Siddon's Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_medical/2dreconstruction_windowed_Siddon.png}}
 				\caption{}\label{fig:reconstruction_medical_siddon}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{\bfseries Joseph's\strut}{%
+				\stackinset{c}{}{t}{-.2in}{\bfseries Joseph's Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_medical/2dreconstruction_windowed_Joseph.png}}
 				\caption{}\label{fig:reconstruction_medical_joseph}
 			\end{subfigure}%
@@ -997,7 +998,7 @@ Though against the later one, it is a small difference.
 
 	\makebox[\textwidth]{
 		\makebox[1.3\textwidth]{%
-			% \rotatebox[origin=c]{90}{\bfseries Zoom into difference\strut}
+			\rotatebox[x=-2em, y=0em]{90}{\bfseries Abs.\ Normalized Difference\strut}
 			\begin{subfigure}{0.3125\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_medical/2dreconstruction_difference_cropped_windowed_Blob.png}
 				\caption{}\label{fig:reconstruction_medical_cropped_blob}
@@ -1025,11 +1026,12 @@ Though against the later one, it is a small difference.
 		}}
 
 	\caption{\subref{fig:reconstruction_medical_blob}--\subref{fig:reconstruction_medical_joseph}
-		Reconstruction of the medical phantom using the different projectors as a basis.
-		From left, to right: the projector based on the blob basis, B-Spline basis, Siddon's
-		method and finally Joseph's method. The parameters for the blob basis function are
-		\(m=2\), \(\alpha=10.83\) and \(a=2\) and cubic B-Splines are used as basis
-		function. The second row
+                Reconstruction of the medical phantom using the different projectors as a basis. It
+                is performed using \(300\) iterations of \gls{FISTA}. From left, to right: the
+                projector based on the blob basis, B-Spline basis, Siddon's method and finally
+                Joseph's method. The parameters for the blob basis function are \(m=2\),
+                \(\alpha=10.83\) and \(a=2\) and cubic B-Splines are used as basis function. The
+                second row
 		(\subref{fig:reconstruction_medical_blob}--\subref{fig:reconstruction_medical_joseph})
 		shows a crop into the difference image to the phantom data. The reconstructed image
 		used the same projector as the reconstruction in the row above.
@@ -1078,27 +1080,27 @@ reconstruction process starts. I.e\ the mean of the Gaussian is \(0\) and the st
 set to be \(1\%\) of the value range of the sinogram. Further, the reconstruction is run for \(150\)
 iterations, instead of \(50\), all the other parameters are set exactly as in the above case.
 
-\begin{figure}[h]
+\begin{figure}
 	\centering
 	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
-			% \rotatebox[origin=c]{90}{\bfseries Reconstruction\strut}
+			\rotatebox[x=-4.5em, y=0em]{90}{\bfseries Reconstruction\strut}
 			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{\bfseries Blob based\strut}{%
+				\stackinset{c}{}{t}{-.2in}{\bfseries Blob Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_noise/2dreconstruction_windowed_Blob.png}}
 				\caption{}\label{fig:reconstruction_noise_blob}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{\bfseries B-Spline based\strut}{%
+				\stackinset{c}{}{t}{-.2in}{\bfseries Cubic B-Spline Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_noise/2dreconstruction_windowed_BSpline.png}}
 				\caption{}\label{fig:reconstruction_noise_bspline}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{\bfseries Siddon's\strut}{%
+				\stackinset{c}{}{t}{-.2in}{\bfseries Siddon's Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_noise/2dreconstruction_windowed_Siddon.png}}
 				\caption{}\label{fig:reconstruction_noise_siddon}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{\bfseries Joseph's\strut}{%
+				\stackinset{c}{}{t}{-.2in}{\bfseries Joseph's Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_noise/2dreconstruction_windowed_Joseph.png}}
 				\caption{}\label{fig:reconstruction_noise_joseph}
 			\end{subfigure}%
@@ -1106,7 +1108,7 @@ iterations, instead of \(50\), all the other parameters are set exactly as in th
 
 	\makebox[\textwidth]{
 		\makebox[1.3\textwidth]{%
-			% \rotatebox[origin=c]{90}{\bfseries Zoom into difference\strut}
+			\rotatebox[x=-2em, y=0em]{90}{\bfseries Abs.\ Normalized Difference\strut}
 			\begin{subfigure}{0.3125\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_noise/2dreconstruction_difference_cropped_windowed_Blob.png}
 				\caption{}\label{fig:reconstruction_noise_cropped_blob}
@@ -1133,11 +1135,12 @@ iterations, instead of \(50\), all the other parameters are set exactly as in th
 		}}
 
 	\caption{\subref{fig:reconstruction_noise_blob}--\subref{fig:reconstruction_noise_joseph}
-		Reconstruction of the Shepp-Logan phantom, when \(1\%\) of Gaussian noise is added
-		to the sinogram. From left, to right: the projector based on the blob basis,
-		B-Spline basis, Siddon's method and finally Joseph's method. The parameters for the
-		blob basis function are \(m=2\), \(\alpha=10.83\) and \(a=2\) and cubic B-Splines
-		are used as basis function. The second row
+                Reconstruction of the Shepp-Logan phantom, when \(1\%\) of Gaussian noise is added
+                to the sinogram. \(150\) iterations of \gls{FISTA} are used for the reconstruction.
+                From left, to right: the projector based on the blob basis, B-Spline basis, Siddon's
+                method and finally Joseph's method. The parameters for the blob basis function are
+                \(m=2\), \(\alpha=10.83\) and \(a=2\) and cubic B-Splines are used as basis
+                function. The second row
 		(\subref{fig:reconstruction_noise_cropped_blob}--\subref{fig:reconstruction_medical_cropped_joseph})
 		shows a crop into the difference image to the phantom data. The reconstructed image
 		used the same projector as the reconstruction in the row above.
