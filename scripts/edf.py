@@ -85,9 +85,14 @@ def readedf(filename, from_elsa=True):
             data = data.reshape(header_dict["Dim_1"], header_dict["Dim_2"])
 
     if nrOfDimensions == 3:
-        data = data.reshape(
-            header_dict["Dim_1"], header_dict["Dim_2"], header_dict["Dim_3"]
-        )
+        if from_elsa:
+            data = data.reshape(
+                header_dict["Dim_3"], header_dict["Dim_2"], header_dict["Dim_1"]
+            )
+        else:
+            data = data.reshape(
+                header_dict["Dim_1"], header_dict["Dim_2"], header_dict["Dim_3"]
+            )
 
     data = np.squeeze(data)
     f.close()

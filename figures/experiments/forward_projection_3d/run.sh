@@ -32,12 +32,15 @@ angles="${RUN_ANGLES:-${angles_default}}"
 #     echo "====================================================="
 #     echo "Reconstruction Rectangle using ${proj} projector"
 #     echo "====================================================="
-#     ${runner} --dims 3 --arc 360 --phantom SheppLogan --angles ${angles} --size ${size} --projector ${proj} --no-recon --output-dir ${output_dir} --analyze | tee ${proj}.log
+#     ${runner} --dims 3 --arc 360 --phantom SheppLogan --angles ${angles} --size ${size} --projector ${proj} --no-recon --output-dir ${output_dir} | tee ${proj}.log
 # done
 
-printf "Converting pgm files to png.."
-for f in *.pgm; do
-    # convert pgm to pgn
-    convert ./"$f" ./"${f%.pgm}.png"
+for slice in 48 192; do
+    for proj in "Blob" "BSpline" "Siddon" "Joseph"; do
+        python test.py ${slice} 3dsinogram_${proj}.edf
+    done
 done
-printf "done\n"
+
+for slice in 47 49; do
+    python test.py ${slice} 3dsinogram_BSpline.edf
+done

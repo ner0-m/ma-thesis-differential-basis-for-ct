@@ -337,7 +337,6 @@ Another frequently used metric is the \textit{\gls{PSNR}}
 	\[ PSNR = 10 \cdot \log_{10}\left( \frac{MAX}{\sqrt{MSE}} \right) \]
 	where \(MAX\) is the maximum possible range depending on the data type of the images
 \end{definition}
-\inlinetodo{Add references}
 All the so far given metrics are based on the \gls{MSE}, i.e.\ they measure based on exact voxel by
 voxel values. They measure absolute errors and weight them depending on the exact method. However,
 they don't necessarily have much in common with the visual perception of humans. The
@@ -403,84 +402,82 @@ center of the volume. The distance from the source to the center is \(25600\) un
 distance from the center of the volume to the principal point of the detector is \(256\) units.
 
 The recommendations discussed in \autoref{chap:signal_representation} are followed for the
-parameters of the basis functions. The projector using B-Splines specifically uses cubic B-Splines.
-And the blob parameters as discussed by~\cite{levakhina_three-dimensional_2014} are followed, i.e.\
-\(m = 2\), \(\alpha = 10.83\) and \(a = 2\).
+parameters of the basis functions. The projector using B-Splines uses cubic B-Splines. And the blob
+parameters as discussed by~\cite{levakhina_three-dimensional_2014} are followed, i.e.\ \(m = 2\),
+\(\alpha = 10.83\) and \(a = 2\).
 
-\begin{figure}[h]
+\begin{figure}
 	\centering
-	% Taken from https://tex.stackexchange.com/a/398309
+
 	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
-			\rotatebox[origin=x]{90}{\bfseries Forward projections\strut}
+			\rotatebox[x=-3.75em, y=0em]{90}{\bfseries Forward projections\strut}
 			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{}{%
+				\stackinset{c}{}{t}{-.2in}{\bfseries Blob Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_Blob_windowed.png}}
-				\caption{Blob based projector}\label{fig:sinogram_blob}
+				\subcaption{}\label{fig:sinogram_blob}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{}{%
+				\stackinset{c}{}{t}{-.2in}{\bfseries Cubic B-Spline Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_BSpline_windowed.png}}
-				\caption{B-Spline based projector}\label{fig:sinogram_bspline}
+				\subcaption{}\label{fig:sinogram_bspline}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{}{%
+				\stackinset{c}{}{t}{-.2in}{\bfseries Siddon's Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_Siddon_windowed.png}}
-				\caption{Siddon's projector}\label{fig:sinogram_siddon}
+				\subcaption{}\label{fig:sinogram_siddon}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{}{%
+				\stackinset{c}{}{t}{-.2in}{\bfseries Joseph's Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_Joseph_windowed.png}}
-				\caption{Joseph's projector}\label{fig:sinogram_joseph}
+				\subcaption{}\label{fig:sinogram_joseph}
 			\end{subfigure}%
 		}}
 
 	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
-			\rotatebox[origin=c]{90}{\bfseries Absolute Normalized Differences\strut}
+			\rotatebox[x=-2.5em, y=0em]{90}{\bfseries Abs.\ Normalized Difference\strut}
 			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{}{%
-					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_difference_Blob_Siddon_windowed.png}}
-				\caption{Difference Blob and Siddon}\label{fig:sino_diff_blob_siddon}
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_difference_Blob_Siddon_windowed.png}
+				\subcaption{}\label{fig:sino_diff_blob_siddon}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{}{%
-					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_difference_Blob_Joseph_windowed.png}}
-				\caption{Difference Blob and Joseph}\label{fig:sino_diff_blob_joseph}
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_difference_Blob_Joseph_windowed.png}
+				\subcaption{}\label{fig:sino_diff_blob_joseph}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{}{%
-					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_difference_BSpline_Siddon_windowed.png}}
-				\caption{Difference B-Spline and Siddon}\label{fig:sino_diff_bspline_siddon}
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_difference_BSpline_Siddon_windowed.png}
+				\subcaption{}\label{fig:sino_diff_bspline_siddon}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{}{%
-					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_difference_BSpline_Joseph_windowed.png}}
-				\caption{Difference B-Spline and Joseph}\label{fig:sino_diff_bspline_joseph}
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_difference_BSpline_Joseph_windowed.png}
+				\subcaption{}\label{fig:sino_diff_bspline_joseph}
 			\end{subfigure}%
 		}}
 
 	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
-			\begin{subfigure}[b]{0.3125\textwidth}
+			\begin{subfigure}[t]{0.275\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_difference_Blob_BSpline_windowed.png}
-				\caption{Difference Blob and B-Spline}\label{fig:sino_diff_blob_bspline}
+				\subcaption{Absolute normalized difference between Blob and cubic
+					B-Spline projector}\label{fig:sino_diff_blob_bspline}
 			\end{subfigure}
-			\begin{subfigure}[b]{0.3321\textwidth}
+			\begin{subfigure}[t]{0.3125\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/plot_sino_differences.png}
-				\caption{Cross-section of \(180\)° projection}\label{fig:plot_sino_differences}
+				\subcaption{Cross-section of \(180\)° projection}\label{fig:plot_sino_differences}
 			\end{subfigure}
-			\begin{subfigure}[b]{0.3321\textwidth}
+			\begin{subfigure}[t]{0.30\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dphantom_windowed.png}
-				\caption{Shepp-Logan phantom}\label{fig:forward_shepp_logan_phantom}
-			\end{subfigure}
+				\subcaption{Shepp-Logan phantom}\label{fig:forward_shepp_logan_phantom}
+			\end{subfigure}%
 		}}
-	\caption{\subref{fig:sinogram_blob}--\subref{fig:sinogram_joseph} sinogram of \(256 \times
-		256\) Shepp-Logan phantom for the Blob based, B-Spline based, Siddon's and Joseph's
-		projector (left to right), with \(384\) different poses in a \(360\)° arc around the
-		phantom using fan-beam geometry.%
+	\caption{\subref{fig:sinogram_blob}--\subref{fig:sinogram_joseph} sinogram of \(512 \times
+		512\) Shepp-Logan phantom for the Blob based, B-Spline based, Siddon's and Joseph's
+		projector (left to right), with \(786\) different poses in a \(360\)° arc around the
+		phantom using fan-beam geometry. The blob parameters used are \(m=2\),
+		\(\alpha=10.83\) and \(a=2\). The B-Spline basis function used has order \(3\).%
 		\subref{fig:sino_diff_blob_siddon}-\subref{fig:sino_diff_bspline_joseph} Absolute
-		difference of normalized sinograms between (from left to right), the Blob based to
+		difference of normalized sinograms between (from left to right), the blob based to
 		Siddon's and Joseph's projector, then the B-Spline based to Siddon's and Joseph's
 		projector. \subref{fig:sino_diff_blob_bspline} Absolute difference of normalized
-		sinogram between the sinogram for the Blob based and B-Spline based projector.%
+		difference between the sinogram for the Blob based and B-Spline based projector.%
 		\subref{fig:plot_sino_differences} Plot of cross sections at \(180\)° (i.e.\ the
 		center row) of sinograms. The intensity difference of the Blob based projector
 		compared to the others is clearly visible. \subref{fig:forward_shepp_logan_phantom} original
@@ -498,7 +495,7 @@ plot in \autoref{fig:plot_sino_differences}. The plot shows a cross-section slic
 \(180^\circ\). There it is clear, the blob based projector has a throughout higher intensity value.
 This also motivates the choice of absolute normalized differences. Focusing on the overall visible
 artifacts, one can see in the different images
-(\autoref{fig:sino_diff_blob_siddon} -- \autoref{fig:sino_diff_bspline_joseph}), artifacts most
+(\autoref{fig:sino_diff_blob_siddon}--\autoref{fig:sino_diff_bspline_joseph}), artifacts most
 notably in the differences to the Siddon's projector. The area around angles divadable by
 \(90^\circ\) contains clearly ring like artifacts especially in the boundary portion of the
 sinogram. The blob and B-Spline based projectors compared to the Joseph's have the most visible
@@ -507,66 +504,69 @@ Lastly looking at the difference between the blob and and B-Spline based project
 \autoref{fig:sino_diff_blob_bspline}, once can see clear differences in at multiples of
 \(45^\circ\).
 
-\begin{figure}[h]
+\begin{figure}
 	\centering
 
 	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
-			\rotatebox[origin=c]{90}{\bfseries Forward projections\strut}
+			\rotatebox[x=-3.5em, y=0em]{90}{\bfseries Forward projections\strut}
 			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{}{%
-					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_Blob.png}}
+				\stackinset{c}{}{t}{-.2in}{\bfseries Blob Projector\strut}{%
+					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_Blob_windowed.png}}
 				\caption{Blob based projector}\label{fig:sinogram_blob_center_crop}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{}{%
-					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_BSpline.png}}
+				\stackinset{c}{}{t}{-.2in}{\bfseries Cubic B-Spline Projector\strut}{%
+					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_BSpline_windowed.png}}
 				\caption{B-Spline based projector}\label{fig:sinogram_bspline_center_crop}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{}{%
-					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_Siddon.png}}
+				\stackinset{c}{}{t}{-.2in}{\bfseries Siddon's Projector\strut}{%
+					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_Siddon_windowed.png}}
 				\caption{Siddon's projector}\label{fig:sinogram_siddon_center_crop}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{}{%
-					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_Joseph.png}}
+				\stackinset{c}{}{t}{-.2in}{\bfseries Joseph's Projector\strut}{%
+					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_Joseph_windowed.png}}
 				\caption{Joseph's projector}\label{fig:sinogram_joseph_center_crop}
 			\end{subfigure}%
 		}}
 
 	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
-			\rotatebox[origin=c]{90}{\bfseries Absolute Normalized Differences\strut}
+			\rotatebox[x=-2.em, y=0em]{90}{\bfseries Abs.\ Normalized Difference\strut}
 			\begin{subfigure}{0.3125\textwidth}
-				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_difference_Blob_Siddon.png}
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_difference_Blob_Siddon_windowed.png}
 				\caption{Difference Blob and Siddon}\label{fig:sinogram_difference_blob_siddon_crop}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
-				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_difference_Blob_Joseph.png}
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_difference_Blob_Joseph_windowed.png}
 				\caption{Difference Blob and Joseph}\label{fig:sinogram_difference_blob_joseph_crop}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
-				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_difference_BSpline_Siddon.png}
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_difference_BSpline_Siddon_windowed.png}
 				\caption{Difference B-Spline and Siddon}\label{fig:sinogram_difference_bspline_siddon_crop}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
-				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_difference_BSpline_Joseph.png}
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_difference_BSpline_Joseph_windowed.png}
 				\caption{Difference B-Spline and Joseph}\label{fig:sinogram_difference_bspline_joseph_crop}
 			\end{subfigure}%
 		}}
 
 	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
 			\begin{subfigure}[t]{0.3125\textwidth}
-				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_difference_Blob_BSpline.png}
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_difference_Blob_BSpline_windowed.png}
 				\caption{Sinogram with marked region of crops}\label{fig:sinogram_difference_blob_bspline_crop}
 			\end{subfigure}
-			\begin{subfigure}[t]{0.3125\textwidth}
+			\begin{subfigure}[t]{0.30\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_Blob_rectangle.png}
 				\caption{Sinogram with marked region of crops}\label{fig:sinogram_crop_overview}
 			\end{subfigure}%
 		}}
 	\caption{\subref{fig:sinogram_blob_center_crop}--\subref{fig:sinogram_joseph_center_crop}
-		crop into the sinogram shown in \autoref{fig:sinogram_shepp_logan}. Showing a part
-		of the projections of around \(180\)° to \(225\)°.
+		crop into the sinogram shown in \autoref{fig:sinogram_shepp_logan} (i.e.\ sinogram
+		created from a \(512 \times 512\) Shepp-Logan phantom using \(786\) projection poses
+		positioned in a full \(360^\circ\) circlular trajectory). The crop shows part of the
+		projections of around \(180\)° to \(225\)°. The blob parameters used are \(m=2\),
+		\(\alpha=10.83\) and \(a=2\). The B-Spline basis function used has order \(3\).
 		\subref{fig:sinogram_difference_blob_siddon_crop}--\subref{fig:sinogram_difference_blob_bspline_crop}
 		same cropped region as the first row, but showing the absolute normalized
 		differences. \subref{fig:sinogram_crop_overview} sinogram with rectangle marking the
@@ -589,71 +589,77 @@ The difference between the projectors based on the blob and B-Spline basis funct
 differences. The most pronounced at multiples of \(45^\circ\), but in the cropped image, each
 \(22^\circ\) artifacts can be seen.
 
+\begin{figure}
+	\centering
+
+	\makebox[\textwidth]{ \makebox[1.2\textwidth]{%
+			\rotatebox[x=-5em, y=0em]{90}{\bfseries \(45^\circ\) projection\strut}
+			\begin{subfigure}{0.3\textwidth}
+				\stackinset{c}{}{t}{-.2in}{\bfseries Blob based\strut}{%
+					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection_3d/3dsinogram_Blob_48.png}}
+				\phantomsubcaption{}\label{fig:sinogram_blob_3d_slice_48}
+			\end{subfigure}%
+			\begin{subfigure}{0.3\textwidth}
+				\stackinset{c}{}{t}{-.2in}{\bfseries Based on Cubic B-Splines\strut}{%
+					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection_3d/3dsinogram_BSpline_48.png}}
+				\phantomsubcaption{}\label{fig:sinogram_bspline_3d_slice_48}
+			\end{subfigure}%
+			\begin{subfigure}{0.3\textwidth}
+				\stackinset{c}{}{t}{-.2in}{\bfseries Siddon's based\strut}{%
+					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection_3d/3dsinogram_Siddon_48.png}}
+				\phantomsubcaption{}\label{fig:sinogram_siddon_3d_slice_48}
+			\end{subfigure}%
+			\begin{subfigure}{0.3\textwidth}
+				\stackinset{c}{}{t}{-.2in}{\bfseries Joseph's based\strut}{%
+					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection_3d/3dsinogram_Joseph_48.png}}
+				\phantomsubcaption{}\label{fig:sinogram_joseph_3d_slice_48}
+			\end{subfigure}%
+		}}
+
+	\makebox[\textwidth]{ \makebox[1.2\textwidth]{%
+			\rotatebox[x=-4.75em, y=0em]{90}{\bfseries \(180^\circ\) projection\strut}
+			\begin{subfigure}{0.3\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection_3d/3dsinogram_Blob_192.png}
+				\phantomsubcaption{}\label{fig:sinogram_blob_3d_slice_192}
+			\end{subfigure}%
+			\begin{subfigure}{0.3\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection_3d/3dsinogram_BSpline_192.png}
+				\phantomsubcaption{}\label{fig:sinogram_bspline_3d_slice_192}
+			\end{subfigure}%
+			\begin{subfigure}{0.3\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection_3d/3dsinogram_Siddon_192.png}
+				\phantomsubcaption{}\label{fig:sinogram_siddon_3d_slice_192}
+			\end{subfigure}%
+			\begin{subfigure}{0.3\textwidth}
+				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection_3d/3dsinogram_Joseph_192.png}
+				\phantomsubcaption{}\label{fig:sinogram_joseph_3d_slice_192}
+			\end{subfigure}%
+		}}
+
+	\caption{Lateral slices of the forward projector of the \(3\)d Shepp-Logan phantom of size
+		\(256^3\). Top row: lateral slice of the projection of \(45^\circ\). Bottom row:
+		lateral slice of the projection of \(180^\circ\). Form left to right: forward
+		projections using the blob based projector, B-Spline projector, Siddon's projector
+		and Joseph's projector. The blob parameters used are \(m=2\), \(\alpha=10.83\) and
+		\(a=2\). The cubic B-Spline basis function are used.
+	}\label{fig:3dsinogram_shepp_logan}
+\end{figure}
+
 Without repeating to much, similar artifacts can be seen in the three-dimensional case, depicted in
 \autoref{fig:3dsinogram_shepp_logan}. The Siddon's method performs worst. Artefacts can be found in
 the Joseph's projector, but are few and subtle. Basically no artifacts can be found in the blob
 based projector. However, for the B-Spline based projector the lateral slices of the projection
 \(45^\circ\) shows clear strip like artifacts. They are not visible slices for the next closest
-projection angles before and after. The adjacent views are shown in
+projection angles before and after. The adjacent slices are shown in
 \autoref{fig:sinogram_bspline_3d_closeup}, with the same slice again in the middle. The artifacts
 are present every \(90^\circ\), i.e.\ at \(45^\circ\), \(135^\circ\), \(225^\circ\), and
 \(315^\circ\). Note also, the brightness difference is notable again.
 
-\begin{figure}[h]
-	\centering
+After this found, I investigated further into the two-dimensional case, to see if similar behaviour
+can be seen. This might be connected to the artifacts seen in \autoref{fig:sino_diff_blob_bspline}.
+This seems to be somewhat true, however further investigation is necessary.
 
-	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
-			\rotatebox[origin=c]{90}{\bfseries \(45^\circ\) projection\strut}
-			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{\bfseries Blob based\strut}{%
-					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection_3d/3dsinogram_Blob_48.png}}
-				\label{fig:sinogram_blob_3d_slice_48}
-			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{\bfseries B-Spline based\strut}{%
-					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection_3d/3dsinogram_BSpline_48.png}}
-				\label{fig:sinogram_bspline_3d_slice_48}
-			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{\bfseries Siddon's based\strut}{%
-					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection_3d/3dsinogram_Siddon_48.png}}
-				\label{fig:sinogram_siddon_3d_slice_48}
-			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
-				\stackinset{c}{}{t}{-.2in}{\bfseries Joseph's based\strut}{%
-					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection_3d/3dsinogram_Joseph_48.png}}
-				\label{fig:sinogram_joseph_3d_slice_48}
-			\end{subfigure}%
-		}}
-
-	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
-			\rotatebox[origin=c]{90}{\bfseries \(180^\circ\) projection\strut}
-			\begin{subfigure}{0.3125\textwidth}
-				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection_3d/3dsinogram_Blob_192.png}
-				\label{fig:sinogram_blob_3d_slice_192}
-			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
-				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection_3d/3dsinogram_BSpline_192.png}
-				\label{fig:sinogram_bspline_3d_slice_192}
-			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
-				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection_3d/3dsinogram_Siddon_192.png}
-				\label{fig:sinogram_siddon_3d_slice_192}
-			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
-				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection_3d/3dsinogram_Joseph_192.png}
-				\label{fig:sinogram_joseph_3d_slice_192}
-			\end{subfigure}%
-		}}
-
-	\caption{Lateral slices of the forward projector of the \(3\)d Shepp-Logan phantom. Top row:
-		lateral slice of the projection of \(45^\circ\). Bottom row: lateral slice of the
-		projection of \(180^\circ\). Form left to right: forward projections using the blob
-		based projector, B-Spline projector, Siddon's projector and Joseph's projector.
-	}\label{fig:3dsinogram_shepp_logan}
-\end{figure}
-
-\begin{figure}[h]
+\begin{figure}
 	\centering
 
 	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
@@ -673,9 +679,12 @@ are present every \(90^\circ\), i.e.\ at \(45^\circ\), \(135^\circ\), \(225^\cir
 				\label{fig:sinogram_bspline_3d_closeup3}
 			\end{subfigure}%
 		}}
-	\caption{Closeup of line artifacts found at the lateral slice of the projector using B-Spline
-		basis functions. From left to right: slices of the projectors at \(44.0625^\circ\),
-		\(45^\circ\), \(45.9375^\circ\)}\label{fig:sinogram_bspline_3d_closeup}
+	\caption{Closeup of line artifacts found at the lateral slice of the projector using cubic
+		B-Spline basis functions. From left to right: slices of the projectors at
+		\(44.0625^\circ\), \(45^\circ\), \(45.9375^\circ\). The parameters for the blob
+		basis function are \(m=2\), \(\alpha=10.83\) and \(a=2\) and cubic B-Splines are
+		used as basis function.
+	}\label{fig:sinogram_bspline_3d_closeup}
 \end{figure}
 
 \section{Reconstruction of Synthetic Data}\label{sec:experiments_synthethic_projection}
@@ -744,7 +753,7 @@ In the following sections, the experiments for each phantom are presented and di
 \begin{figure}[h]
 	\centering
 	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
-			\rotatebox[origin=c]{90}{\bfseries Reconstruciton\strut}
+			\rotatebox[x=-3em, y=0em]{90}{\bfseries Reconstruction \strut}
 			\begin{subfigure}{0.3125\textwidth}
 				\stackinset{c}{}{t}{-.2in}{}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_cropped_windowed_Blob.png}}
@@ -772,7 +781,7 @@ In the following sections, the experiments for each phantom are presented and di
 		}}
 
 	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
-			\rotatebox[origin=c]{90}{\bfseries Difference to phantom\strut}
+			\rotatebox[x=-2.5em, y=0em]{90}{\bfseries Abs.\ Normalized Difference\strut}
 			\begin{subfigure}{0.3125\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_difference_cropped_windowed_Blob.png}
 				\caption{Blob based projector}%
@@ -804,7 +813,9 @@ In the following sections, the experiments for each phantom are presented and di
 			\end{subfigure}%
 		}}
 	\caption{\subref{fig:rectangle_recon_artifacts_blob}--\subref{fig:rectangle_recon_artifacts_joseph}
-		crop of top left corner of the reconstruction rectangle with different projectors
+                crop of top left corner of the reconstruction rectangle with different projectors.
+                The blob basis function use \(m=2\), \(\alpha=10.83\) and \(a=2\) and cubic
+                B-Splines are used as basis function for the projectors
 		\subref{fig:rectangle_recon_difference_blob}--\subref{fig:rectangle_recon_difference_joseph}
 		absolute normalized difference of reconstructed image and the phantom in
 		\subref{fig:rectangle_recon_phantom}. In order from left to right and top down, the
@@ -853,7 +864,7 @@ magnitude. \gls{SSIM} is similar as well for all, only the Siddon's method falls
 \begin{figure}[h]
 	\centering
 	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
-			\rotatebox[origin=c]{90}{\bfseries Reconstruction\strut}
+			% \rotatebox[origin=c]{90}{\bfseries Reconstruction\strut}
 			\begin{subfigure}{0.3125\textwidth}
 				\stackinset{c}{}{t}{-.2in}{\bfseries Blob based\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dreconstruction_windowed_Blob.png}}
@@ -878,7 +889,7 @@ magnitude. \gls{SSIM} is similar as well for all, only the Siddon's method falls
 
 	\makebox[\textwidth]{
 		\makebox[1.3\textwidth]{%
-			\rotatebox[origin=c]{90}{\bfseries Zoom into difference\strut}
+			\rotatebox[x=-2.5em, y=0em]{90}{\bfseries Abs.\ Normalized Difference\strut}
 			\begin{subfigure}{0.3125\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dreconstruction_difference_cropped_windowed_Blob.png}
 				\caption{}\label{fig:reconstruction_shepp_logan_cropped_blob}
@@ -909,6 +920,9 @@ magnitude. \gls{SSIM} is similar as well for all, only the Siddon's method falls
 		Reconstruction of the Shepp-Logan phantom using the (from left to right) the
 		projectors using the blob and B-Spline basis function followed by the projector
 		based on the Siddon's and Joseph's method.
+		The parameters for the blob basis function are
+		\(m=2\), \(\alpha=10.83\) and \(a=2\) and cubic B-Splines are used as basis
+		function.
 		\subref{fig:reconstruction_shepp_logan_cropped_blob}--\subref{fig:reconstruction_shepp_logan_joseph}
 		crop into the difference of each reconstruction with the original phantom, the same
 		order of projectors is given. The window is given for each image individually.
@@ -958,7 +972,7 @@ Though against the later one, it is a small difference.
 \begin{figure}[h]
 	\centering
 	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
-			\rotatebox[origin=c]{90}{\bfseries Reconstruction\strut}
+			% \rotatebox[origin=c]{90}{\bfseries Reconstruction\strut}
 			\begin{subfigure}{0.3125\textwidth}
 				\stackinset{c}{}{t}{-.2in}{\bfseries Blob based\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_medical/2dreconstruction_windowed_Blob.png}}
@@ -983,7 +997,7 @@ Though against the later one, it is a small difference.
 
 	\makebox[\textwidth]{
 		\makebox[1.3\textwidth]{%
-			\rotatebox[origin=c]{90}{\bfseries Zoom into difference\strut}
+			% \rotatebox[origin=c]{90}{\bfseries Zoom into difference\strut}
 			\begin{subfigure}{0.3125\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_medical/2dreconstruction_difference_cropped_windowed_Blob.png}
 				\caption{}\label{fig:reconstruction_medical_cropped_blob}
@@ -1013,7 +1027,9 @@ Though against the later one, it is a small difference.
 	\caption{\subref{fig:reconstruction_medical_blob}--\subref{fig:reconstruction_medical_joseph}
 		Reconstruction of the medical phantom using the different projectors as a basis.
 		From left, to right: the projector based on the blob basis, B-Spline basis, Siddon's
-		method and finally Joseph's method. The second row
+		method and finally Joseph's method. The parameters for the blob basis function are
+		\(m=2\), \(\alpha=10.83\) and \(a=2\) and cubic B-Splines are used as basis
+		function. The second row
 		(\subref{fig:reconstruction_medical_blob}--\subref{fig:reconstruction_medical_joseph})
 		shows a crop into the difference image to the phantom data. The reconstructed image
 		used the same projector as the reconstruction in the row above.
@@ -1065,7 +1081,7 @@ iterations, instead of \(50\), all the other parameters are set exactly as in th
 \begin{figure}[h]
 	\centering
 	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
-			\rotatebox[origin=c]{90}{\bfseries Reconstruction\strut}
+			% \rotatebox[origin=c]{90}{\bfseries Reconstruction\strut}
 			\begin{subfigure}{0.3125\textwidth}
 				\stackinset{c}{}{t}{-.2in}{\bfseries Blob based\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_noise/2dreconstruction_windowed_Blob.png}}
@@ -1090,7 +1106,7 @@ iterations, instead of \(50\), all the other parameters are set exactly as in th
 
 	\makebox[\textwidth]{
 		\makebox[1.3\textwidth]{%
-			\rotatebox[origin=c]{90}{\bfseries Zoom into difference\strut}
+			% \rotatebox[origin=c]{90}{\bfseries Zoom into difference\strut}
 			\begin{subfigure}{0.3125\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_noise/2dreconstruction_difference_cropped_windowed_Blob.png}
 				\caption{}\label{fig:reconstruction_noise_cropped_blob}
@@ -1119,7 +1135,9 @@ iterations, instead of \(50\), all the other parameters are set exactly as in th
 	\caption{\subref{fig:reconstruction_noise_blob}--\subref{fig:reconstruction_noise_joseph}
 		Reconstruction of the Shepp-Logan phantom, when \(1\%\) of Gaussian noise is added
 		to the sinogram. From left, to right: the projector based on the blob basis,
-		B-Spline basis, Siddon's method and finally Joseph's method. The second row
+		B-Spline basis, Siddon's method and finally Joseph's method. The parameters for the
+		blob basis function are \(m=2\), \(\alpha=10.83\) and \(a=2\) and cubic B-Splines
+		are used as basis function. The second row
 		(\subref{fig:reconstruction_noise_cropped_blob}--\subref{fig:reconstruction_medical_cropped_joseph})
 		shows a crop into the difference image to the phantom data. The reconstructed image
 		used the same projector as the reconstruction in the row above.
@@ -1205,7 +1223,7 @@ until finished without any user interaction.
 		separator=semicolon,
 		tabular = cccccc,
 		table head = \toprule \textbf{Dimension} & \textbf{Siddon} & \textbf{Joseph} \downarrow &
-		\textbf{B-Spline based} \downarrow & \textbf{Blob based} \uparrow \\\midrule,
+		\textbf{B-Spline based} \downarrow & \textbf{Blob based} \downarrow \\\midrule,
 		table foot = \bottomrule
 	]{figures/experiments/perf_testing/speedup.csv}{}{%
 		\csvlinetotablerow%
@@ -1284,10 +1302,7 @@ and Joseph's method, but the performance drop can be seen there as well.
 shows a detailed break down of the two-dimensional measurements from the previous plots. They are
 split into the forward and backward projection and each projector has an individual plot. The blob
 and B-Splien based projectors performance quite consistent compared to the Siddon's and Joseph's,
-i.e. they have only few outliers.
-
-\inlinetodo{Maybe make this a little more detailed, but idk just look at the plots and you see
-	what's up}
+i.e.\ they have only few outliers.
 
 \begin{figure}[h]
 	\centering
