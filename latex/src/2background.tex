@@ -1,26 +1,26 @@
 \chapter{Notation and Terminology}\label{chap:notation}
 
-Let \(A\) be an operator, then \(A^\ast\) is the adjoint operation. class of linear bounded
-operators from two vector spaces.
-Hilbert space, Real numbers, matrix, vector, approx linear bounded operators, transpose
-\(\mvec{x}\) vector, \(\mvec{x}^{(k)}\) vector at iteration \(k\)
+This chapter shortly introduces most of the common notation used throughout this thesis. It can be
+freely skipped and jumped back to when in doubt about a specific notation. However, I hope that the
+notation is self-explanatory or clear from the context given at all places.
 
-Generally usual notation regarding symbols such as the natural numbers \(\mathbb{N}\), integers
+Generally, standard notation regarding symbols such as the natural numbers \(\mathbb{N}\), integers
 \(\mathbb{Z}\), \(\mathbb{R}\) are used. Scalar values of these spaces are denoted by lowercase
 non-bold letters, such as \(n \in \mathbb{N}\) or \(x \in \mathbb{R}\). A special notation is
 introduced for scalar measurements. They have a integer subscript \(m_j\), but are not necessarily
 connected to a vector. Vectors are always assumed to be column vectors and are denoted with bold
-characters such as \(x \in \mathbb{R}^n\). Elements of \(n\)-dimensional vectors are subscribed
-\(x_j\). Row vectors are specifically denoted with brackets such as \([x_1, x_2, x_3, \dots ]\).
+characters such as \(\mvec{x} \in \mathbb{R}^n\). Elements of \(n\)-dimensional vectors are
+subscribed \(\mvec{x}_j\). Row vectors are specifically denoted with brackets such as \([\mvec{x}_1,
+		\mvec{x}_2, \mvec{x}_3, \dots ]\).
 
 Given \(\mvec{x} \in \mathbb{R}\) and \(\mvec{y} \in \mathbb{R}\), then \(\abs{\mvec{x}}\) is the
-componentwise absolute value, \(\norm{\mvec{x}}\) is no further specified norm,
+componentwise absolute value, \(\norm{\mvec{x}}\) is a no further specified norm,
 \(\norm{\mvec{x}}_2\) the \(l_2\) or Euclidean norm, \(\norm{\mvec{x}}^2_2\) the squared \(l_2\)
 norm, and \(\langle \mvec{x}, \mvec{y} \rangle\) the scalar product. \(\mathscr{S}^n\) is the unit
-\(n\)-sphere defined as \(\mathscr{S} = {\mvec{x} \in \mathbb{R} \colon \norm{\mvec{x} = 1} }\).
-\(\theta^\perp\) denotes a vector perpendicular to \(\theta\). Though at one place, the scalar
-product is also denoted by \(\mvec{x} \cdot \mvec{y}\). \(\mvec{x}^{(k)}\) is the \(k\) vector of a
-sequence of vectors. Given the matrix \(A \in \mathbb{R}^{n \times m}\). Then \(A^T\) is the
+\(n\)-sphere defined as \(\mathscr{S}^n = \{\mvec{x} \in \mathbb{R}^n \colon \norm{\mvec{x}} = 1 \}\).
+\(\mvec{x}^\perp\) denotes a vector perpendicular to \(\mvec{x}\). Though at one place, the scalar
+product is also denoted by \(\mvec{x} \cdot \mvec{y}\). \(\mvec{x}^{(k)}\) is the \(k\)th vector of
+a sequence of vectors. Given the matrix \(A \in \mathbb{R}^{n \times m}\). Then \(A^T\) is the
 transpose and \(A^{-1}\) the inverse of the matrix.
 
 \(\mathcal{H}\) and \(\mathcal{K}\) denote Hilbert spaces, and \(\mathscr{L}(\mathcal{H},
@@ -28,8 +28,8 @@ transpose and \(A^{-1}\) the inverse of the matrix.
 \in \mathscr{L}(\mathcal{H}, \mathcal{K})\) be linear bounded operator, then \(A^\ast\) denotes the
 adjoint of the operator.
 
-Other important symbols include \(\mu\), the attenuation coefficient, \(\Psi\), the phase-shift of a
-wave front, \(\delta\) the refractive index decrement. Important Transformation used throughout
+Other important symbols include \(\mu\), the attenuation coefficient, \(\Phi\), the phase-shift of a
+wave front, \(\delta\) the refractive index decrement. Important transformation used throughout
 the thesis are the Radon Transform \(\radon\), the X-ray Transform \(\xray\), and the Fourier
 Transformation \(\mathscr{F}\). Specifically, in the notation of the Fourier Transform, a subscript
 denotes the dimensionality of the transform, i.e.\ \(\mathscr{F}_1\) is the one-dimensional Fourier
@@ -38,24 +38,24 @@ Transform the angle of projection is often denoted by a subscript, e.g.\ \(\rado
 \(\mathscr{M}_j\) denotes the physical model that is used to acquire \(m_j\).
 
 Throughout the thesis, the function \(f\) is the function that one seeks to reconstruction, and
-\(g \coloneq \radon f\) is the Radon Transform of \(f\). Given two functions \(h\) and \(\delta\),
-\(h \ast \delta\) is the convolution of the two functions. \(\nabla f\) is the gradient of the
+\(g \coloneq \radon f\) is the Radon Transform of \(f\). Given two functions \(g\) and \(h\),
+\(g \ast h\) is the convolution of the two functions. \(\nabla f\) is the gradient of the
 function \(f\).
 
 \chapter{Imaging Modalities}\label{chap:imaging_modalities}
 
-Numerous fields boil down to a very similar problem statement. Based on a given measurement, how can
+Numerous fields boil down to a very similar problem statement: based on a given measurement, how can
 one retrieve the original measured object, assuming the measurement process is known. This is also
 often referred to as reconstruction form projections~\cite{herman_basis_2015}. This is precisely,
 the definition of reconstruction used throughout this thesis.
 
-These fields include, but are not limited to, variation methods in imaging (e.g.\ image denoising,
+These fields include, but are not limited to, variational methods in imaging (e.g.\ image denoising,
 inpainting, super resolution and more~\cite{scherzer_variational_2009}), X-ray attenuation CT,
 differential phase-contrast CT, X-ray dark-field contrast CT, light-field tomography, seismic
-imaging, nondestructive material testing~\cite{carpio_inverse_2008}. All of these problems are part
-of the class of so-called \textit{inverse problems}.
+imaging and nondestructive material testing~\cite{carpio_inverse_2008}. All of these problems are
+part of the class of so-called \textit{inverse problems}.
 
-A little detour to emphasize, how ubiquitously inverse problems are: The Hubble Space Telescope was
+A little detour to emphasize, how ubiquitously inverse problems are: the Hubble Space Telescope was
 launched into space in 1990. However, it initially had an issue with the spherical aberration in its
 optics. A hardware fix was deployed in 1993. But due to the cost of the operation in general, the
 images of the telescope were still used and lots of processing went into the images. Numerous
@@ -75,9 +75,10 @@ of scope, but the interested reader can look into~\cite{white_restoration_1992,a
 	(the physical model).
 \end{definition}
 
-As Hilbert spaces, are complete vector spaces with a scalar product \(\langle\cdot,\cdot\rangle\)
-is defined. Hence, they make sufficiently nice spaces to work in. For the purposes of this thesis,
-usually these spaces are subspaces of \(\mathbb{R}^n\).
+Hilbert spaces are complete vector spaces, where a scalar product \(\langle\cdot,\cdot\rangle\) is
+defined. Hence, they make sufficiently nice spaces to work in. For the purposes of this thesis,
+usually one can assume \(\mathcal{H}\) and \(\mathcal{K}\) to be subspaces of \(\mathbb{R}^n\), so
+no further studies on Hilber Spaces is conducted at this point.
 
 I want to point out a minor, but important detail. Different imaging modalities, which vary
 drastically in scope of physical properties, can be mathematically reduces to a common concept. This
@@ -91,12 +92,12 @@ definition of Hadamard~\cite{hadamard_sur_1902} a problem is well posed if all t
 properties are fulfilled:
 
 \begin{itemize}
-	\item \textbf{Existence}: The exists a solution.
+	\item \textbf{Existence}: There exists a solution.
 	\item \textbf{Uniqueness}: It is the only solution.
 	\item \textbf{Stability}: The solution depends continuously on the data.
 \end{itemize}
 
-If any of these conditions doesn't hold it is ill-posed. An example for well-posed problems is the
+If any of these conditions do not hold, it is ill-posed. An example for well-posed problems is the
 heat equation with specified initial conditions. Inverse problems are basically all
 ill-posed~\cite{hansen_discrete_2010}, at least the ones considered in this thesis.
 
@@ -112,28 +113,28 @@ From a practical point this is quite important. Imagine two blurred images of th
 only differ slightly from one another. If the stability criterion is violated, the solution to the
 inverse problem trying to deblur the images, need not be close to each other. Hence, proper care
 needs to be taken in the development of algorithms, that search for solutions for the inverse
-problem. See \citeauthor{hansen_discrete_2010}\cite{hansen_discrete_2010} for some nice illustrative
-examples for each property.
+problem. See \citeauthor{hansen_discrete_2010}~\cite{hansen_discrete_2010} for some nice
+illustrative examples for each property.
 
 In the specific field of tomographic reconstruction, the challenge is to reconstruction an image
-from a finite set of projections. Specifically, most of the applications considered are projections
-from X-ray sources. However, other imaging modalities such as light field microscopy exists.
+from a finite set of projections. Specifically, the applications considered here are projections
+from X-ray sources. However, other imaging modalities such as light field microscopy exist.
 
 An essential aspect of tomographic reconstruction is the so-called \textit{forward model}. It is the
 mathematical abstraction of the physical measuring process (\(A\) in \autoref{def:inverse_problem}).
-A mathematical approach and definition is given in \autoref{def:forward-model}. Throughout this
-thesis, X-rays are treated as infinitely thin rays, and therefore, mathematically a single X-ray
-going through the object can be model using a line. Along its path through the object interacts with
-the matter and once it passed through it will hit some kind of detector. This can either measure the
-attenuation of the X-ray, the refraction or the scattering, but the mathematical abstraction is very
-similar.
+Throughout this thesis, X-rays are treated as infinitely thin rays, and therefore, mathematically a
+single X-ray going through the object can be model using a line. Along its path through the object
+interacts with the matter and once it passed through it will hit some kind of detector. This can
+either measure the attenuation of the X-ray, the refraction or the scattering, but the mathematical
+abstraction is very similar.
 
-This idea was already studied by \citeauthor{radon_uber_1917}. Hence, the resulting transformation
-modeling the projection of an object to its projection is often referred to as the \textit{Radon
-	Transform}. For two-dimensional reconstructions this holds true, but for higher dimensions,
-this is not necessarily true anymore. Other transformations, such as the \textit{X-ray
-	Transform}~\cite{solmon_x-ray_1976}, have been presented. An overview of both the Radon
-Transformation and the X-ray Transformation is given in \autoref{chap:radon_transform_and_related}.
+This idea was already studied by \citeauthor{radon_uber_1917} in \citeyear{radon_uber_1917}. Hence,
+the resulting transformation modeling the projection of an object to its projection is often
+referred to as the \textit{Radon Transform}. For two-dimensional reconstructions this holds true,
+but for higher dimensions, this is not necessarily true anymore. Other transformations, such as the
+\textit{X-ray Transform}~\cite{solmon_x-ray_1976}, have been presented. An overview of both the
+Radon Transformation and the X-ray Transformation and generally a more mathematically focused
+discussion is given in \autoref{chap:radon_transform_and_related}.
 
 Again, note how the mathematical description closes the gap between different concepts of
 measuring X-ray attenuation, refraction and scattering.
@@ -146,38 +147,41 @@ gain a visual intuition for the mathematical introduction and definitions in the
 
 Out of scope are physical details. Rather, they will be striped down and simplified to what is
 necessary and useful for the scope of this thesis and the concepts presented. However, as much as
-possible, resources for the interested reader are cited in the corresponding sections.
+possible, resources for the interested reader are given in the corresponding sections.
 
 \section{X-ray Attenuation CT}\label{sec:xray_attenuation_ct}
 
 The discovery of X-rays by Wilhelm Conrad Röntgen~\cite{rontgen_uber_1895} and its impact in medical
 diagnostics have been tremendous. For the first time it was possible to `look inside' an object
-without opening it. As touched on in the introduction (\ref{chap:introduction}), this was used to
-find and plan the removal of metal objects in bodies.
+without opening it. As touched on in the introduction of \autoref{chap:introduction}, this was used,
+among others, to find and plan the removal of metal objects in bodies.
 
 \citeauthor*{cormack_representation_1963}~\cite{cormack_representation_1963} laid the mathematical
-foundations for X-ray attenuation CT. However, the breakthrough of X-ray attenuation CT scanners
-only happened with the publication series of
-\citeauthor{hounsfield_computerized_1973}\cite{hounsfield_computerized_1973},
-\citeauthor{ambrose_computerized_1973}\cite{ambrose_computerized_1973} and
-~\citeauthor{perry_computerized_1973}\cite{perry_computerized_1973}.
+foundations for X-ray attenuation CT\@. Thereby, reinventing what \citeauthor*{radon_uber_1917}
+already discovered. However, X-ray attenuation CT did not take off till the publication series of
+\citeauthor*{hounsfield_computerized_1973}~\cite{hounsfield_computerized_1973},
+\citeauthor*{ambrose_computerized_1973}~\cite{ambrose_computerized_1973} and
+\citeauthor*{perry_computerized_1973}~\cite{perry_computerized_1973} and their corresponding
+prototypes of CT scanners.
 
 X-ray attenuation CT is an easy principle. The projections of the CT scanner are acquired using a
-simple setup. The object one wants to scan is between the X-ray source and the detector. Without
-going into details, X-ray sources for common CT scanners are vacuum tubes, which convert electrical
-power to radiation. The detector consists of an array of pixels, which reacts sensitive to X-rays.
-Then for each projection a `photo' is taken, the object is rotated in relation to the source and
-detector, and then the next acquisitions is performed and so on. It is of no importance for the
-reconstruction, if the object of interested is rotated or the source and detector are rotated. For a
-detailed overview see \citeauthor{buzug_computed_2008}~\cite[Chapter~2]{buzug_computed_2008}.
+simple setup. The object one wants to scan is between the X-ray source and the detector. Then for
+each projection a `photo' is taken, the object is rotated in relation to the source and detector,
+and then the next acquisitions is performed and so on. It is common to described a projection with
+an angle in two dimensions and two angles in three dimensions. This fully qualifies a single
+projection pose. A a further notice, it is of no importance for the reconstruction, if the object of
+interested is rotated or the source and detector are rotated. X-ray sources for common CT scanners
+are vacuum tubes, which convert electrical power to radiation. The detector consists of an array of
+pixels, which reacts sensitive to X-rays. For a detailed overview see
+\citeauthor{buzug_computed_2008}~\cite[Chapter~2]{buzug_computed_2008}.
 
-The objective of tomographic reconstruction for X-ray attenuation, is the retrieval of the
+The objective of tomographic reconstruction for X-ray attenuation CT, is the retrieval of the
 attenuation coefficient for the complete object of interest. To achieve this, numerous projections
 are necessary. Each projection is the X-ray shadow of the measured object.
 \autoref{fig:sinogram_example_abdomen} shows three different projections for such an object. In this
-specific case, the object of interest was rotated relative to the X-ray source and detector.
-The graph on the right of each sub-image, shows the measured projections values. The higher this
-value is, the larger the attenuation (i.e.\ the darker the X-ray shadow) of the line hitting the
+specific case, the object of interest was rotated relative to the X-ray source and detector. The
+graph on the right of each sub-image, shows the measured projections values. The higher this value
+is, the larger the attenuation (i.e.\ the darker the X-ray shadow) of the line hitting the
 projection plane at this position.
 
 \begin{figure}
@@ -205,7 +209,7 @@ projection plane at this position.
 \end{figure}
 
 For a simple study of the physical process in X-ray attenuation CT, one can start with the analysis
-of a single X-ray going through an object with a homogeneous (i.e.\ single constant) attenuation
+of a single X-ray going through an object with a homogeneous (i.e.\ constant) attenuation
 coefficient (see \autoref{fig:x-ray_homogeneous_attenuation}). The object one desires to
 investigate, is between an X-ray source and a detector. The X-ray source generates X-rays with a
 certain intensity \(I_0\). After the X-ray traverses the object, the detector measures a reduced
@@ -226,7 +230,7 @@ attenuation coefficient \(\mu\) and the distance traveled through the matter \(s
 
 Extending this model to accommodate changing or varying attenuation coefficients, one needs to
 replace the constant coefficient \(\mu\), by a function \(\mu: \mathbb{R}^2 \mapsto \mathbb{R}\)
-(for now, this is kept in the two-dimensional case). Then the measured intensity is given by the
+(for now, this is kept in the two-dimensios). Then the measured intensity is given by the
 integral along the line the ray travels along \(L\) of the function \(\mu\), see
 \autoref{fig:x-ray_nonhomogeneous_attenuation} for an illustration.
 
@@ -235,31 +239,33 @@ integral along the line the ray travels along \(L\) of the function \(\mu\), see
 	\def\svgwidth{0.75\textwidth}
 	\import{./figures/nonhomogeneous_attenuation}{nonhomogeneous_attenuation.pdf_tex}
 	\caption{Model of a single X-ray (red line) going through a material with
-		homogeneous attenuation coefficient \(\mu(x)\) (abdominal section). Again \(I_0\) is
-		the initial intensity of the X-ray, \(I_1\) is the measured intensity, given
-		by the integral along the line \(L\) (i.e.\ the ray given in red) of the
-		attenuation coefficient function \(mu(x)\), where \(x\) is each point along the
-		line \(L\).}\label{fig:x-ray_nonhomogeneous_attenuation}
+                homogeneous attenuation coefficient \(\mu(x)\) (abdominal section). Again \(I_0\) is
+                the initial intensity of the X-ray, \(I_1\) is the measured intensity, given by the
+                integral along the line \(L\) (i.e.\ the ray given in red) of the attenuation
+                coefficient function \(\mu(\mvec{x})\), where \(\mvec{x}\) is each point along the
+                line \(L\).}\label{fig:x-ray_nonhomogeneous_attenuation}
 \end{figure}
 
 % Some help from https://www.fips.fi/slides/Bubba_SummerSchoolVFIP2019_1.pdf
 Then the connection between the initial intensity, and measured intensity is connected by the
 \textit{Beer-Lambert law}~\cite{buzug_computed_2008}:
 \begin{equation}\label{eq:beer-Lambert-law}
-	- \ln \frac{I}{I_0} = \int_L \mu (x) \, \mathrm{d}x
+	- \ln \frac{I}{I_0} = \int_L \mu (\mvec{x}) \, \mathrm{d}\mvec{x}
 \end{equation}
 The right-hand side of \autoref{eq:beer-Lambert-law} is the line integral of the attenuation
-coefficient function \(\mu\) along the line \(L\). The line integrals for all lines which are
-parallel to each other, are precisely the above mentioned projections. This is what is exemplarily
-shown in \autoref{fig:sinogram_example_abdomen} for 3 different projection angles.
+coefficient function \(\mu\) along the line \(L\), \(\mvec{x} in \mathbb{R}\) are the points that
+lie on \(L\). The line integrals for all lines which are parallel to each other, are precisely the
+above mentioned projections for a given projection angle \(\theta\). This is what is exemplarily
+shown in \autoref{fig:sinogram_example_abdomen} for 3 different projection angles \(0^\circ\),
+\(45^\circ\) and \(90^\circ\).
 
-To successfully reconstruct an object from its projection one needs many projections from different
+To successfully reconstruct an object from its projection, one needs many projections from different
 angles. The resulting measurements can be stacked together to an image. This is referred to as
 \textit{sinogram}. The name originates from the sinusoidal pattern a point draws in such an image,
 see \autoref{fig:sinogram_simple_complete} for an example. There the sinogram for a single point in
 the phantom is shown (together with the simple phantom) on the left. Further, the sinogram for the
-abdomen used throughout this chapter can be seen in \autoref{fig:sinogram_complete}. The vertical
-lines mark the projections taken in \autoref{fig:sinogram_example_abdomen}.
+abdomen used throughout this chapter can be seen in \autoref{fig:sinogram_abdomen_complete}. The
+vertical lines mark the projections taken in \autoref{fig:sinogram_example_abdomen}.
 
 \begin{figure}
 	\centering
@@ -282,32 +288,31 @@ lines mark the projections taken in \autoref{fig:sinogram_example_abdomen}.
 			\end{subfigure}
 		}}
 	\caption{Examples of sinograms. The name originates from the pattern a single points draw in
-		the sinogram. This can be seen in
-		\subref{fig:sinogram_simple_phantom}--\subref{fig:sinogram_simple_complete}. The
-		sinogram for the abdomen data used throughout the chapter
-		\subref{fig:sinogram_abdomen_phantom} can be in
-		\subref{fig:sinogram_abdomen_complete}. The vertical lines mark the projections
-		depicted in \autoref{fig:sinogram_example_abdomen}.
+                the sinogram. This can be seen in
+                \subref{fig:sinogram_simple_phantom}--\subref{fig:sinogram_simple_complete}. The
+                sinogram for the abdomen \subref{fig:sinogram_abdomen_phantom} used throughout the
+                chapter can be seen in \subref{fig:sinogram_abdomen_complete}. The vertical lines
+                mark the projections depicted in \autoref{fig:sinogram_example_abdomen}.
 	}\label{fig:sinogram_complete}
 \end{figure}
 
-The first to proof that a function (in this case the \(\mu\)) can be described via its line
+The first to proof that a function (in this case the \(\mu\)) can be described fully via its line
 integral, was first shown by \textit{Radon Transform}~\cite{radon_uber_1917}
 (see~\cite{radon_determination_1986} for the English translation). Further details on the Radon
-Transform can be found in \autoref{chap:radon_transform_and_related}. However, for here it should be
-noted, that the line integral of a function is the basis of many imaging modalities.
+Transform can be found in \autoref{chap:radon_transform_and_related}. Here it should just be
+highlighted, that the line integral of a function is the basis of many imaging modalities.
 
 Stepping back, to again a more practical approach. CT scanners evolved over time. Hence, there do
-exists many so-called generations of CT scanners. The first and mostly interesting ones because a
-lot of the theory is build around their principles, are CT scanners, with a parallel beam geometry
-(see \autoref{fig:parallel_beam_geometry}). There all rays are generated in parallel to each other
-and hit the detector. This is achieved by having an X-ray source and the detector shift
-perpendicular to the projection direction.
+exists many so-called \textit{generations} of CT scanners. The first generation of CT scanners, have
+a paralllel beam geometry (see \autoref{fig:parallel_beam_geometry}). Today they are mostly
+interesting because much of the theory is build around their principles. There all rays are
+generated in parallel to each other and hit the detector. This is achieved by having an X-ray source
+and the detector shift perpendicular to the projection direction.
 
 Another, common setting is the fan-bean geometry as shown in \autoref{fig:fan_beam_geometry}. It is
 a two-dimensional setting, where the X-rays are emitted from a point-source and are not parallel to
 each other, but rather (as the name suggest) have a fan like pattern. Further, the detector is often
-curved. Other common geometry setups include inherently three-dimensional setup using a cone-line
+curved. Other common geometry setups include inherently three-dimensional setup using a cone-like
 beam shape and a two-dimensional detector. Newer CT scanners, also rely on multiple sources. A
 detailed discussion is given in e.g.\ \cite{buzug_computed_2008}. Most of the geometric setups are
 introduced to either reduce the acquisition time or increase the spatial resolution of the
@@ -583,7 +588,7 @@ via the polar coordinates. Others define a subspace perpendicular to the project
 
 The Radon Transform is related to the Fourier Transformation. Also, it is a special case of the
 Hankel Transform. Another special case of the Radon Transform is the \textit{Abel Transform}. If the
-function \(f\) is a spherically symmetric function the Radon Transform coincides with the Abel
+function \(f\) is a spherically-symmetric function the Radon Transform coincides with the Abel
 Transform~\cite{buzug_computed_2008}.
 
 \begin{definition}[Back-Projection]\label{def:back_projection}
@@ -1100,7 +1105,7 @@ where \(\mvec{x} \in \mathbb{R}^n\).
 B-Splines have a couple of really attractive properties. B-Splines are the shortest and smoothest
 scaling functions for a given order of approximation~\cite{momey_b-spline_2012}. They are close to a
 Gaussian function, with a sufficiently large \(d\)~\cite{momey_b-spline_2012}, all while preserving
-compactness. Hence, they tend to spherically symmetric functions, while preserving local support.
+compactness. Hence, they tend to spherically-symmetric functions, while preserving local support.
 Due to these properties, \citeauthor*{momey_new_2011}\cite{momey_new_2011} argue for B-Splines over
 blobs. Further, they note the need to tune the parameters for of blobs for optimal results, which
 adds complexity. This is an important point. During reconstruction, there are many, so-called
@@ -1235,7 +1240,7 @@ Shepp-Logan filter includes a smoothing filter to deal better with noise.
 			\end{subfigure}
 			\begin{subfigure}[t]{0.3125\textwidth}
 				\includegraphicsmaybe[width=\textwidth]{figures/filtered_backprojection/fbp_filters.png}
-				\phantomsubcaption{}\label{fig:fbp_32_projections}
+				\phantomsubcaption{}\label{fig:fbp_filters}
 			\end{subfigure}
 		}}%
 	\caption{Top row: reconstruction using \gls{FBP} with a different number of projection
