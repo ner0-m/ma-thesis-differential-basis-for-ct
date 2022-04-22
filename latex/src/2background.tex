@@ -512,9 +512,9 @@ by the physical properties of the X-rays. This chapter dives deeper in the mathe
 of forward models. And specifically important transformations in the field of tomographic
 reconstruction.
 
-The physical model is the link between the unknown signal and it's measurements. Usually, the model
-is referred to as forward model. First a couple of basic definitions are given, followed by a deeper
-dive in to the mathematical formulation of the forward model for X-ray attenuation CT\@.
+The physical model is the link between the unknown signal and its measurements. Usually, the model
+is referred to as \text{forward model}. First a couple of basic definitions are given, followed by a
+deeper dive in to the mathematical formulation of the forward model for X-ray attenuation CT\@.
 
 \begin{definition}[Signal]\label{def:signal}
 	Let \(f\colon \mathbb{R}^n \to \mathbb{R}\) be a \(n\)-dimensional continuous function,
@@ -522,19 +522,19 @@ dive in to the mathematical formulation of the forward model for X-ray attenuati
 	will be referred to as signal, without the special mention of \(n\)-dimensional.
 \end{definition}
 
-Other names for signal are common, such as \textit{image}. However, image is typically an overloaded
-term and can be misunderstood. Hence, it does not suit to a general notion. However, in specific
-cases, such as the reconstruction of a two-dimensional function, it works well and thus, I will
-refer to images as two-dimensional signal. But limited to the solution domain of the inverse
-problem. The word image, in my opinion, also does not suit for example the sinogram, as it is not in
-the sense an image, but rather a stacked form of many measured signals. The same is true for
-volumes. In the three-dimensional setting, this is exactly the kind of signal on wishes to
-reconstruct.
+Other names for signal are common, such as \textit{image} as in~\cite{herman_basis_2015}. However,
+image is an overloaded term and can be misunderstood. Hence, it does not suit itself in a general
+setting. In specific cases, such as the reconstruction of a two-dimensional functions, it works well
+and thus, I will often refer to two-dimensional signals as images. Though, the usage is limited to
+the solution domain of the inverse problem, as e.g.\ sinograms are not images in the colloquial
+meaning of images. Hence, sinogram are not referred to as images. A similar distinction is made for
+the three-dimensional case. There the three-dimensional signal is referred to as \textit{volume}.
 
-A note for completeness's sake, recall \autoref{def:inverse_problem} of the inverse problem. There
-the definition is given in terms of Hilbert spaces. For our purposes \(\mathcal{H} = \mathbb{R}^I\),
-\(\mathcal{K} = \mathbb{R}^J\) and \(A \in \mathbb{R}^{I\times J}\) with \(I \in \mathbb{N}\) and
-\(J \in \mathbb{N}\) two numbers. Now, the forward model can be defined.
+Recall the definition of inverse problem given in \autoref{def:inverse_problem}. Just to reiterate,
+there, the definition is given in terms of Hilbert spaces. But for the discussion here, one can
+assume \(\mathcal{H} = \mathbb{R}^I\), \(\mathcal{K} = \mathbb{R}^J\) and \(A \in
+\mathbb{R}^{I\times J}\) with \(I \in \mathbb{N}\) and \(J \in \mathbb{N}\). Now, the forward model
+can be defined.
 
 \begin{definition}[Forward Model]\label{def:forward-model}
 	To reconstruct an unknown \(I\)-dimensional signal \(f: \mathbb{R}^I \to \mathbb{R}\), a set
@@ -559,56 +559,60 @@ two-dimensional case. Therefore, the special \textit{X-ray Transform} is also pr
 \section{Radon Transform}\label{sec:radon_transform}
 
 Recall from \autoref{sec:xray_attenuation_ct}, the connection between the initial intensity and the
-measured intensity was the line integral of the attenuation coefficients of the material. This
-transformation of a function is known as the Radon Transform, which is attributed to Johann Radon
-and his work in \citeyear{radon_uber_1917}~\cite{radon_uber_1917,radon_determination_1986}. It was
-later rediscovered by \citeauthor{cormack_representation_1963}~\cite{cormack_representation_1963} in
-the context of the invention of CT scanners. Without any further ado, let us directly dive into the
+measured intensity was the line integral of the attenuation coefficients of the matter. The
+transformation mapping a function into its all line integrals known as the Radon Transform, which is
+attributed to Johann Radon and his work in
+\citeyear{radon_uber_1917}~\cite{radon_uber_1917,radon_determination_1986}. It was later
+rediscovered by \citeauthor{cormack_representation_1963}~\cite{cormack_representation_1963} in the
+context of the invention of CT scanners. Without any further ado, let us directly dive into the
 definition of the Radon Transform.
 
 \begin{definition}[Radon Transform]\label{def:radon_transform}
-	Let \(\Omega \subset \mathbb{R}^n\) and \(f\colon \Omega \to \mathbb{R}\), which is assumed
-	to sufficiently nice. Then the mapping \(\radon f\colon (\mathbb{R}^n \to \mathbb{R})
-	\to (\mathbb{R} \times \mathscr{S}^{n-1} \to \mathbb{R})\) of \(f\), which maps \(f\) into
-	the set of its integrals over the affine hyperplanes of \(\mathbb{R}^{n-1}\), is called the
+	Let \(\Omega \subset \mathbb{R}^I\) and \(f\colon \Omega \to \mathbb{R}\), which is assumed
+	to sufficiently nice. Then the mapping \(\radon f\colon (\mathbb{R}^I \to \mathbb{R})
+	\to (\mathbb{R} \times \mathscr{S}^{I-1} \to \mathbb{R})\) of \(f\), which maps \(f\) into
+	the set of its integrals over the affine hyperplanes of \(\mathbb{R}^{I-1}\), is called the
 	\textit{Radon Transform} (c.f.~\cite{natterer_mathematics_1986,buzug_computed_2008,carpio_inverse_2008}).
 \end{definition}
 
-Specifically, given the unit direction \(\theta \in \mathcal{S}^{n-1}\) and a scalar \(s \in
-\mathbb{R}\), one can define the hyperplane \(\mathcal{H}^{n-1}(\theta, s) = \lbrace \mvec{x} \in
-\mathbb{R}^n \, \colon \langle \mvec{x}, \theta \rangle = s  \rbrace\) with distance \(s\) to the origin
-and perpendicular to \(\theta\). The Radon Transform \(\radon\) of \(f\) is defined by the line
-integral over the hyperplane \(\mathcal{H}^{n-1}(\theta, s)\):
+Specifically, given the unit direction \(\mvec{\theta} \in \mathcal{S}^{I-1}\) and a scalar \(s \in
+\mathbb{R}\), one can define the hyperplane \(\mathcal{H}^{I-1}(\mvec{\theta}, s) = \lbrace \mvec{x}
+\in \mathbb{R}^I \, \colon \langle \mvec{x}, \mvec{\theta} \rangle = s  \rbrace\) with distance
+\(s\) to the origin and perpendicular to \(\mvec{\theta}\). The Radon Transform \(\radon\) of \(f\)
+is defined by the line integral over the hyperplane \(\mathcal{H}^{I-1}(\mvec{\theta}, s)\):
 \begin{equation}\label{eq:radon_transform}
-	\radon f(\theta, s) = \radon_\theta f(s) = \int_{\langle \mvec{x}, \theta \rangle = s} f(\mvec{x}) \, \, \mathrm{d}\mvec{x}
+	\radon f(\mvec{\theta}, s) = \int_{\langle \mvec{x}, \mvec{\theta} \rangle = s} f(\mvec{x}) \, \, \mathrm{d}\mvec{x}
 \end{equation}
 Note that for \(n=2\) the hyperplanes are lines, and hence match the forward model for X-ray
 imaging. For the 3-dimensional case, this does not fit anymore. For this case, the so-called X-ray
-Transform \(\xray\) was developed \citeauthor*{solmon_x-ray_1976}~\cite{solmon_x-ray_1976}, which is
-very similar to the Radon Transform, but integrates over lines for all dimensions, instead of
+Transform \(\xray\) was developed by \citeauthor*{solmon_x-ray_1976}~\cite{solmon_x-ray_1976}, which
+is very similar to the Radon Transform, but integrates over lines for all dimensions, instead of
 hyperplanes. See \autoref{sec:xray_transform} for more on the X-ray Transform.
 
-Also note that many notations are common. Specifically in two dimensions, it is common to define it
-via the polar coordinates. Others define a subspace perpendicular to the projection direction
-\(\theta^\perp\). But the basic principle is the same.
+Also note that there many notations are common. Specifically in two dimensions, it is common to
+define it via the polar coordinates. Others define a subspace perpendicular to the projection
+direction \(\theta^\perp\). But the basic principle is the same. A notation used throughout the
+thesis, is the subscript of the projection angle \(\theta\) as in \(\radon_\theta\). This is only
+relevant for two-dimensional Radon Transform.
 
 The Radon Transform is related to the Fourier Transformation. Also, it is a special case of the
 Hankel Transform. Another special case of the Radon Transform is the \textit{Abel Transform}. If the
 function \(f\) is a spherically-symmetric function the Radon Transform coincides with the Abel
-Transform~\cite{buzug_computed_2008}.
+Transform~\cite{buzug_computed_2008}. This is particularly interesting in the case of
+spherically-symmetric basis functions, as is covered in \autoref{sec:blob_basis}.
 
 \begin{definition}[Back-Projection]\label{def:back_projection}
-	If the Radon Transform is defined as a bounded operator. One can define its adjoint
+	If the Radon Transform is defined as a linear bounded operator. One can define its adjoint
 	\(\radon^\ast\) as
-	\[ \radon^\ast g (x) = \int_{\mathcal{S}^{n-1}} g(\theta, \langle x, \theta \rangle) \, \, \mathrm{d} \theta \]
-	Often one defines \(g = \radon f\). The adjoint is often referred to as the \textit{back
-		projection}. Compared to the \textit{forward projection} which is \(\radon f\).
+	\[ \radon^\ast g (\mvec{x}) = \int_{\mathcal{S}^{I-1}} g(\mvec{\theta}, \langle \mvec{x}, \mvec{\theta} \rangle) \, \, \mathrm{d} \mvec{\theta} \]
+	Often one defines \(g = \radon f\). The adjoint is often referred to as the
+	\textit{back-projection}. Compared to the \textit{forward projection} which is \(\radon f\).
 \end{definition}
 
-The backprojection is basically a smearing of the projection angles along. This is illustrated in
-\autoref{fig:backprojection_shepp_logan} on the left-hand side. For more and more back-projections,
-the image gets closer to the original phantom. However, stays a bully version of the original
-phantom. A sharper reconstruction can be achieved through different means, this is discussed in
+The backprojection is basically a smearing of the projection angles along the projection direction.
+This is illustrated in \autoref{fig:backprojection_shepp_logan} on the left-hand side. For more and
+more back-projections, the image gets closer to the original signal. However, it stays a blurry. A
+sharper reconstruction can be achieved through different means. This is discussed in
 \autoref{chap:tomographic_reconstruction}.
 
 \begin{figure}
@@ -642,7 +646,7 @@ practical approach uses the connection of the Radon Transform to the Fourier Tra
 
 \begin{definition}[Fourier Slice Theorem]\label{def:fourier_slice_theorem}
 	Let \(f\colon \mathbb{R}^2 \to \mathbb{R}\) be sufficiently nice and \(\mathscr{F}_n\) the
-	\(n\)-dimensional Fourier transform. Then
+	\(n\)-dimensional Fourier transform. Then by the \textit{Fourier Slice Theorem}:
 	\[ (\mathscr{F}_2f)(\theta, s) = (\mathscr{F}_1(\radon_\theta f(\cdot)))(s) \]
 	It is also often referred to as \textit{projection-slice theorem} or \textit{central slice theorem}
 \end{definition}
@@ -659,7 +663,7 @@ reducing the number of projections acquired. Further, problems arise as the Four
 typically sampled in polar coordinates, but for this representation, one would like to access them
 using Cartesian coordinates. This requires some for of interpolation. See the dissertation of
 \citeauthor{vogel_tomographic_2015}~\cite[Chapter~4.1.2]{vogel_tomographic_2015} for a detailed
-discussions and nice illustrative figures. More methods to compute the adjoint and reconstruction
+discussions and nice illustrative figures. More methods to compute the adjoint and reconstruction of
 \(f\) are presented in \autoref{chap:tomographic_reconstruction}.
 
 Of further interest to us is the first derivative of the Radon transform. As a variety of imaging
@@ -678,26 +682,28 @@ see~\cite{nilchian_fast_2013}.
 
 \section{X-ray Transform}\label{sec:xray_transform}
 
-The \(n\)-dimensional Radon Transform computed the integral over \(n-1\)-dimensional hyperplanes.
+The \(n\)-dimensional Radon Transform computes the integral over \(n-1\)-dimensional hyperplanes.
 However, for the setting of attenuation X-ray CT, one is interested in the line integration over
-lines in \(n\)-dimensional spaces.
+lines in \(n\)-dimensional spaces. Hence, a variation of the Radon Transform is introduced.
 
 \begin{definition}[X-ray Transform]\label{def:x-ray_transform}
-	Given \(\theta \in \mathscr{S}^{n-1}\) and \(x \in \mathbb{R}^n\), then
-	\[ \xray f(\theta, x) = \xray_\theta(x) = \int_{-\infty}^{+\infty} f(x + t \theta) \, \mathrm{d}t\]
-	is the X-ray Transform. It is the integral over the straight line through \(x\) with
-	direction \(\theta\) (c.f.~\cite{natterer_mathematics_1986,solmon_x-ray_1976}).
+	Given the projection direction \(\mvec{\theta} \in \mathscr{S}^{n-1}\) and \(\mvec{x} \in
+	\mathbb{R}^n\), then
+	\[ \xray f(\mvec{\theta}, \mvec{x}) = \int_{-\infty}^{+\infty} f(\mvec{x} + t \mvec{\theta}) \, \mathrm{d} t \]
+	is the \textit{X-ray Transform}. It is the integral over the straight line through
+	\(\mvec{x}\) with direction \(\mvec{\theta}\)
+	(c.f.~\cite{natterer_mathematics_1986,solmon_x-ray_1976}).
 \end{definition}
 
 In the two-dimensional case, the Radon Transform and X-ray Transform are equivalent.
 Then, the relation between the Radon Transform and the X-ray Transform is
 \begin{equation}
-	\xray_\theta f(s\theta^\perp) = \radon_{\theta^\perp} f(s)
+	\xray f(\mvec{\theta}, s\mvec{\theta}^\perp) = \radon f(\mvec{\theta}^\perp, s)
 \end{equation}
 For the case of attenuation X-ray CT, the X-ray Transform is the physical forward model used. The
 Fourier Slice Theorem~\ref{def:fourier_slice_theorem} also holds true for the X-ray Transform.
 
-Another transformations, which is not considered in this thesis is the Cone-Beam Transform
+Another transformations, which is not considered in this thesis, is the Cone-Beam Transform
 (c.f.~\cite[Chapter~2]{carpio_inverse_2008}). Also, other important topics such as the Riesz
 potential are left out.
 
