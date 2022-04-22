@@ -18,8 +18,8 @@ field of tomographic reconstruction, the problem domain has to be discretized. A
 the \textit{series expansion}. There the original signal, is described by a linear combination of a
 coefficient vector with a set of basis functions. Arguably, the most common choice of basis function
 is the pixel (or voxel) basis function. Other alternatives have been proposed, such as
-\textit{spherically symmetric} (blob)~\cite{lewitt_multidimensional_1990} or \textit{B-Spline}
-~\cite{unser_fast_1991} basis function. Especially, spherically symmetric basis function have been
+\textit{spherically-symmetric} (blob)~\cite{lewitt_multidimensional_1990} or \textit{B-Spline}
+~\cite{unser_fast_1991} basis function. Especially, spherically-symmetric basis function have been
 popular in tomographic reconstruction. Both basis function provide a higher accuracy compared to
 voxel basis functions. But importantly, they are continuously differentiable (at least under certain
 conditions). This is an important property, especially in the context of differential phase-contrast
@@ -38,7 +38,7 @@ problem domain. However, this creates issues for imaging modalities that assume 
 signal in the problem domain, such as differential phase-contrast CT\@.
 
 In the scope of this thesis, two such projectors are implemented for the tomographic reconstruction
-framework \textit{elsa}. One projector is based on spherically symmetric and the other on B-Spline
+framework \textit{elsa}. One projector is based on spherically-symmetric and the other on B-Spline
 basis functions. Two different projections are implemented to firstly, lay the foundation for
 first-class support of differential phase-contrast CT in elsa. But secondly, ensure this approach is
 feasible.
