@@ -134,7 +134,7 @@
 % Code in latex
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\usepackage[outputdir=build,chapter]{minted}
+\usepackage[chapter]{minted}
 \usemintedstyle{friendly}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -183,6 +183,7 @@
 	numberwithin=chapter
 ]{definition}
 
+% \usepackage{bm}
 \usepackage{mathtools}
 
 % Define \abs
@@ -232,12 +233,16 @@
 
 \ifxetexorluatex%
 	\usepackage{amssymb}
+	% \usepackage{mathrsfs}
 	\let\mathbbalt\mathbb
 	\usepackage{unicode-math}
 	\let\mathbb\mathbbalt% UNIVERSAL RESET TO ORIGINAL \mathbb
+
 	\setmainfont{IBM Plex Serif}[Scale=MatchLowercase]
 	\setsansfont{IBM Plex Sans}[Scale=MatchLowercase]
 	\setmonofont{IBM Plex Mono}[Scale=MatchLowercase]
+
+	% \setmathfont[range={\mathscr,\mathbfscr}]{XITS Math}
 	% Try again after restart
 	% \setmathfont[range={\mathscr,\mathbfscr}]{XITS Math}
 \else
@@ -274,8 +279,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Nomenclature
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\usepackage{nomencl}
-\makenomenclature%
+% \usepackage{nomencl}
+% \renewcommand{\nomname}{List of Symbols}
+
+% \makenomenclature%
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Ordinals
@@ -333,8 +341,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % List of TODOs
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\todototoc
-\listoftodos
+% \todototoc
+% \listoftodos
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Introduction
@@ -442,7 +450,6 @@
 \glsaddall
 \printglossary[type=\acronymtype]
 \newpage
-\printglossary
 \endgroup
 
 \printindex

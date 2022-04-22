@@ -3,7 +3,8 @@ PYTHON := $(shell which python)
 FIGURE_DIR := $(abspath ./figures)
 PYTHON_DIR := $(abspath ./python)
 
-LATEX_BUILD_DIR := ./build
+# LATEX_BUILD_DIR := ./build
+LATEX_BUILD_DIR := .
 
 TEXTIDOTE ?= $(shell which textidote || echo .textidote-not-found)
 
@@ -19,32 +20,32 @@ ELSA_EXAMPLE_ARGPASE_PATH?=
 	@exit 1
 
 
-$(LATEX_BUILD_DIR)/main.pdf: main.tex
-	latexmk -pdf -pv -xelatex -interaction=nonstopmode -shell-escape --outdir=$(LATEX_BUILD_DIR) main.tex
+main.pdf: main.tex
+	latexmk -pdf -pv -xelatex -interaction=nonstopmode -shell-escape main.tex
 
-thesis: $(LATEX_BUILD_DIR)/main.pdf
+thesis: main.pdf
 	
 watch:
-	latexmk -pvc -pdf -xelatex -interaction=nonstopmode -shell-escape --outdir=$(LATEX_BUILD_DIR) main.tex
+	latexmk -pvc -pdf -xelatex -interaction=nonstopmode -shell-escape main.tex
 
 clean-latex:
-	latexmk --outdir=$(LATEX_BUILD_DIR) -C
+	latexmk -C
 
-toc:
-	pdftk $(LATEX_BUILD_DIR)/main.pdf cat 6-7 output $(LATEX_BUILD_DIR)/main_toc.pdf
+toc: main.p
+	pdftk main.pdf cat 6-7 output main_toc.pdf
 
 check:
-	$(TEXTIDOTE) --output plain --check en --dict dict.txt main.tex | tee $(LATEX_BUILD_DIR)/report.txt
+	$(TEXTIDOTE) --output plain --check en --dict dict.txt main.tex | tee report.txt
 
 check-html:
-	$(TEXTIDOTE) --output html --check en --dict dict.txt main.tex > $(LATEX_BUILD_DIR)/report.html
-	firefox $(LATEX_BUILD_DIR)/repoart.html
+	$(TEXTIDOTE) --output html --check en --dict dict.txt main.tex > report.html
+	firefox report.html
 
 distclean:
 	rm -rf $(FIGURE_DIR)/*.png build/
 
-word:
-	pdftotext $(LATEX_BUILD_DIR)/main.pdf - | wc -w
+word: main.pdf
+	pdftotext main.pdf - | wc -w
 
 ifdef ELSA_EXAMPLE_ARGPASE_PATH
 figures/experiments/forward_projection:

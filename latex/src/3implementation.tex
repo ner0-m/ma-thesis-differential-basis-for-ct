@@ -702,7 +702,7 @@ complexity of the data resembles realistic medical data. All three phantoms are 
 \autoref{fig:experiment_overview_phantoms}. Please note, that for all cases, the inverse
 crime~\cite{wirgin_inverse_2004} is committed.
 
-\begin{figure}[h]
+\begin{figure}
 	\centering
 	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
 			\begin{subfigure}[t]{0.40\textwidth}
@@ -750,7 +750,7 @@ In the following sections, the experiments for each phantom are presented and di
 
 \subsection{Rectangular Phantom}
 
-\begin{figure}[h]
+\begin{figure}
 	\centering
 	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
 			\rotatebox[x=-4.5em, y=0em]{90}{\bfseries Reconstruction \strut}
@@ -921,7 +921,7 @@ magnitude. \gls{SSIM} is similar as well for all, only the Siddon's method falls
                 Reconstruction of the Shepp-Logan phantom using the (from left to right) the
                 projectors using the blob and B-Spline basis function followed by the projector
                 based on the Siddon's and Joseph's method. The reconstruction is performed using
-                \(50\) iterations of \gls{FIST}. The parameters for the blob basis function are
+                \(50\) iterations of \gls{FISTA}. The parameters for the blob basis function are
                 \(m=2\), \(\alpha=10.83\) and \(a=2\) and cubic B-Splines are used as basis
                 function.
 		\subref{fig:reconstruction_shepp_logan_cropped_blob}--\subref{fig:reconstruction_shepp_logan_joseph}
@@ -1253,7 +1253,7 @@ for the two-dimensional case, and in \autoref{fig:performance_3d_lineplot} the r
 three-dimensional case are plotted. Noticeably, the method's scale similarly as both the Siddon's
 and Joseph's method, but the performance drop can be seen there as well.
 
-\begin{figure}[h]
+\begin{figure}
 	\centering
 
 	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
@@ -1277,7 +1277,7 @@ and Joseph's method, but the performance drop can be seen there as well.
 	\label{fig:performance_2d_lineplot}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}
 	\centering
 
 	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
@@ -1307,7 +1307,7 @@ split into the forward and backward projection and each projector has an individ
 and B-Splien based projectors performance quite consistent compared to the Siddon's and Joseph's,
 i.e.\ they have only few outliers.
 
-\begin{figure}[h]
+\begin{figure}
 	\centering
 
 	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
@@ -1346,7 +1346,7 @@ i.e.\ they have only few outliers.
 	\label{fig:performance_2d_violin_forward}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}
 	\centering
 
 	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%

@@ -1,14 +1,46 @@
 \chapter{Notation and Terminology}\label{chap:notation}
 
-\inlinetodo{This section has to be done}
 Let \(A\) be an operator, then \(A^\ast\) is the adjoint operation. class of linear bounded
 operators from two vector spaces.
 Hilbert space, Real numbers, matrix, vector, approx linear bounded operators, transpose
-
 \(\mvec{x}\) vector, \(\mvec{x}^{(k)}\) vector at iteration \(k\)
 
-Equations, which are not part of a definition are specifically marked with a number. However,
-equations which are part of the definition do not have a specific numbering scheme.
+Generally usual notation regarding symbols such as the natural numbers \(\mathbb{N}\), integers
+\(\mathbb{Z}\), \(\mathbb{R}\) are used. Scalar values of these spaces are denoted by lowercase
+non-bold letters, such as \(n \in \mathbb{N}\) or \(x \in \mathbb{R}\). A special notation is
+introduced for scalar measurements. They have a integer subscript \(m_j\), but are not necessarily
+connected to a vector. Vectors are always assumed to be column vectors and are denoted with bold
+characters such as \(x \in \mathbb{R}^n\). Elements of \(n\)-dimensional vectors are subscribed
+\(x_j\). Row vectors are specifically denoted with brackets such as \([x_1, x_2, x_3, \dots ]\).
+
+Given \(\mvec{x} \in \mathbb{R}\) and \(\mvec{y} \in \mathbb{R}\), then \(\abs{\mvec{x}}\) is the
+componentwise absolute value, \(\norm{\mvec{x}}\) is no further specified norm,
+\(\norm{\mvec{x}}_2\) the \(l_2\) or Euclidean norm, \(\norm{\mvec{x}}^2_2\) the squared \(l_2\)
+norm, and \(\langle \mvec{x}, \mvec{y} \rangle\) the scalar product. \(\mathscr{S}^n\) is the unit
+\(n\)-sphere defined as \(\mathscr{S} = {\mvec{x} \in \mathbb{R} \colon \norm{\mvec{x} = 1} }\).
+\(\theta^\perp\) denotes a vector perpendicular to \(\theta\). Though at one place, the scalar
+product is also denoted by \(\mvec{x} \cdot \mvec{y}\). \(\mvec{x}^{(k)}\) is the \(k\) vector of a
+sequence of vectors. Given the matrix \(A \in \mathbb{R}^{n \times m}\). Then \(A^T\) is the
+transpose and \(A^{-1}\) the inverse of the matrix.
+
+\(\mathcal{H}\) and \(\mathcal{K}\) denote Hilbert spaces, and \(\mathscr{L}(\mathcal{H},
+\mathcal{K})\) the set of linear bounded operators from \(\mathcal{H}\) to \(\mathcal{K}\). Let \(A
+\in \mathscr{L}(\mathcal{H}, \mathcal{K})\) be linear bounded operator, then \(A^\ast\) denotes the
+adjoint of the operator.
+
+Other important symbols include \(\mu\), the attenuation coefficient, \(\Psi\), the phase-shift of a
+wave front, \(\delta\) the refractive index decrement. Important Transformation used throughout
+the thesis are the Radon Transform \(\radon\), the X-ray Transform \(\xray\), and the Fourier
+Transformation \(\mathscr{F}\). Specifically, in the notation of the Fourier Transform, a subscript
+denotes the dimensionality of the transform, i.e.\ \(\mathscr{F}_1\) is the one-dimensional Fourier
+Transform, and \(\mathscr{F}_2\) the two-dimensional one and so on. For the Radon and X-ray
+Transform the angle of projection is often denoted by a subscript, e.g.\ \(\radon_\theta\).
+\(\mathscr{M}_j\) denotes the physical model that is used to acquire \(m_j\).
+
+Throughout the thesis, the function \(f\) is the function that one seeks to reconstruction, and
+\(g \coloneq \radon f\) is the Radon Transform of \(f\). Given two functions \(h\) and \(\delta\),
+\(h \ast \delta\) is the convolution of the two functions. \(\nabla f\) is the gradient of the
+function \(f\).
 
 \chapter{Imaging Modalities}\label{chap:imaging_modalities}
 
@@ -33,10 +65,11 @@ of scope, but the interested reader can look into~\cite{white_restoration_1992,a
 
 \begin{definition}[Inverse Problem]\label{def:inverse_problem}
 	Loosely speaking, the solution to inverse problems is the cause of an effect. Turning this
-	into the mathematical setting, let \(H\) and \(K\) be Hilbert spaces (i.e.\ a vector space,
-	which has a scalar product and is complete), then let \(m \in K\) the measurements and \(f
-	\in H\) the original cause. The system which causes the effect can be modeled by a
-	linear bounded operator \(A \in \mathscr{L}(H, K)\). Then the problem is formulated as
+	into the mathematical setting, let \(\mathcal{H}\) and \(\mathcal{K}\) be Hilbert spaces
+	(i.e.\ a vector space, which has a scalar product and is complete), then let \(m \in
+	\mathcal{K}\) the measurements and \(f \in \mathcal{H}\) the original cause. The system
+	which causes the effect can be modeled by a linear bounded operator \(A \in \mathscr{L}(H,
+	K)\). Then the problem is formulated as
 	\[ A f = m \]
 	The inverse problem is to retrieve \(f\) (the cause) given \(m\) (the measurements) and \(A\)
 	(the physical model).
@@ -487,9 +520,10 @@ the sense an image, but rather a stacked form of many measured signals. The same
 volumes. In the three-dimensional setting, this is exactly the kind of signal on wishes to
 reconstruct.
 
-A note for completeness's sake, recall \autoref{def:inverse_problem} of the inverse problem. For our
-purposes \(H = \mathbb{R}^I\) and \(K = \mathbb{R}^J\) with \(I \in \mathbb{N}\) and \(J \in
-\mathbb{N}\) two numbers. Now, the forward model can be defined.
+A note for completeness's sake, recall \autoref{def:inverse_problem} of the inverse problem. There
+the definition is given in terms of Hilbert spaces. For our purposes \(\mathcal{H} = \mathbb{R}^I\),
+\(\mathcal{K} = \mathbb{R}^J\) and \(A \in \mathbb{R}^{I\times J}\) with \(I \in \mathbb{N}\) and
+\(J \in \mathbb{N}\) two numbers. Now, the forward model can be defined.
 
 \begin{definition}[Forward Model]\label{def:forward-model}
 	To reconstruct an unknown \(I\)-dimensional signal \(f: \mathbb{R}^I \to \mathbb{R}\), a set
@@ -530,7 +564,7 @@ definition of the Radon Transform.
 \end{definition}
 
 Specifically, given the unit direction \(\theta \in \mathcal{S}^{n-1}\) and a scalar \(s \in
-\mathbb{s}\), one can define the hyperplane \(\mathcal{H}^{n-1}(\theta, s) = \lbrace \mvec{x} \in
+\mathbb{R}\), one can define the hyperplane \(\mathcal{H}^{n-1}(\theta, s) = \lbrace \mvec{x} \in
 \mathbb{R}^n \, \colon \langle \mvec{x}, \theta \rangle = s  \rbrace\) with distance \(s\) to the origin
 and perpendicular to \(\theta\). The Radon Transform \(\radon\) of \(f\) is defined by the line
 integral over the hyperplane \(\mathcal{H}^{n-1}(\theta, s)\):
@@ -560,7 +594,35 @@ Transform~\cite{buzug_computed_2008}.
 		projection}. Compared to the \textit{forward projection} which is \(\radon f\).
 \end{definition}
 
-\inlinetodo{Add example images for 1, 2, 4, and so on projection angles}
+The backprojection is basically a smearing of the projection angles along. This is illustrated in
+\autoref{fig:backprojection_shepp_logan} on the left-hand side. For more and more back-projections,
+the image gets closer to the original phantom. However, stays a bully version of the original
+phantom. A sharper reconstruction can be achieved through different means, this is discussed in
+\autoref{chap:tomographic_reconstruction}.
+
+\begin{figure}
+	\centering
+	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+			\begin{subfigure}[t]{0.3125\textwidth}
+				\includegraphicsmaybe[width=\textwidth]{figures/backprojection/backprojection_shepp_logan_001.png}
+				\phantomsubcaption{}\label{fig:backprojection_shepp_logan_1}
+			\end{subfigure}%
+			\begin{subfigure}[t]{0.3125\textwidth}
+				\includegraphicsmaybe[width=\textwidth]{figures/backprojection/backprojection_shepp_logan_002.png}
+				\phantomsubcaption{}\label{fig:backprojection_shepp_logan_2}
+			\end{subfigure}%
+			\begin{subfigure}[t]{0.3125\textwidth}
+				\includegraphicsmaybe[width=\textwidth]{figures/backprojection/backprojection_shepp_logan_032.png}
+				\phantomsubcaption{}\label{fig:backprojection_shepp_logan_16}
+			\end{subfigure}%
+			\begin{subfigure}[t]{0.3125\textwidth}
+				\includegraphicsmaybe[width=\textwidth]{figures/backprojection/backprojection_shepp_logan_256.png}
+				\phantomsubcaption{}\label{fig:backprojection_shepp_logan_256}
+			\end{subfigure}%
+		}}%
+	\caption{Back-projection of the Shepp-Logan phantom of \(1\), \(2\), \(32\) and \(256\)
+		different projection angles.}\label{fig:backprojection_shepp_logan}
+\end{figure}
 
 In the setting of tomographic reconstruction, one wishes to reconstruct the original signal \(f\)
 from a set of measurements \(m\). Already, \citeauthor*{radon_uber_1917} showed a theoretical way of
@@ -695,7 +757,7 @@ As it is an important transformation, a closer look is taken at Radon Transforma
 Radon Transform yields the following:
 \[ \radon\near{f}(\mvec{x}) = \radon\left( \sum_{\mvec{k} \in \mathbb{Z}^n} c_{\mvec{k}} \varphi(\mvec{x} - \mvec{x}_{\mvec{k}}) \right) \]
 Due to the linearity of the Radon Transform this is equivalent to
-\[ \radon\hat{f}(\mvec{x}) = \sum_{\symbfit{k} \in \mathbb{Z}^n} c_{\symbfit{k}}\radon\left( \varphi(\mvec{x} - \mvec{x}_{\symbfit{k}}) \right) \]
+\[ \radon\hat{f}(\mvec{x}) = \sum_{\mvec{k} \in \mathbb{Z}^n} c_{\mvec{k}}\radon\left( \varphi(\mvec{x} - \mvec{x}_{\mvec{k}}) \right) \]
 Put into natural language, the Radon transformation applied to the permissible representation, only
 act upon the basis function. Hence, it is sufficient to study, how the Radon transformation acts
 upon the individual basis function.
@@ -739,17 +801,18 @@ most widely used basis function. Most literature assumes the voxel basis functio
 illustration of the permissible representation of a signal using the voxel basis function can be
 seen in \autoref{fig:permissible_representation_pixel}.
 
-The centered voxel basis function of step width \(h\), is given by:
+The centered voxel basis function of unit step width, is given by:
 \begin{equation}\label{eq:voxel_basis_fn}
-	\varphi^{\text{pixel}}(\mvec{x}) =
+	\varphi^{\text{pixel}}(\mvec{x}) = \Pi(\mvec{x})
 	\begin{cases}
-		1, \abs{\mvec{x}} < \frac{h}{2} \\
+		1, \abs{\mvec{x}} < \frac{1}{2}           \\
+		\frac{1}{2}, \abs{\mvec{x}} = \frac{1}{2} \\
 		0, \text{otherwise}
 	\end{cases}
 \end{equation}
-Here, the absolute value is coefficient wise, as soon as the absolute value of any coefficient of
-the vector \(\mvec{x} \in \mathbb{R}^n\) is larger half the step size, the function will return
-\(0\).
+\(\Pi\) is the rectangular pulse of unit step length. Also, the absolute value is coefficient wise,
+as soon as the absolute value of any coefficient of the vector \(\mvec{x} \in \mathbb{R}^n\) is
+larger half the step size, the function will return \(0\).
 
 The voxel basis function for the one-dimensional case is just the step function centered around the
 origin. It can be seen in \autoref{fig:pixel_basis_function_1d}. Approximating a signal using the
@@ -900,7 +963,7 @@ independent on the projection angle, but only dependent on the distance from the
 Transform of the blob basis function is defined as
 (c.f.~\cite{lewitt_multidimensional_1990,lewitt_alternatives_1992}):
 \begin{align}\label{eq:radon_blob_basis}
-	p(s) & = \int_{-\infty}^{+\infty} \varphi^{\text{blob}}_{m, \alpha, a}\left(t\right) \, \mathrm{d} t                                                                                                       \\
+	g(s) & = \int_{-\infty}^{+\infty} \varphi^{\text{blob}}_{m, \alpha, a}\left(t\right) \, \mathrm{d} t                                                                                                       \\
 	     & = 2 \int_0^{\sqrt{(a^2-s^2)}} \varphi^{\text{blob}}_{m, \alpha, a}\left(\sqrt{s^2 - r^2}\right) \, \mathrm{d} r                                                                                     \\
 	     & = \frac{a}{I_m(\alpha)} \left( \frac{2\pi}{\alpha}\right)^{1/2} \left( \sqrt{1 - \left(\frac{s}{a}\right)^2} \right)^{m + 1/2} I_{m+1/2}\left( \alpha \sqrt{1 - \left(\frac{s}{a}\right)^2} \right)
 \end{align}
@@ -935,7 +998,7 @@ Then \autoref{eq:radon_blob_basis} can be simplified to not include any non-inte
 the modified Kaiser-Bessel function of the first kind. For example assuming, \(m = 0\), and to keep
 everything a little more concise, let \(w = \sqrt{1 - \left(\frac{r}{a}\right)^2}\):
 \begin{align}\label{eq:radon_blob_basis_order_0_simplified}
-	p(s) & = \frac{a}{I_0(\alpha)} \left(\frac{2\pi}{\alpha}\right)^{1/2} \left( w \right)^{1/2} I_{1/2}\left( \alpha w \right)                     \\
+	g(s) & = \frac{a}{I_0(\alpha)} \left(\frac{2\pi}{\alpha}\right)^{1/2} \left( w \right)^{1/2} I_{1/2}\left( \alpha w \right)                     \\
 	     & = \frac{a}{I_0(\alpha)} \left(\frac{2\pi w}{\alpha}\right)^{1/2} I_{1/2}\left( \alpha w \right)                                          \\
 	     & = \frac{a}{I_0(\alpha)} \left(\frac{2\pi w}{\alpha}\right)^{1/2} \left( \frac{2}{\pi \alpha w}\right)^{1/2} \sinh \left(\alpha w \right) \\
 	     & = \frac{2 a}{\alpha I_0(\alpha)} \sinh \left(\alpha w \right)
@@ -969,31 +1032,58 @@ function.
 
 Now, first couple of definitions and properties are given.
 \begin{definition}[B-Spline]
-	The most basic definition of a B-Spline of degree \(0\) and unit width is the step function:
-	\begin{equation}
-		\beta^0(x) = \mu(x) =
+	The most basic definition of a B-Spline of order \(0\) and unit width is the step function:
+	\[
+		\beta^0(x) = \Pi(x) =
 		\begin{cases}
-			1, & \text{if } x \in \mathopen[\minus \frac{1}{2}, \frac{1}{2}\mathclose] \\
-			0, & \text{otherwise}
+			1,           & \text{if } \abs{x} < \frac{1}{2} \\
+			\frac{1}{2}, & \text{if } \abs{x} = \frac{1}{2} \\
+			0,           & \text{otherwise}
 		\end{cases}
-	\end{equation}
-	Then the univariate B-Spline of degree \(d\) can be constructed by \(d + 1\) convolution of
+	\]
+	Note that B-Splines of order \(0\) is just the voxel basis function. This makes the
+	B-Splines a nice generalization of the voxel basis function. Then the univariate B-Spline of
+	order \(d\) can be constructed by \(d + 1\) convolution of
 	\(\beta^0\) (compare~\cite{momey_new_2011}):
-	\begin{equation}
+	\[
 		\beta^d(x) = \beta^0 * \beta^{d-1}(x) = \underbrace{\beta^0 * \dots * \beta^0(x)}_{d+1 \text{convolution terms}}
-	\end{equation}
+	\]
+	See \autoref{fig:bspline_basis_1d} for illustrations of the B-Spline basis functions of
+	different order.
 \end{definition}
-\inlinetodo{Add figure for B-Splines of different degree, add function approximation}
-Note that B-Splines of degree \(0\) is just the voxel basis function. This makes the B-Splines a
-nice generalization of the voxel basis function.
+
+\begin{figure}
+	\centering
+	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+			\begin{subfigure}[t]{0.3125\textwidth}
+				\includegraphicsmaybe[width=\textwidth]{figures/bsplines_basis/bspline_basis_1d_order0.png}
+				\phantomsubcaption{}\label{fig:bspline_basis_order_0}
+			\end{subfigure}
+			\begin{subfigure}[t]{0.3125\textwidth}
+				\includegraphicsmaybe[width=\textwidth]{figures/bsplines_basis/bspline_basis_1d_order1.png}
+				\phantomsubcaption{}\label{fig:bspline_basis_order_1}
+			\end{subfigure}
+			\begin{subfigure}[t]{0.3125\textwidth}
+				\includegraphicsmaybe[width=\textwidth]{figures/bsplines_basis/bspline_basis_1d_order2.png}
+				\phantomsubcaption{}\label{fig:bspline_basis_order_2}
+			\end{subfigure}
+			\begin{subfigure}[t]{0.3125\textwidth}
+				\includegraphicsmaybe[width=\textwidth]{figures/bsplines_basis/bspline_basis_1d_order3.png}
+				\phantomsubcaption{}\label{fig:bspline_basis_order_3}
+			\end{subfigure}
+		}}%
+	\caption{Examples of the \(1\)d univariate B-Spline basis functions of different order. From
+		left to right, B-Spline basis of order \(0\), \(1\), \(2\) and \(3\).
+	}\label{fig:bspline_basis_1d}
+\end{figure}
 
 Another way to compute the B-Spline basis of order \(d\) is given in~\cite{unser_fast_1991}:
 \begin{equation}
-	\beta^d(x) = \sum_{i=0}^{d+1} \frac{(-1)^i}{n!} \binom{d+1}{i}(x - i)^d\mu(x - i)
+	\beta^d(x) = \sum_{i=0}^{d+1} \frac{(-1)^i}{n!} \binom{d+1}{i}(x - i)^d\Pi(x - i)
 \end{equation}
 where \(\binom{d+1}{i}\) is the binomial coefficient.
 
-The derivative is again B-Spline of degree \(d-1\) (compare~\cite{unser_splines_1999}):
+The derivative is again B-Spline of order \(d-1\) (compare~\cite{unser_splines_1999}):
 \begin{equation}
 	\frac{\partial \beta^d(x)}{\partial x} = \beta^{d-1}\left(x + \frac{1}{2}\right) -
 	\beta^{d-1}\left(x - \frac{1}{2}\right)
@@ -1003,7 +1093,7 @@ B-Splines are continuously differentiable up to order \(d-1\).
 B-Splines are separable. Hence, \(n\)-dimensional B-Splines, often referred to as tensor product
 B-Splines. They can be constructed the following way:
 \begin{equation}
-	\beta^d(\mvec{x}) = \prod^n_{i=1} \beta^d(x_i)
+	\beta^d(\mvec{x}) = \prod^n_{i=1} \beta^d(\mvec{x}_i)
 \end{equation}
 where \(\mvec{x} \in \mathbb{R}^n\).
 
@@ -1042,7 +1132,7 @@ The Radon Transform of a two-dimensional B-Spline was shown by
 \citeauthor*{horbelt_discretization_2002}\cite{horbelt_discretization_2002}. Given the projection
 angle \(\theta\), then it is:
 \begin{equation}
-	\radon\beta^d(s) = \beta^d_{\sin\theta} * \beta^d_{\cos\theta}(d)
+	\radon_\theta\beta^d(s) = \beta^d_{\sin\theta} * \beta^d_{\cos\theta}(s)
 \end{equation}
 Hence it is the convolution of two splines of different width (denoted by the subscript). These are
 referred to as spline bikernels. \citeauthor*{horbelt_discretization_2002} presents an explicit
@@ -1055,13 +1145,13 @@ product) B-Splines are a special case of box splines.
 	lower dimension \(\mathbb{R}^d\). Similarly to B-Splines, box splines can be defined via
 	convolution:
 	\begin{equation}
-		M_\Xi(x) = M_{\xi_1} * \dots * M_{\xi_n}(x)
+		M_\Xi(\mvec{x}) = M_{\xi_1} * \dots * M_{\xi_n}(\mvec{x})
 	\end{equation}
-	where \(\Xi \coloneq \mathopen[ \xi_1 \xi_2 \dots \xi_n \mathclose] \in \mathbb{R}^{s \times n}\)
-	is the matrix of directions. Each \(\xi\) defines a direction of the hypercube.
-	\(\Xi\) completely defines the box spline (compare~\cite{de_boor_box_1993})
+	where \(\Xi \coloneq \mathopen[ \xi_1 \xi_2 \dots \xi_n \mathclose] \in \mathbb{R}^{s \times
+		n}\) is the matrix of directions. Each \(\xi\) defines a direction of the hypercube. \(\Xi\)
+	completely defines the box spline (compare~\cite{de_boor_box_1993}). If \(\Xi\) is the
+	identity matrix, the box spline is the same as the tensor-product B-Spline.
 \end{definition}
-If \(\Xi\) is the identity matrix, the box spline is the same as the tensor-product B-Spline.
 
 \citeauthor*{entezari_box_2012}~\cite{entezari_box_2012} proof that the X-ray transform of a
 \(d\)-variate box spline is a \(d - 1\) variate box spline. Further, it is the box spline defined
@@ -1097,8 +1187,6 @@ projections are filtered in the Fourier domain and then the filtered values are 
 as before, a sharper image can be obtained. This is referred to as the filtered back-projection
 (FBP)~\cite{ramachandran_three-dimensional_1971}.
 
-\inlinetodo{Insert Result of blurred non-filtered back projection version}
-
 \begin{definition}[Filtered Back-Projection]\label{def:filtered_back_projection}
 	Let \(f\colon \Omega \to \mathbb{R}\), where \(\Omega \in \mathbb{R}^2\) sufficiently nice,
 	and \(g \coloneq \radon f\) be the Radon Transform of \(f\). Then
@@ -1108,15 +1196,60 @@ as before, a sharper image can be obtained. This is referred to as the filtered 
 	\autoref{def:back_projection}, then \(\radon^\ast g^\delta\) is the \textit{\gls{FBP}}.
 \end{definition}
 
+The \gls{FBP} for a different number of projection angles can be seen in
+\autoref{fig:filtered_backprojection_shepp_logan}. It is clearly visible, that a large amount of
+projection angles are necessary to reconstruct a pleasing image. The filtered Radon Transform of a
+measurement can be seen on the bottom row on the left of
+\autoref{fig:filtered_backprojection_shepp_logan}. In this case the filter is a so called
+\textit{ramp} filter (depicted on the bottom right of
+\autoref{fig:filtered_backprojection_shepp_logan}). Other common filters include the
+Ram-Lak~\cite{ramachandran_three-dimensional_1971} or the Shepp-Logan filter
+\cite{shepp_fourier_1974}. The later is also depicted on the plot together with the ramp filter. The
+Shepp-Logan filter includes a smoothing filter to deal better with noise.
+
+\begin{figure}
+	\centering
+	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+			\begin{subfigure}[t]{0.3125\textwidth}
+				\includegraphicsmaybe[width=\textwidth]{figures/filtered_backprojection/fbp_shepp_logan_032.png}
+				\phantomsubcaption{}\label{fig:fbp_32_projections}
+			\end{subfigure}
+			\begin{subfigure}[t]{0.3125\textwidth}
+				\includegraphicsmaybe[width=\textwidth]{figures/filtered_backprojection/fbp_shepp_logan_064.png}
+				\phantomsubcaption{}\label{fig:fbp_64_projections}
+			\end{subfigure}
+			\begin{subfigure}[t]{0.3125\textwidth}
+				\includegraphicsmaybe[width=\textwidth]{figures/filtered_backprojection/fbp_shepp_logan_128.png}
+				\phantomsubcaption{}\label{fig:fbp_128_projections}
+			\end{subfigure}
+			\begin{subfigure}[t]{0.3125\textwidth}
+				\includegraphicsmaybe[width=\textwidth]{figures/filtered_backprojection/fbp_shepp_logan_512.png}
+				\phantomsubcaption{}\label{fig:fbp_512_projections}
+			\end{subfigure}
+		}}%
+
+	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+			\begin{subfigure}[t]{0.3125\textwidth}
+				\includegraphicsmaybe[width=\textwidth]{figures/filtered_backprojection/fbp_shepp_logan_ramp.png}
+				\phantomsubcaption{}\label{fig:fbp_filtered_sinogram}
+			\end{subfigure}
+			\begin{subfigure}[t]{0.3125\textwidth}
+				\includegraphicsmaybe[width=\textwidth]{figures/filtered_backprojection/fbp_filters.png}
+				\phantomsubcaption{}\label{fig:fbp_32_projections}
+			\end{subfigure}
+		}}%
+	\caption{Top row: reconstruction using \gls{FBP} with a different number of projection
+		angles. From left to right: \(32\), \(64\), \(128\) and \(512\) projection angles.
+		Bottom row: one the right filtered projection measurement, filtered with the ramp
+		filter and and the left, plot of the ramp and Shepp-Logan filter.
+	}\label{fig:filtered_backprojection_shepp_logan}
+\end{figure}
+
 The quality of the reconstruction depends on the filter and data acquisition. Further the FBP as
 presented here, is limited to parallel beam geometry setups. There do exist other methods for fan
 beam settings that require rebinning (i.e.\ sorting the projections, such that all rays are
 parallel). However, overall the FBP leads to sharp images, and it is widely used in medical CT
 scanners~\cite{pan_why_2009}.
-
-\inlinetodo{Use something like to show back-projection and filtered back projection
-	\href{https://scikit-image.org/docs/dev/auto_examples/transform/plot_radon_transform.html} to create
-	some nice graps and include code to reproduce results. Show how FBP fails}
 
 \section{Towards the Matrix form}\label{sec:matrix_formulation}
 
@@ -1257,11 +1390,11 @@ projected and used as an update to the current guess.
 The basic Landweber iteration is a special case of gradient descent. If \(f(\mvec{c}) = \frac{1}{2}
 \norm{A\mvec{c} - \mvec{m}}_2^2\), the update can be written in terms of the gradient
 \begin{equation}
-    \mvec{c}^{(k+1)} = \mvec{c}^{(k)} - \lambda^{(k)} \nabla f(\mvec{c}^{(k)})
+	\mvec{c}^{(k+1)} = \mvec{c}^{(k)} - \lambda^{(k)} \nabla f(\mvec{c}^{(k)})
 \end{equation}
 A generalisation of the Landweber iteration can be given by
 \begin{equation}
-    \mvec{c}^{(k+1)} = \mvec{c}^{(k)} + \lambda^{(k)} DA^TM(\mvec{m} - A\mvec{c}^{(k)})
+	\mvec{c}^{(k+1)} = \mvec{c}^{(k)} + \lambda^{(k)} DA^TM(\mvec{m} - A\mvec{c}^{(k)})
 \end{equation}
 The exact algorithm and it's convergence behavior, depend on the precise choice of the matrices
 \(D\) and \(M\). The basic Landweber iteration as presented above has \(D = M = I\). If \(D =
