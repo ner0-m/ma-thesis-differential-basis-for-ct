@@ -239,11 +239,11 @@ integral along the line the ray travels along \(L\) of the function \(\mu\), see
 	\def\svgwidth{0.75\textwidth}
 	\import{./figures/nonhomogeneous_attenuation}{nonhomogeneous_attenuation.pdf_tex}
 	\caption{Model of a single X-ray (red line) going through a material with
-                homogeneous attenuation coefficient \(\mu(x)\) (abdominal section). Again \(I_0\) is
-                the initial intensity of the X-ray, \(I_1\) is the measured intensity, given by the
-                integral along the line \(L\) (i.e.\ the ray given in red) of the attenuation
-                coefficient function \(\mu(\mvec{x})\), where \(\mvec{x}\) is each point along the
-                line \(L\).}\label{fig:x-ray_nonhomogeneous_attenuation}
+		homogeneous attenuation coefficient \(\mu(x)\) (abdominal section). Again \(I_0\) is
+		the initial intensity of the X-ray, \(I_1\) is the measured intensity, given by the
+		integral along the line \(L\) (i.e.\ the ray given in red) of the attenuation
+		coefficient function \(\mu(\mvec{x})\), where \(\mvec{x}\) is each point along the
+		line \(L\).}\label{fig:x-ray_nonhomogeneous_attenuation}
 \end{figure}
 
 % Some help from https://www.fips.fi/slides/Bubba_SummerSchoolVFIP2019_1.pdf
@@ -288,11 +288,11 @@ vertical lines mark the projections taken in \autoref{fig:sinogram_example_abdom
 			\end{subfigure}
 		}}
 	\caption{Examples of sinograms. The name originates from the pattern a single points draw in
-                the sinogram. This can be seen in
-                \subref{fig:sinogram_simple_phantom}--\subref{fig:sinogram_simple_complete}. The
-                sinogram for the abdomen \subref{fig:sinogram_abdomen_phantom} used throughout the
-                chapter can be seen in \subref{fig:sinogram_abdomen_complete}. The vertical lines
-                mark the projections depicted in \autoref{fig:sinogram_example_abdomen}.
+		the sinogram. This can be seen in
+		\subref{fig:sinogram_simple_phantom}--\subref{fig:sinogram_simple_complete}. The
+		sinogram for the abdomen \subref{fig:sinogram_abdomen_phantom} used throughout the
+		chapter can be seen in \subref{fig:sinogram_abdomen_complete}. The vertical lines
+		mark the projections depicted in \autoref{fig:sinogram_example_abdomen}.
 	}\label{fig:sinogram_complete}
 \end{figure}
 
@@ -341,32 +341,35 @@ reconstruction.
 
 In the X-ray attenuation CT setup, X-rays are only considered exhibiting attenuation. However, as
 visible light, X-rays are also refracted and scattered. Methods based on refraction can measure the
-phase-shift of the X-ray. These phase-contrast imaging modalities in general provide a general
-advantage in soft-tissue contrast, as the difference in refraction index is higher for soft-tissues
-than for the attenuation coefficient. This chapter aims to introduce basic concepts on the retrieval
-of phase-contrast based imaging modules and derive the forward model used in such imaging
-modalities. Specifically, emphasize is put on the similarities in the forward model regarding X-ray
-attenuation CT\@.
+phase-shift of the X-ray. These phase-contrast imaging modalities in general provide an advantage in
+soft-tissue contrast, as the difference in refraction index is higher for soft-tissues than for the
+attenuation coefficient. This chapter aims to introduce basic concepts on the retrieval of
+phase-contrast based imaging modules and derive the forward model used in such imaging modalities.
+Specifically, emphasize is put on the similarities in the forward model regarding X-ray attenuation
+CT\@.
 
 There are different ways to measure the refraction and thus the phase-contrast. A setup, which
-gained a lot of traction lately is the setup proposed by
+gained a lot of traction lately is the setup proposed by \citeauthor*{pfeiffer_phase_2006} in
 ~\cite{pfeiffer_phase_2006,pfeiffer_hard-x-ray_2008}. The setup is based on Talbot-Lau
 interferometry. It allows both the retrieval of the X-ray refraction and scattering information
-(which can be used for dark-field imaging). The setup consists as with conventional X-ray
-attenuation imaging of the X-ray source and the detector. Additionally, 3 gratings are placed in the
-setup: the \textit{source grating} G0, the \textit{phase-grating} G1 and the \textit{analyzer
-	grating} G2. G1 is placed between the X-ray source and the object, the other two are placed
-between the object and the detector. The source grating creates sufficiently high coherence, which
-allows for a periodic interference behind the phase grating. Using the analyzer grating allows for
-conventional X-ray detectors to be used. For a detailed discussion about the exact placement of the
-gratings, see~\cite{donath_inverse_2009}.
+(which can be used for dark-field imaging). The setup described in~\cite{pfeiffer_hard-x-ray_2008}
+enables the usage of conventional X-ray sources, which was previously not possible. Hence, the basic
+setup is similar to the one conventional X-ray attenuation CT, i.e.\ a X-ray source and detector and
+the object, one wishes to scan in between. Additionally, 3 gratings are placed in the setup: the
+\textit{source grating} G0, the \textit{phase-grating} G1 and the \textit{analyzer grating} G2. G0
+is placed between the X-ray source and the object, the other two are placed between the object and
+the detector. The source grating creates sufficiently high coherence, which allows for a periodic
+interference behind the phase grating. Using the analyzer grating allows for conventional X-ray
+detectors to be used. For a detailed discussion about the exact placement of the gratings,
+see~\cite{donath_inverse_2009}.
 
-A key advantage of this grating based setup is the usage of conventional X-ray sources. This makes
-this setup suitable for (bio-) medical applications. Only recently this setup was incorporated in a
-medical grate CT scanner~\cite{viermetz_dark-field_2022}.
+A key advantage of this grating-based setup over other approaches for phase-contrast, is the
+possibility of using conventional X-ray sources. This makes this setup suitable for (bio-) medical
+applications. Hence, it was possible to incorporated in a medical grate CT
+scanner~\cite{viermetz_dark-field_2022}.
 
-The important observation in the grating-based setup, an object placed in the X-ray beam causes a
-refraction of the beam by an angle \(\alpha\) (following~\cite{donath_inverse_2009}) in the
+The important observation in the grating-based setup is, that an object placed in the X-ray beam
+causes a refraction of the beam by an angle \(\alpha\) (following~\cite{donath_inverse_2009}) in the
 \(x\)-direction. The refraction angle is connected to the differential phase-shift \(\frac{\partial
 	\Phi}{\partial x}\) by:
 \begin{equation}
@@ -376,14 +379,16 @@ refraction of the beam by an angle \(\alpha\) (following~\cite{donath_inverse_20
 Simplified, placing an object in the beam, causes a refraction, which results in a displacement of
 the interference pattern created by the gratings. And by the above formula is connected to the
 phase-shift introduced by the object. However, the interference patterns can not be spatially
-resolved by the detector. However, performing multiple measurements with a later shifted analyzer
-grating, creates an intensity modulation of the detector read-out. This is referred to as
-\textit{phase stepping}. Apart from the additional stepping necessary, the process of acquiring
-measurements is similar to the one in conventional X-ray attenuation CT\@. The different possible
-values measured using phase-stepping are illustrated in \autoref{fig:grating_setup_what_happens}.
-In this setup attenuation is reflected by drop of the average intensity. Compared to that,
-phase-shifts, leads to a lateral displacement of the interferometer pattern, and scattering reduces
-the amplitude of the oscillation.
+resolved by the detector. This can be solved by performing multiple measurements with a later
+shifted analyzer grating. This creates an intensity modulation of the detector read-out. This is
+referred to as \textit{phase stepping}. Apart from the additional stepping necessary, the process of
+acquiring measurements is the same to the one in conventional X-ray attenuation CT\@. I.e.\ the
+rotational trajectory around the object. The different possible values measured using phase-stepping
+are illustrated in \autoref{fig:grating_setup_what_happens}. All measured values are in relation to
+a reference stepping curve, acquired without any object in the X-ray beam. In this setup,
+attenuation is reflected by a drop of the average intensity. Compared to that, phase-shifts leads to
+a lateral displacement of the interferometer pattern. And scattering reduces the amplitude of the
+oscillation.
 
 \begin{figure}
 	\centering
@@ -400,8 +405,9 @@ the amplitude of the oscillation.
 		}}
 	\caption{Visualization of the measured intensity changing measured at the detector, when
 		performing phase-stepping. Attenuation is measured by a drop of the average
-		intensity value (left most plot). Phase-shift leads to a lateral shift of the
-		intensity signal (center plot). And scattering drops in amplitude (left plot).}%
+		intensity value compared to the reference signal (left most plot). Phase-shift leads
+		to a lateral shift of the intensity signal (center plot). And scattering drops in
+		amplitude (left plot). The reference signal is plotted in black for each plot.}%
 	\label{fig:grating_setup_what_happens}
 \end{figure}
 
