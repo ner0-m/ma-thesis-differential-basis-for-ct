@@ -1206,7 +1206,7 @@ as before, a sharper image can be obtained. This is referred to as the filtered 
 \begin{definition}[Filtered Back-Projection]\label{def:filtered_back_projection}
 	Let \(f\colon \Omega \to \mathbb{R}\), where \(\Omega \in \mathbb{R}^2\) sufficiently nice,
 	and \(g \coloneq \radon f\) be the Radon Transform of \(f\). Then
-	\[ g^\delta(t, \phi) \coloneq (\delta \ast g(\cdot, \phi))(t) \]
+	\[ g^\delta(t, \theta) \coloneq (\delta \ast g(\cdot, \theta))(t) \]
 	is the filtered projection. \(\delta(x) \approx \abs{x}\) is a filter, which is convolved
 	with the projection data. With the adjoint of the Radon Transform \(\radon^\ast\) as in
 	\autoref{def:back_projection}, then \(\radon^\ast g^\delta\) is the \textit{\gls{FBP}}.
@@ -1214,14 +1214,14 @@ as before, a sharper image can be obtained. This is referred to as the filtered 
 
 The \gls{FBP} for a different number of projection angles can be seen in
 \autoref{fig:filtered_backprojection_shepp_logan}. It is clearly visible, that a large amount of
-projection angles are necessary to reconstruct a pleasing image. The filtered Radon Transform of a
+projection angles is necessary to reconstruct a pleasing image. The filtered Radon Transform of a
 measurement can be seen on the bottom row on the left of
 \autoref{fig:filtered_backprojection_shepp_logan}. In this case the filter is a so called
-\textit{ramp} filter (depicted on the bottom right of
+\textit{ramp} filter (plotted on the bottom right of
 \autoref{fig:filtered_backprojection_shepp_logan}). Other common filters include the
-Ram-Lak~\cite{ramachandran_three-dimensional_1971} or the Shepp-Logan filter
-\cite{shepp_fourier_1974}. The later is also depicted on the plot together with the ramp filter. The
-Shepp-Logan filter includes a smoothing filter to deal better with noise.
+Ram-Lak~\cite{ramachandran_three-dimensional_1971} or the Shepp-Logan
+filter~\cite{shepp_fourier_1974}. The later is also depicted on the plot together with the ramp
+filter. The Shepp-Logan filter includes a smoothing filter to deal better with noise.
 
 \begin{figure}
 	\centering
@@ -1272,27 +1272,27 @@ scanners~\cite{pan_why_2009}.
 As it can be seen in the previous section, the \gls{FBP} leads to overall sharp results. But
 iterative reconstruction algorithm generally outperform it. Importantly, with iterative
 reconstruction algorithms, the X-ray dose can be reduced~\cite{willemink_evolution_2019}. This is
-desired as exposure to X-rays involves health risks.
+desired, as exposure to X-rays involves health risks.
 
-Before, however, iterative reconstruction algorithms are presented, one needs the correct problem
-statement. So far the forward model \(A\) is still assumed to be continuous. However, this is not
-the desired form for those group of algorithms. Hence, this section is a short run through the steps
-that are necessary to go from the continuous definition of the inverse problem as given in
+Before, iterative reconstruction algorithms are presented, one needs the correct problem statement.
+So far the forward model \(A\) is still assumed to be continuous. However, this is not the desired
+form for those group of algorithms. Hence, this section is a short run through the steps that are
+necessary to go from the continuous definition of the inverse problem as given in
 \autoref{def:inverse_problem} to a discrete version.
 
-As already shown in¸\autoref{def:permissible_representation}, the signal \(f\) can be described as
+As already shown in \autoref{def:permissible_representation}, the signal \(f\) can be described as
 \begin{equation}
 	f \approx \near{f} = \sum_{k=1}^{N} c_k \varphi(\cdot - \mvec{x}_k) = \sum_{k=1}^{N} c_k \varphi_k
 \end{equation}
-choosing any zero centered symmetric basis function for \(\varphi\) (e.g.\ voxel basis, blobs, or
-B-Splines). \(\varphi_k\) is only a shorted notation. Note, here a linearized index is used not a
-index vector \(\mvec{k}\) as it is shown \autoref{def:permissible_representation}. They are
-equivalent, however, this notation will come on handy here.
+choosing any zero centered symmetric basis function for \(\varphi\) (e.g.\ voxel, blob, or B-Splines
+basis functions). \(\varphi_k\) is only a shorthand notation. Note, here a linearized index is used
+not a index vector \(\mvec{k}\) as it is shown \autoref{def:permissible_representation}. They are
+equivalent. However, in this case, the linear index will come in handy down the road.
 
-Using the notation given in \autoref{def:forward-model}, i.e. \(J\) is a set of scalar measurements,
-and a single scalar measurements \(m_j \in \mathbb{R}\) with \(j \in \lbrace 1, \dots, J \rbrace\),
-the scalar measurements can be approximated using the permissible representation of \(f\) using the
-physical model \(\mathscr{M}_j\):
+Using the notation given in \autoref{def:forward-model}, i.e. Left \(J\) is a set of scalar
+measurements, and a single scalar measurements \(m_j \in \mathbb{R}\) with \(j \in \lbrace 1, \dots,
+J \rbrace\). Then the scalar measurements can be approximated using the permissible representation
+of \(f\) using the physical model \(\mathscr{M}_j\):
 \begin{equation}
 	m_j \approx \mathscr{M}_j\hat{f} = \sum_{k=1}^{I} c_k \mathscr{M}_j\varphi_k
 \end{equation}
@@ -1307,8 +1307,7 @@ This is possible due to the linearity of the forward model. \(a_{ji} \coloneq
 	\caption{Visualization of the idea behind the matrix form of the problem regarding
 		tomographic reconstruction. The problem and measurement domain is discretized and
 		then linearized to a vector. Here the vector for a single measurement is given as
-		\(a_{1,i}\). Weights closer to the ray can be expected have a higher
-		contribution.}\label{fig:matrix_row}
+		\(a_{1,i}\) rearranged to depict the image.}\label{fig:matrix_row}
 \end{figure}
 
 For a single measurements \(m_j\), the contributions can be gathered in a single vector \(\mvec{a}_j
@@ -1323,7 +1322,7 @@ visualization the sparsity of the contribution vectors, as already in this simpl
 roughly half the entries of the row are \(0\).
 
 Now, both the measurements and the coefficients can be stacked to a vector, i.e.\ \(\mvec{m} = (m_j)
-\in \mathbb{R}^J\) and \(\mvec{c} = (c_i) \in \mathbb{R}^I\) respectively. Now, a single measurement
+\in \mathbb{R}^J\) and \(\mvec{c} = (c_i) \in \mathbb{R}^I\) respectively. Then a single measurement
 can be written as a scalar product of the coefficient vector and the contribution vector. But taking
 it a step further. A linear system can be defined:
 \begin{equation}\label{eq:system_lin_equation}
@@ -1336,9 +1335,10 @@ it a step further. A linear system can be defined:
 	\end{bmatrix} \mvec{c} \eqcolon A \mvec{c}
 \end{equation}
 
-This is a regular system of linear equation, it partitions the problem in the measurements, the
-\textit{system matrix} \(A \in \mathbb{R}^{J \times I}\) and the coefficient vector \(\mvec{c}\).
-It should be noted that it is equivalent to solve for \(mvec{x}\) and solve for \(f\).
+This is a regular system of linear equations. It partitions the problem in the measurements, the
+\textit{system matrix} \(A \in \mathbb{R}^{J \times I}\) and the coefficient vector \(\mvec{c}\). It
+should be noted that it is equivalent to solve for \(mvec{c}\) and solve for \(f\). As from now on
+the discretized version is assumed, the one seeks to solve for the coefficient vector \(\mvec{c}\).
 
 As the system matrix is the model of the system of linear equations is it tremendously important.
 The system matrix represents not only the physical process and its approximation. But also the
@@ -1356,14 +1356,16 @@ setups better. Such settings include low number of available projections. As des
 desirable to reduce the number of projections, to lower the X-ray exposure.
 
 A common approach to handle ill-posed problems is to considered least squares problem instead.
-\begin{definition}[Least Squared Problem]\label{def:least_squares_problem}
+\begin{definition}[Least Squares Problem]\label{def:least_squares_problem}
 	The least squares problem is defined as
 	\[ \argmin_{\mvec{c}} \frac{1}{2} \norm{A\mvec{c} - \mvec{m}}^2_2 \]
 	The solution to the least squares problem is given by the normal equation
 	\[ A^T A \mvec{c} = A^T \mvec{m} \]
 \end{definition}
 Note here, that \(A\mvec{c}\) is considered the forward projection and \(A^T \mvec{m}\) is the
-backward projection.
+backward projection. The least squares problem also already solves on the issues arrising from the
+ill-posedness of a problem. If no solution exists, the corresponding least squares problem can solve
+it~\cite{hansen_discrete_2010}.
 
 The system matrix is usually too large to store in system memory. Therefore, algorithms are
 necessary, which do not require the knowledge of the complete system matrix. The software computing
@@ -1413,43 +1415,40 @@ A generalisation of the Landweber iteration can be given by
 	\mvec{c}^{(k+1)} = \mvec{c}^{(k)} + \lambda^{(k)} DA^TM(\mvec{m} - A\mvec{c}^{(k)})
 \end{equation}
 The exact algorithm and it's convergence behavior, depend on the precise choice of the matrices
-\(D\) and \(M\). The basic Landweber iteration as presented above has \(D = M = I\). If \(D =
-\frac{1}{J} \text{diag}(\norm{\mvec{a}_j}^2_2)^{-1}\), with \(\norm{\mvec{a}_j}^2_2\) being the
-squared \(l_2\) norm of the \(j\)th row of the system matrix, the method is known as
+\(D\) and \(M\). The basic Landweber iteration as presented above has \(D = M = I\). If \(M = I\)
+and \(D = \frac{1}{J} \text{diag}(\norm{\mvec{a}_j}^2_2)^{-1}\), with \(\norm{\mvec{a}_j}^2_2\)
+being the squared \(l_2\) norm of the \(j\)th row of the system matrix, the method is known as
 Cimmino's~\cite[Chapter~6.1]{hansen_discrete_2010}.
 
-Both the vanilla Landweber Iterations and Cimmino's method are known to exhibit semiconvergence.
-Semiconvergence is a term coined by Natter~\cite{natterer_mathematics_1986}, however, I find the
-explanation given by \citeauthor*{hansen_discrete_2010} in~\cite[Chapter~6]{hansen_discrete_2010}
-to be very good.
+Both the vanilla Landweber Iterations and Cimmino's method are known to exhibit semiconvergence,
+thou it is quite slow. Semiconvergence is a term coined by Natter~\cite{natterer_mathematics_1986},
+however, I find the explanation given by \citeauthor*{hansen_discrete_2010}
+in~\cite[Chapter~6]{hansen_discrete_2010} to be very good.
 
 \begin{definition}[Semiconvergence]\label{def:semiconvergence}
 	Iterative Reconstruction algorithms produce a sequence of approximate solutions
-	\(\mvec{c}^{(1)} \mvec{c}^{(2)}\mvec{c}^{(3)}\mvec{c}^{(4)}, \cdots\). An algorithm is said
-	to exhibit semiconvergence, if the first many \(\mvec{c}^{(k)}\) for \(k = 1, 2, \cdots\),
-	resembles the regularized exact solution, but starts to diverge again for later iterations.
+	\(\mvec{c}^{(1)}, \mvec{c}^{(2)}, \mvec{c}^{(3)}, \mvec{c}^{(4)}, \dots\). An algorithm is
+	said to exhibit semiconvergence, if the first many \(\mvec{c}^{(k)}\) for \(k = 1, 2,
+	\dots\) resembles the regularized solution, but diverge again for later iterations.
 \end{definition}
-
-The semiconvergence of the Landweber Itations is quite slow.
 
 \subsection{Algebraic Reconstruction Technique}\label{subsec:algebraic_reconstruction_technique}
 
-The \glsfirst{ART} was proposed by \citeauthor{gordon_algebraic_1970}\cite{gordon_algebraic_1970}.
-However, outside of tomography the method is often knows as Kaczmarz
-method~\cite{kaczmarz_approximate_1993}. Though, \gls{ART} is a slight modification of the original
-Kaczmarz method.
+The Algebraitc Reconstruction Technique (ART) was proposed by
+\citeauthor*{gordon_algebraic_1970}~\cite{gordon_algebraic_1970}. However, outside of tomography the
+method is often knows as Kaczmarz method~\cite{kaczmarz_approximate_1993}. Though, \gls{ART} is a
+slight modification of the original Kaczmarz method.
 
 The basic idea of the algorithm, is to view each row of the system matrix as a hyperplane and update
-the solution by iteratively project it onto the hyperplane. If the system matrix is square \(I = J\)
-and of full rank, all hyperplanes intersect at one point and \gls{ART} will converge to it. However, if
-the system is overdetermined (\(J > I\)) and noisy, which it usually is, the hyperplanes will not
-intersect at a single point, but rather at in close proximity to each other.
+the solution by iteratively projecting it onto the next hyperplane. If the system matrix is square
+\(I = J\) and of full rank, all hyperplanes intersect at one point and \gls{ART} will converge to
+it. However, if the system is overdetermined (\(J > I\)) and noisy, which it usually is, the
+hyperplanes will not intersect at a single point, but rather at in close proximity to each other.
 
 \begin{definition}[Algebraic Reconstruction Technique]\label{def:art}
 	Given the system of linear equations \(A\mvec{c} = \mvec{m}\), and an initial solution guess
-	\(\mvec{c}^{(0)} \in \mathbb{R}^I\) (i.e.\ the zero vector). Then the solution can be
-	iteratively updated for
-	\(k = 0, 1, \dots\)
+	\(\mvec{c}^{(0)} \in \mathbb{R}^I\) (e.g.\ the zero vector). Then the solution can be
+	iteratively updated for \(k = 0, 1, 2, \dots\)
 	\[
 		\mvec{c}^{(k+1)} = \mvec{c}^{(k)} + \lambda^{j(k)} \frac{\mvec{m}_{j(k)} - \langle \mvec{a}_{j(k)}, \mvec{c}^{j(k)} \rangle}{\norm{\mvec{a}_{j(k)}}}\mvec{a}_{j(k)}
 	\]
@@ -1458,12 +1457,12 @@ intersect at a single point, but rather at in close proximity to each other.
 	\(j(k) = (k \mod J) + 1\), but it can also be randomized~\cite{strohmer_randomized_2007}.
 \end{definition}
 
-The original Kaczmarz method had \(\lambda(k) = 1\, \forall k \in \mathbb{N}\), lowering the
+The original Kaczmarz method had \(\lambda(k) = 1\), \(\forall k \in \mathbb{N}\), lowering the
 relaxation parameter can improve the reconstruction in noisy settings. Further, the method can be
 written as a Landweber-type method~\cite{hansen_discrete_2010}, but it's rather uncommon.
 
 The convergence of \gls{ART} is quite fast for the first couple of iterations, but tapers off after
-that and becomes quite slow~\cite{hansen_discrete_2010}. However, there do exist problems if the
+that and becomes quite slow~\cite{hansen_discrete_2010}. Moreover, there do exist problems if the
 hyperplanes do not intersect at a single points. \gls{ART} also exhibits semiconvergence.
 
 Compared to the Landweber iterations given in the previous section, the Kaczmarz methods accesses
@@ -1473,16 +1472,16 @@ hand Landweber type methods access all rows of the system matrix simultaneously.
 
 \section{Regularization}\label{sec:regularization}
 
-So far all solvers presented here have only looked at the least squares problem. I.e.\ they only
+So far all solvers presented here, have only looked at the least squares problem. I.e.\ they only
 concern themselves with the forward model and do not incorporate any further constrains. However,
 usually we have some information about the images we wish to reconstruct. For example, one would
 expect them to be smooth. One hopes that regularization stabilizes the solution. In the sense that
 small perturbations by noise in the measurements, still yields solutions close to the exact
-solutions.
+solutions. Thus dealing with the lack of stability of ill-posed problems.
 
 \begin{definition}[Regularized Problem]\label{def:regularized_problem}
 	Let \(R(\mvec{c})\) be a \textit{penalty function} or \textit{regularizer}, then the least
-	square problem can be expanded to
+	squares problem can be expanded to
 	\[
 		\argmin_{\mvec{c}} \frac{1}{2} \norm{A \mvec{c} - \mvec{m}}_2^2 + \lambda R(\mvec{c})
 	\]
@@ -1499,8 +1498,7 @@ described as
 Usually, \(R\) is chosen to be non-linear and often is expected to be continuously differentiable.
 This equation has three parts. The first \(T(\mvec{c})\) is the data term. It measures how well a
 prediction models the noisy data. However, we do not want to fit the noise in the data. This is the
-second, the regularization term. \(\lambda\) controls the importance or the balance of each the
-previous terms.
+second, the regularization term. \(\lambda\) controls the importance or the balance of the terms.
 
 \subsection{Tikhonov Regularization}\label{subsec:tikhonov_regularization}
 
@@ -1517,7 +1515,7 @@ norm.
 A common case is a simple scaling function i.e.\ \(\Gamma = \alpha I\), thus the Tikhonov
 regularizer penalizes \(\mvec{c}\) with large \(l_2\) norm. Therefore, it is also referred to as
 \(l_2\)-regularization. But also the first and second derivative operator is commonly
-used~\cite{golub_tikhonov_1999} The hope is, that Tikhonov regularization suppresses high-frequency
+used~\cite{golub_tikhonov_1999}. The hope is, that Tikhonov regularization suppresses high-frequency
 noise.
 
 On a further note, the Tikhonov regularization can be reformulated to a least squares problem again
@@ -1553,7 +1551,7 @@ used.
 Another common regularization method is based on the \(l_1\) norm, i.e.\ the sum of absolute
 values.
 \begin{definition}[\(l_1\)-Regularization]\label{def:l1_regularization}
-	The penalty term for Tikhonov regularization is given by
+        The penalty term for \(l_1\) based regularization is given by
 	(compare~\cite{tibshirani_regression_1996,tibshirani_lasso_2013,beck_fast_2009})
 	\[
 		R(\mvec{c})_{l_1} = \norm{\mvec{c}}_1
@@ -1562,8 +1560,8 @@ values.
 Compared to the \(l_2\) regularization, the \(l_1\) regularization enforces sparsity. I.e.\ the
 assumption is that the representation is in some way sparse, and should be enforced. Also, it is
 more robust to outliers~\cite{beck_fast_2009}. For information on how these problems can be solved
-see \citeauthor{beck_fast_2009}~\cite{beck_fast_2009}. As it will be used in the experimental
-sections, specifically \gls{ISTA} and  \gls{FISTA}.
+see~\cite{beck_fast_2009}. Two common algorithms are \gls{ISTA} and improving on the previous
+\gls{FISTA}.
 
 \begin{definition}[ISTA]\label{def:ista}
 	The update step for \gls{ISTA} is given by
@@ -1576,9 +1574,9 @@ sections, specifically \gls{ISTA} and  \gls{FISTA}.
 		\mathscr{T_\alpha}(\mvec{c})_j = \max(\abs{\mvec{c}_i} - \alpha, 0) \sign(\mvec{c}_j)
 	\]
 \end{definition}
-Similar to Landweber like methods, the residual of the forward projection current prediction and the
-measurement vector is back projected. Next, the projected error is subtracted from the current
-estimate and then the shrinkage operator is applied.
+Similar to Landweber like methods, the residual of the forward projection of the current prediction
+and the measurement vector is back projected. Next, the projected error is subtracted from the
+current estimate and then the shrinkage operator is applied.
 
 However, the convergence of \gls{ISTA} is rather slow (compare~\cite{beck_fast_2009} and its
 references). \gls{FISTA} improves on the convergence of \gls{ISTA}, but it is out of scope for this
