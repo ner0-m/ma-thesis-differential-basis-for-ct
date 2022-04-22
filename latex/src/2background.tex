@@ -720,10 +720,12 @@ are inherently discrete. Hence, one wishes to represent a signal in a discrete f
 
 \begin{definition}[Permissible representation]\label{def:permissible_representation}
 	Let \(f\colon \mathbb{R}^n \to \mathbb{R}\) be a \(n\)-dimensional continuous function,
-	\(N \in \mathbb{N}\) be a positive integer and \(\varphi_n\) a set basis function for
-	\(1 \leq n \leq N\). Then the signal \(f\) can be approximated as a linear combination
-	of these basis functions and the coefficients \(c_n\) (c.f.\ \cite{herman_basis_2015}):
+	\(N \in \mathbb{N}\) be a positive integer and \(\varphi_k\) a set basis function for
+	\(1 \leq k \leq N\). Then the \textit{permissible representation} of the signal \(f\) is
+	given by
 	\[ f \approx \near{f}(\mvec{x}) = \sum_{k=1}^{N} c_k \varphi_k(\mvec{x}) \]
+	\(\near{f}\) is a linear combination of the basis functions \(\varphi_k\) and the
+	coefficients \(c_k\) (c.f.\ \cite{herman_basis_2015}).
 \end{definition}
 
 \begin{figure}
@@ -760,9 +762,7 @@ can be reformulated:
 \begin{equation}
 	\near{f}(\mvec{x}) = \sum_{\mvec{k} \in \mathbb{Z}^n} c_{\mvec{k}} \varphi(\mvec{x} - \mvec{x}_{\mvec{k}})
 \end{equation}
-This definition follows the notation given in~\cite{momey_new_2011}. This method to discretize a
-signal is called \textit{series expansion} and is described in detail in
-e.g.\ \cite{herman_basis_2015}.
+This definition follows the notation given in~\cite{momey_new_2011}.
 
 With that, only a finite number of points are necessary to represent a signal, at least under the
 assumption that functions have compact support. Hence, a discrete representation is found. But the
@@ -772,16 +772,16 @@ investigate how the permissible representation behaves under certain transformat
 
 As it is an important transformation, a closer look is taken at Radon Transformation. Applying the
 Radon Transform yields the following:
-\[ \radon\near{f}(\mvec{x}) = \radon\left( \sum_{\mvec{k} \in \mathbb{Z}^n} c_{\mvec{k}} \varphi(\mvec{x} - \mvec{x}_{\mvec{k}}) \right) \]
+\begin{equation}
+	\radon\near{f}(\mvec{x}) = \radon\left( \sum_{\mvec{k} \in \mathbb{Z}^n} c_{\mvec{k}} \varphi(\mvec{x} - \mvec{x}_{\mvec{k}}) \right)
+\end{equation}
 Due to the linearity of the Radon Transform this is equivalent to
-\[ \radon\hat{f}(\mvec{x}) = \sum_{\mvec{k} \in \mathbb{Z}^n} c_{\mvec{k}}\radon\left( \varphi(\mvec{x} - \mvec{x}_{\mvec{k}}) \right) \]
+\begin{equation}
+	\radon\hat{f}(\mvec{x}) = \sum_{\mvec{k} \in \mathbb{Z}^n} c_{\mvec{k}}\radon\left( \varphi(\mvec{x} - \mvec{x}_{\mvec{k}}) \right)
+\end{equation}
 Put into natural language, the Radon transformation applied to the permissible representation, only
 act upon the basis function. Hence, it is sufficient to study, how the Radon transformation acts
 upon the individual basis function.
-
-Note that this holds for any linear physical model. Notably, this holds for the X-ray transform and
-the first derivative of the Radon transform. But it is also true for the physical models behind the
-applications discussed in the previous chapter.
 
 The key takeaway, is that the linear operators, such as the forward models related to the imaging
 modalities discussed in \autoref{chap:imaging_modalities}, or the derivative operator only act on
@@ -813,14 +813,14 @@ Usually, it is referred to as pixel basis function for two-dimensions, and voxel
 three-dimensional case. However, to be agnostic, from here on it will be referred to as voxel basis
 for any dimension, expect if explicitly the two-dimensional case is referred to.
 
-The voxel basis function is a piecewise linear function. The voxel basis function is most likely the
-most widely used basis function. Most literature assumes the voxel basis function implicitly. A
-illustration of the permissible representation of a signal using the voxel basis function can be
-seen in \autoref{fig:permissible_representation_pixel}.
+The voxel basis function is a piecewise linear function. It is most likely the most widely used
+basis function. Most literature assumes the voxel basis function implicitly. An illustration of the
+permissible representation of a signal using the voxel basis function can be seen in
+\autoref{fig:permissible_representation_pixel}.
 
 The centered voxel basis function of unit step width, is given by:
 \begin{equation}\label{eq:voxel_basis_fn}
-	\varphi^{\text{pixel}}(\mvec{x}) = \Pi(\mvec{x})
+	\varphi^{\text{pixel}}(\mvec{x}) = \Pi(\mvec{x}) =
 	\begin{cases}
 		1, \abs{\mvec{x}} < \frac{1}{2}           \\
 		\frac{1}{2}, \abs{\mvec{x}} = \frac{1}{2} \\
@@ -835,8 +835,8 @@ The voxel basis function for the one-dimensional case is just the step function 
 origin. It can be seen in \autoref{fig:pixel_basis_function_1d}. Approximating a signal using the
 voxel basis function is equivalent to averaging the values of a certain region. Or, phrased
 differently, is equivalent to the nearest neighbor interpolation. This is shown in
-\autoref{fig:pixel_basis_approx_fn}. For a two-dimensional signal, an example is given in
-\autoref{fig:permissible_representation_idx}.
+\autoref{fig:pixel_basis_approx_fn}. For a two-dimensional signal, an illustrative example is given
+in \autoref{fig:permissible_representation_idx}.
 
 \begin{figure}
 	\centering
@@ -880,9 +880,10 @@ in~\cite{toft_radon_1996}. However, usually approximates are used. Some of these
 \section{Blob Basis}\label{sec:blob_basis}
 
 First introduced by~\citeauthor*{lewitt_multidimensional_1990}
-in~\cite{lewitt_multidimensional_1990}, spherically-symmetric volume elements (often referred to as
-blobs) are an alternative to the pixel basis.~\cite{lewitt_alternatives_1992} describes how blobs
-can be used in iterative reconstruction algorithms as a basis instead of pixels.
+in~\cite{lewitt_multidimensional_1990} in \citeyear{lewitt_multidimensional_1990},
+spherically-symmetric volume elements (often referred to as blobs) are an alternative to the pixel
+basis.~\cite{lewitt_alternatives_1992} describes how blobs can be used in iterative reconstruction
+algorithms as a basis instead of pixels.
 
 Blob basis functions have been adopted in multiple different fields. Among others electron
 microscopy~\cite{marabini_3d_1998, garduno_optimization_2001}, positron emission tomography
@@ -894,8 +895,8 @@ trees~\cite{zhou_blob-based_2008}, breast tomosynthesis~\cite{wu_breast_2010}, r
 artifacts~\cite{levakhina_two-step_2010} or computed laminography~\cite{trampert_spherically_2017}.
 
 Generally, many fields report increased accuracy or improved handling of artifacts. In other fields,
-such as phase-contrast CT, blobs enable the usage of iterative reconstructions without an extra step
-of numerical differentiation.
+such as differential phase-contrast CT, blobs enable the usage of iterative reconstructions without
+an extra step of numerical differentiation.
 
 \begin{figure}
 	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
@@ -931,18 +932,18 @@ The influence of the parameters \(\alpha\) and \(m\) is shown in
 should be clear how important the exact choice of parameters is.
 
 Regarding the parameter \(m\), the blob is not continuously differentiable if \(m = 0\). For \(m >
-1\) blob is continuous with \(m - 1\) continuous derivatives, compare~\cite{matej_practical_1996}.
-They also advise using \(m > 2\) such that the first derivative is also continuous.
+1\) blob is continuous with \(m - 1\) continuous derivatives (compare~\cite{matej_practical_1996}).
+There it is also advised to use \(m > 2\), such that the first derivative is also continuous.
 
-Regarding, the other parameters, \(a\) and \(\alpha\),~\cite{matej_practical_1996} already conducted
-investigations regarding good choices of \(\alpha\) and \(a\) for Cartesian grids including an
-optimization method. A key take-away is that the exact choice depends highly on the concrete
-problem. However, they propose a \textit{standard blob} with parameters with \(a = 2\) and \(\alpha
-= 10.4\). The exact choice of \(\alpha\) is this case is motivated by the aim to find a band-limited
-signal representation. The rationale for this is laid out in~\cite{lewitt_multidimensional_1990}
-and also discussed in~\cite{benkarroum_blob_2015}. E.g.~\cite{xu_investigation_2012} follows this
-specific value. But some others use slightly different values for
-\(\alpha\).~\cite{kohler_iterative_2011} uses \(\alpha = 10.826\) and
+Regarding, the other parameters, \(a\) and \(\alpha\), \citeauthor{matej_practical_1996}
+in~\cite{matej_practical_1996} already conducted investigations regarding good choices of \(\alpha\)
+and \(a\) for Cartesian grids including an optimization method. A key take-away is that the exact
+choice depends highly on the concrete problem. However, they propose a \textit{standard blob} with
+parameters with \(a = 2\) and \(\alpha = 10.4\). The exact choice of \(\alpha\) is this case is
+motivated by the aim to find a band-limited signal representation. The rationale for this is laid
+out in~\cite{lewitt_multidimensional_1990} and also discussed in~\cite{benkarroum_blob_2015}.
+E.g.~\cite{xu_investigation_2012} follows this specific value. But some others use slightly
+different values for \(\alpha\).~\cite{kohler_iterative_2011} uses \(\alpha = 10.826\) and
 ~\cite{levakhina_three-dimensional_2014} \(\alpha = 10.83\). It should be noted
 that~\cite{benkarroum_blob_2015} recommends the use of \(\alpha = 13.738507\) and \(a = 2.453144\).
 However, these are not used throughout this thesis, as the computational burden keeps growing with a
@@ -1047,7 +1048,7 @@ They differ in the approximation of the evaluation of the X-ray transform. The f
 footprint of the B-Splines, where the later rely on the first derivative of the B-Spline basis
 function.
 
-Now, first couple of definitions and properties are given.
+Now, first a couple of definitions and properties are given.
 \begin{definition}[B-Spline]
 	The most basic definition of a B-Spline of order \(0\) and unit width is the step function:
 	\[
@@ -1059,14 +1060,14 @@ Now, first couple of definitions and properties are given.
 		\end{cases}
 	\]
 	Note that B-Splines of order \(0\) is just the voxel basis function. This makes the
-	B-Splines a nice generalization of the voxel basis function. Then the univariate B-Spline of
+	B-Splines a nice generalization of the voxel basis function. The univariate B-Spline of
 	order \(d\) can be constructed by \(d + 1\) convolution of
 	\(\beta^0\) (compare~\cite{momey_new_2011}):
 	\[
 		\beta^d(x) = \beta^0 * \beta^{d-1}(x) = \underbrace{\beta^0 * \dots * \beta^0(x)}_{d+1 \text{convolution terms}}
 	\]
 	See \autoref{fig:bspline_basis_1d} for illustrations of the B-Spline basis functions of
-	different order.
+	different order from \(0\) up to \(3\).
 \end{definition}
 
 \begin{figure}
@@ -1098,44 +1099,42 @@ Another way to compute the B-Spline basis of order \(d\) is given in~\cite{unser
 \begin{equation}
 	\beta^d(x) = \sum_{i=0}^{d+1} \frac{(-1)^i}{n!} \binom{d+1}{i}(x - i)^d\Pi(x - i)
 \end{equation}
-where \(\binom{d+1}{i}\) is the binomial coefficient.
-
-The derivative is again B-Spline of order \(d-1\) (compare~\cite{unser_splines_1999}):
+where \(\binom{d+1}{i}\) is the binomial coefficient. The derivative is again B-Spline of order
+\(d-1\) (compare~\cite{unser_splines_1999}):
 \begin{equation}
 	\frac{\partial \beta^d(x)}{\partial x} = \beta^{d-1}\left(x + \frac{1}{2}\right) -
 	\beta^{d-1}\left(x - \frac{1}{2}\right)
 \end{equation}
-B-Splines are continuously differentiable up to order \(d-1\).
-
-B-Splines are separable. Hence, \(n\)-dimensional B-Splines, often referred to as tensor product
-B-Splines. They can be constructed the following way:
+B-Splines are continuously differentiable up to order \(d-1\). B-Splines are separable. Hence,
+\(n\)-dimensional B-Splines, often referred to as tensor product B-Splines. They can be constructed
+the following way:
 \begin{equation}
 	\beta^d(\mvec{x}) = \prod^n_{i=1} \beta^d(\mvec{x}_i)
 \end{equation}
 where \(\mvec{x} \in \mathbb{R}^n\).
 
-B-Splines have a couple of really attractive properties. B-Splines are the shortest and smoothest
-scaling functions for a given order of approximation~\cite{momey_b-spline_2012}. They are close to a
-Gaussian function, with a sufficiently large \(d\)~\cite{momey_b-spline_2012}, all while preserving
-compactness. Hence, they tend to spherically-symmetric functions, while preserving local support.
-Due to these properties, \citeauthor*{momey_new_2011}\cite{momey_new_2011} argue for B-Splines over
-blobs. Further, they note the need to tune the parameters for of blobs for optimal results, which
-adds complexity. This is an important point. During reconstruction, there are many, so-called
-hyperparameters, such as the blob basis parameters. With more parameters, the complexity and the
-possible combination of parameter choices grows quickly. Hence, finding the optimal or at least good
-hyperparameters for a reconstruction gets harder. Also finding default values can be harder, which
-also increases complexity.
+B-Splines have a couple of really attractive properties. Among others, B-Splines are the shortest
+and smoothest scaling functions for a given order of approximation~\cite{momey_b-spline_2012}. They
+are close to a Gaussian function, with a sufficiently large order \(d\)~\cite{momey_b-spline_2012},
+all while preserving compactness. Hence, they tend to spherically-symmetric functions, while
+preserving local support. Due to these properties, \citeauthor*{momey_new_2011}\cite{momey_new_2011}
+argue for B-Splines over blobs. Further, they note the need to tune the parameters for of blobs for
+optimal results, which adds complexity. This is an important point. During reconstruction, there are
+many, so-called hyperparameters, such as the blob basis parameters. With more parameters, the
+complexity and the possible combination of parameter choices grows quickly. Hence, finding the
+optimal or at least good hyperparameters for a reconstruction gets harder. Also finding default
+values can be harder, which also increases complexity.
 
 Importantly, blobs fail to satisfy the partition of unity~\cite{nilchian_fast_2013}. A basis
 functions that satisfies the partition of unity, can approximate any input function arbitrarily
 close.~\citeauthor*{nilchian_fast_2013}~\cite{nilchian_fast_2013} show the impact of the property
-for tomographic reconstruction. They outperform blob in a similar setting in terms of reconstruction
-quality.
+for tomographic reconstruction. They show how B-Splines outperform the blob basis functions in a
+similar setting in terms of reconstruction quality.
 
 According to~\cite{momey_spline_2015}, quadric (order \(2\)) B-Splines are around as accurate as the
-blob basis function. Though as mentioned above, with growing order, the B-Splines tent to
-spherically-symmetric functions, many such
-as~\cite{momey_new_2011,momey_b-spline_2012,momey_spline_2015, nilchian_fast_2013} restrict
+blob basis function. Even though as mentioned above, the B-Splines tent to spherically-symmetric
+functions, many such
+as~\cite{momey_new_2011,momey_b-spline_2012,momey_spline_2015,nilchian_fast_2013} restrict
 themselves to B-Splines of order \(3\). This seems to be an optimum for accuracy and computation
 cost, as larger orders have an increased footprint and therefore increase the necessary amount of
 computation.
