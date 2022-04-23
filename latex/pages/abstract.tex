@@ -8,14 +8,15 @@ Numerous applications in engineering can be mathematically described by so-calle
 can be described as such. One large application is \textit{tomographic reconstruction}. There, the
 observed measurements are always a finite set of projections. Tomographic reconstruction covers
 important imaging modalities such as X-ray attenuation computed tomography (CT). CT scanners based
-on X-ray attenuation have been a major innovation in medical diagnostics. It provides a way to
-non-intrusively obtain images from the inside of objects. However, it is known that X-ray
-attenuation based imaging modalities lack soft-tissue contrast \cite{pfeiffer_phase_2006}. Other
-imaging modalities can overcome this issue, on example is differential phase-contrast CT.
+on X-ray attenuation have been a major innovation in medical diagnostics. X-ray attenuation CT
+provides a way to non-intrusively obtain images from the inside of objects. However, it is known
+that X-ray attenuation based imaging modalities lack soft-tissue
+contrast~\cite{pfeiffer_phase_2006}. Other imaging modalities can overcome this issue, one example
+is differential phase-contrast CT\@.
 
 No matter the exact imaging modalities, in order to find a solution to the inverse problem in the
 field of tomographic reconstruction, the problem domain has to be discretized. A common approach is
-the \textit{series expansion}. There the original signal, is described by a linear combination of a
+the \textit{series expansion}. Here the original signal, is described by a linear combination of a
 coefficient vector with a set of basis functions. Arguably, the most common choice of basis function
 is the pixel (or voxel) basis function. Other alternatives have been proposed, such as
 \textit{spherically-symmetric} (blob)~\cite{lewitt_multidimensional_1990} or \textit{B-Spline}
@@ -39,14 +40,14 @@ signal in the problem domain, such as differential phase-contrast CT\@.
 
 In the scope of this thesis, two such projectors are implemented for the tomographic reconstruction
 framework \textit{elsa}. One projector is based on spherically-symmetric and the other on B-Spline
-basis functions. Two different projections are implemented to firstly, lay the foundation for
+basis functions. Two different projectors are implemented to firstly, lay the foundation for
 first-class support of differential phase-contrast CT in elsa. But secondly, ensure this approach is
 feasible.
 
 Both projectors significantly outperform proven projector methods such as proposed by
 \citeauthor*{siddon_fast_1985}~\cite{siddon_fast_1985} or
 \citeauthor*{joseph_improved_1982}~\cite{joseph_improved_1982} in terms of accuracy. Typical
-artifacts present in other kind of projectrs are not visible. Both the forward projection and
+artifacts present in other kind of projectors are not visible. Both the forward projection and
 reconstructions yield better results in multiple different cases. However, due the overlapping
 nature of the basis functions, the computational burden is increased. This is especially evident for
 the three-dimensional case.
