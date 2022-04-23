@@ -45,7 +45,7 @@ function \(f\).
 \chapter{Imaging Modalities}\label{chap:imaging_modalities}
 
 Numerous fields boil down to a very similar problem statement: based on a given measurement, how can
-one retrieve the original measured object, assuming the measurement process is known. This is also
+one retrieve the original measured object, assuming the measurement process is known? This is also
 often referred to as reconstruction form projections~\cite{herman_basis_2015}. This is precisely,
 the definition of reconstruction used throughout this thesis.
 
@@ -111,20 +111,20 @@ However, if the third property is violated, the solutions to a system with two c
 
 From a practical point this is quite important. Imagine two blurred images of the same scene, that
 only differ slightly from one another. If the stability criterion is violated, the solution to the
-inverse problem trying to deblur the images, need not be close to each other. Hence, proper care
+inverse problem trying to deblur the images, needs not be close to each other. Hence, proper care
 needs to be taken in the development of algorithms, that search for solutions for the inverse
 problem. See \citeauthor{hansen_discrete_2010}~\cite{hansen_discrete_2010} for some nice
 illustrative examples for each property.
 
-In the specific field of tomographic reconstruction, the challenge is to reconstruction an image
-from a finite set of projections. Specifically, the applications considered here are projections
-from X-ray sources. However, other imaging modalities such as light field microscopy exist.
+In the specific field of tomographic reconstruction, the challenge is to reconstruct an image from a
+finite set of projections. Specifically, the applications considered here are projections from X-ray
+sources. However, other imaging modalities such as light field microscopy exist.
 
 An essential aspect of tomographic reconstruction is the so-called \textit{forward model}. It is the
 mathematical abstraction of the physical measuring process (\(A\) in \autoref{def:inverse_problem}).
 Throughout this thesis, X-rays are treated as infinitely thin rays, and therefore, mathematically a
 single X-ray going through the object can be model using a line. Along its path through the object
-interacts with the matter and once it passed through it will hit some kind of detector. This can
+interacts with the matter and once it passed through, it will hit some kind of detector. This can
 either measure the attenuation of the X-ray, the refraction or the scattering, but the mathematical
 abstraction is very similar.
 
@@ -200,12 +200,14 @@ projection plane at this position.
 				\label{fig:sinogram_example_90_degree}
 			\end{subfigure}%
 		}}%
-	\caption{Three different projections of an object. In this case the X-ray source would be on
-		the far left and generating parallel X-rays. From left to right: A projection from
-		\(0^\circ\), \(45^\circ\) and \(90^\circ\). A single projection is the X-ray shadow
-		of the desired object. It is also the sum of the attenuation coefficient of the
-		integral along the infinite set of lines perpendicular to the projection plane (the
-		line showing the attenuation values on the right)}\label{fig:sinogram_example_abdomen}
+	\caption{Three different projections of an object (an human abdomen in this case). In this
+                case the X-ray source would be on the far left and generating parallel X-rays. From
+                left to right: A projection from \(0^\circ\), \(45^\circ\) and \(90^\circ\). A
+                single projection is the X-ray shadow of the desired object. It is also the sum of
+                the attenuation coefficient of the integral along the infinite set of lines
+                perpendicular to the projection plane (the line showing the attenuation values on
+                the right).
+	}\label{fig:sinogram_example_abdomen}
 \end{figure}
 
 For a simple study of the physical process in X-ray attenuation CT, one can start with the analysis
@@ -262,7 +264,7 @@ shown in \autoref{fig:sinogram_example_abdomen} for 3 different projection angle
 To successfully reconstruct an object from its projection, one needs many projections from different
 angles. The resulting measurements can be stacked together to an image. This is referred to as
 \textit{sinogram}. The name originates from the sinusoidal pattern a point draws in such an image,
-see \autoref{fig:sinogram_simple_complete} for an example. There the sinogram for a single point in
+see \autoref{fig:sinogram_simple_complete} for an example. There, the sinogram for a single point in
 the phantom is shown (together with the simple phantom) on the left. Further, the sinogram for the
 abdomen used throughout this chapter can be seen in \autoref{fig:sinogram_abdomen_complete}. The
 vertical lines mark the projections taken in \autoref{fig:sinogram_example_abdomen}.
@@ -297,17 +299,17 @@ vertical lines mark the projections taken in \autoref{fig:sinogram_example_abdom
 \end{figure}
 
 The first to proof that a function (in this case the \(\mu\)) can be described fully via its line
-integral, was first shown by \textit{Radon Transform}~\cite{radon_uber_1917}
+integral, was shown by \textit{Radon Transform}~\cite{radon_uber_1917}
 (see~\cite{radon_determination_1986} for the English translation). Further details on the Radon
 Transform can be found in \autoref{chap:radon_transform_and_related}. Here it should just be
 highlighted, that the line integral of a function is the basis of many imaging modalities.
 
 Stepping back, to again a more practical approach. CT scanners evolved over time. Hence, there do
-exists many so-called \textit{generations} of CT scanners. The first generation of CT scanners, have
-a paralllel beam geometry (see \autoref{fig:parallel_beam_geometry}). Today they are mostly
-interesting because much of the theory is build around their principles. There all rays are
-generated in parallel to each other and hit the detector. This is achieved by having an X-ray source
-and the detector shift perpendicular to the projection direction.
+exist many so-called \textit{generations} of CT scanners. The first generation of CT scanners, have
+a paralllel beam geometry (see \autoref{fig:parallel_beam_geometry}). Today, they are mostly
+interesting because much of the theory is build around their principles. There, all rays are
+generated in parallel to each other and also traverse the scanned object in parallel. This is
+achieved by shifting the X-ray source and the detector perpendicular to the projection direction.
 
 Another, common setting is the fan-bean geometry as shown in \autoref{fig:fan_beam_geometry}. It is
 a two-dimensional setting, where the X-rays are emitted from a point-source and are not parallel to
@@ -345,8 +347,7 @@ phase-shift of the X-ray. These phase-contrast imaging modalities in general pro
 soft-tissue contrast, as the difference in refraction index is higher for soft-tissues than for the
 attenuation coefficient. This chapter aims to introduce basic concepts on the retrieval of
 phase-contrast based imaging modules and derive the forward model used in such imaging modalities.
-Specifically, emphasize is put on the similarities in the forward model regarding X-ray attenuation
-CT\@.
+Emphasize is put on the similarities in the forward model regarding X-ray attenuation CT\@.
 
 There are different ways to measure the refraction and thus the phase-contrast. A setup, which
 gained a lot of traction lately is the setup proposed by \citeauthor*{pfeiffer_phase_2006} in
@@ -354,14 +355,14 @@ gained a lot of traction lately is the setup proposed by \citeauthor*{pfeiffer_p
 interferometry. It allows both the retrieval of the X-ray refraction and scattering information
 (which can be used for dark-field imaging). The setup described in~\cite{pfeiffer_hard-x-ray_2008}
 enables the usage of conventional X-ray sources, which was previously not possible. Hence, the basic
-setup is similar to the one conventional X-ray attenuation CT, i.e.\ a X-ray source and detector and
-the object, one wishes to scan in between. Additionally, 3 gratings are placed in the setup: the
-\textit{source grating} G0, the \textit{phase-grating} G1 and the \textit{analyzer grating} G2. G0
-is placed between the X-ray source and the object, the other two are placed between the object and
-the detector. The source grating creates sufficiently high coherence, which allows for a periodic
-interference behind the phase grating. Using the analyzer grating allows for conventional X-ray
-detectors to be used. For a detailed discussion about the exact placement of the gratings,
-see~\cite{donath_inverse_2009}.
+setup is similar to the one used in conventional X-ray attenuation CT, i.e.\ a X-ray source and
+detector and the object, one wishes to scan in between. Additionally, 3 gratings are placed in the
+setup: the \textit{source grating} G0, the \textit{phase-grating} G1 and the \textit{analyzer
+grating} G2. G0 is placed between the X-ray source and the object, the other two are placed between
+the object and the detector. The source grating creates sufficiently high coherence, which allows
+for a periodic interference behind the phase grating. Using the analyzer grating allows for
+conventional X-ray detectors to be used. For a detailed discussion about the exact placement of the
+gratings, see~\cite{donath_inverse_2009}.
 
 A key advantage of this grating-based setup over other approaches for phase-contrast, is the
 possibility of using conventional X-ray sources. This makes this setup suitable for (bio-) medical
@@ -375,10 +376,10 @@ causes a refraction of the beam by an angle \(\alpha\) (following~\cite{donath_i
 \begin{equation}
 	\alpha = \frac{\lambda}{2 \pi} \frac{\partial \Phi}{\partial x}
 \end{equation}
-\(\lambda\) is the X-ray wavelength, and the beam propagates along the \(z\)-axis.
-Simplified, placing an object in the beam, causes a refraction, which results in a displacement of
-the interference pattern created by the gratings. And by the above formula is connected to the
-phase-shift introduced by the object. However, the interference patterns can not be spatially
+\(\lambda\) is the X-ray wavelength, and the beam propagates along the \(z\)-axis. Simplified,
+placing an object in the beam, causes a refraction, which results in a displacement of the
+interference pattern created by the gratings. The exact correlation between the refraction and the
+phase-shift is given in the equation. However, the interference patterns can not be spatially
 resolved by the detector. This can be solved by performing multiple measurements with a later
 shifted analyzer grating. This creates an intensity modulation of the detector read-out. This is
 referred to as \textit{phase stepping}. Apart from the additional stepping necessary, the process of
@@ -430,7 +431,7 @@ be described as
 \begin{equation}\label{eq:wave_propagation}
 	\Psi(\mvec{r}) = \Psi_0 \cdot e^{i n \mvec{k} \cdot \mvec{r}} = \Psi_0 \cdot e^{i(1-\delta)\mvec{k} \cdot \mvec{r}} \cdot e^{-\beta \mvec{k} \cdot \mvec{r}}
 \end{equation}
-Here the first exponential on the right-hand side represents a phase factor and the second an
+Here, the first exponential on the right-hand side represents a phase factor and the second an
 attenuation of the wave's amplitude. This model can be used to derive the Beer-Lambert law as it was
 shown in \autoref{eq:beer-Lambert-law} (compare~\cite[Chapter~2.1]{hahn_statistical_2014}). If one
 looks only at the phase related term, it can be reformulated to
@@ -461,23 +462,22 @@ Then the refraction angle \(\alpha\) is given by
 \begin{equation}
 	\alpha(x,y) = \frac{\partial}{\partial x} \delta(x, y, z) \mathrm{d}y
 \end{equation}
-This section is mostly based on the derivation given in~\cite{hahn_statistical_2014}.
-It should be of note, that it is not possible to directly measure the phase-shift with current
-detector technology, but it is sufficient to measure the refraction index. Albeit, it should be
-notated, that the angles are very small.
+This section is mostly based on the derivation given in~\cite{hahn_statistical_2014}. It should be
+noted, that it is not possible to directly measure the phase-shift with current detector technology,
+but it is sufficient to measure the refraction index. Albeit, that the angles are very small.
 
 With that out of the way, we can see, that the forward model for differential phase-contrast is also
-connected to the line integral. In this case the function integrated is not the attenuation
+connected to the line integral. In this case, the function integrated is not the attenuation
 coefficient \(\mu\), but the refractive index decrement \(\delta\).
 
-As a small excursion. As already alluded to a bit, the grating based setup can in addition to
+As a small excursion: as already alluded to a bit, the grating based setup can in addition to
 attenuation and phase also measure scattering of the X-rays. Though, the scattering angles are
 small, it is possible. Imaging modalities based on the scattering component are referred to as
 \textit{dark-field}. The setup described above only measures scattering perpendicular to the
 gratings. Hence, it is also possible to rotate the object around the central beam axis, i.e.\ in the
 plane of the gratings. This opens the door for so-called directional or \gls{AXDT}. The connection
 to the previous modalities (apart from the similar setup), is also the connection of the line
-integral. Thou more complicated, they still share this common aspect.
+integral. Though more complicated, they still share this common aspect.
 
 \begin{figure}
 	\centering
@@ -489,12 +489,13 @@ integral. Thou more complicated, they still share this common aspect.
 				\includegraphics[width=\textwidth]{./figures/tooth/tooth_phasecontrast.png}
 			\end{subfigure}
 		}}
-	\caption{Example reconstruction of a medical tooth sample that was. On the left, the
-		reconstruction of the attenuation part of the measured signal, on the right the
-		reconstruction of the differential phase-contrast data. The absorption has been
-		windowed to values in the range of \([0, 0.33]\), and for the phase-contrast image,
-		an interval of \([-\frac{\pi}{8}, \frac{\pi}{8}]\) was used. Taken
-		from~\cite{wieczorek_anisotropic_2017}. With permission from Tobias Lasser}
+	\caption{Example reconstruction of a medical tooth sample that was captured using a
+                grating-based system. On the left, the reconstruction of the attenuation part of the
+                measured signal, on the right the reconstruction of the differential phase-contrast
+                data. The absorption has been windowed to values in the range of \([0, 0.33]\), and
+                for the phase-contrast image, an interval of \([-\frac{\pi}{8}, \frac{\pi}{8}]\) was
+                used as a window. Taken from~\cite{wieczorek_anisotropic_2017} with permission from
+                Tobias Lasser.}
 	\label{fig:medical_tooth_sample}
 \end{figure}
 
@@ -1551,7 +1552,7 @@ used.
 Another common regularization method is based on the \(l_1\) norm, i.e.\ the sum of absolute
 values.
 \begin{definition}[ \(l_1\)-Regularization]\label{def:l1_regularization}
-        The penalty term for \(l_1\) based regularization is given by
+	The penalty term for \(l_1\) based regularization is given by
 	(compare~\cite{tibshirani_regression_1996,tibshirani_lasso_2013,beck_fast_2009})
 	\[
 		R(\mvec{c})_{l_1} = \norm{\mvec{c}}_1

@@ -2,11 +2,11 @@
 
 In \citeyear{rontgen_uber_1895} \citeauthor{rontgen_uber_1895} discovered X-rays. Since then
 different methods based on X-ray have been revolutionizing medical treatment. For the first time it
-was possible to inspect (among others) the human body non-intrusively, i.e.\ without cutting it
-open. It was used among others to detect metal objects in the body such as
-bullets~\cite{haygood_skeletal_1996}. But also new kinds of fractures could be detected and
-diagnosed. New bone diseases could be discovered such as Osteopoikilosis, or others such as skeletal
-tuberculosis~\cite{haygood_skeletal_1996} could be identified.
+was possible to inspect the human body non-intrusively, i.e.\ without cutting it open. It was used
+among others to detect metal objects in the body such as bullets~\cite{haygood_skeletal_1996}. But
+also new kinds of fractures could be detected and diagnosed. New bone diseases could be discovered
+such as Osteopoikilosis, or others such as skeletal tuberculosis~\cite{haygood_skeletal_1996} could
+be identified.
 
 The next major step was the invention of \textit{X-ray attenuation computed tomography} (CT). The
 first prototypes were developed at EMI laboratories and resulted in a series of publications
@@ -14,7 +14,7 @@ first prototypes were developed at EMI laboratories and resulted in a series of 
 simple X-ray images, X-ray attenuation CT can create cross-sectional images from the interior of the
 scanned object. Whereas, in tradition X-ray imaging different objects superimpose each other, X-ray
 attenuation CT can distinguish them. Since its introduction, X-ray attenuation CT became a standard
-tool in medical diagnostics. Medical applications include but are by no means limited to the
+tool in medical diagnostics. Medical applications include, but are by no means limited to, the
 detection of infarction, tumors, calcifications, hemorrhage and bone
 trauma~\cite[Chapter~5]{buchanan_advanced_2012}. However, X-ray attenuation does lack soft-tissue
 contrast~\cite{pfeiffer_phase_2006}. I.e.\ tissues with similar attenuation coefficient are hard to
@@ -49,7 +49,7 @@ novel techniques can be made.
 
 Though, they are different modalities, they do have a common basis. All of the above mentioned
 imaging modalities can be sorted in the group of \textit{tomographic reconstruction}, which itself
-is a subset of \textit{inverse problems}. The challenge for this specific class of problems, is the
+is a subset of \textit{inverse problems}. The challenge for this specific class of problems is the
 reconstruction of a signal from a finite set of projections~\cite{herman_basis_2015}. The connection
 between the problem domain and the measurement domain is the so-called \textit{forward model}.
 
@@ -57,15 +57,14 @@ The forward model for X-ray attenuation CT, differential phase-contrast CT and d
 based on the line integral. They assume X-rays traveling throughout some object in a straight line.
 Hence, some quantity (i.e.\ the attenuation coefficients of an object) can be integrated along the
 path of the X-ray. Such a quantity can be fully described by the infinite set of lines from
-different projection angles. This has been proven multiple times over the history. However, most
-often it is attributed to \citeauthor*{radon_uber_1917} in \citeyear{radon_uber_1917}
-~\cite{radon_uber_1917}. Therefore, the integral transform, which maps a function into its set of
-line integrals is referred to as the \textit{Radon Transform}. Other than
-\citeauthor*{radon_uber_1917},
+different projection angles. This has been proven multiple times. However, most often it is
+attributed to \citeauthor*{radon_uber_1917} in \citeyear{radon_uber_1917} ~\cite{radon_uber_1917}.
+Therefore, the integral transform, which maps a function into its set of line integrals is referred
+to as the \textit{Radon Transform}. Other than \citeauthor*{radon_uber_1917},
 \citeauthor*{cormack_representation_1963}~\cite{cormack_representation_1963} rediscovered it without
 the knowledge of the work done by \citeauthor*{radon_uber_1917}.
 \citeauthor*{cormack_representation_1963} laid the theoretical foundation of modern CT scanners. And
-\citeauthor*{hounsfield_computerized_1973}~\cite{hounsfield_computerized_1973} build the first
+\citeauthor*{hounsfield_computerized_1973}~\cite{hounsfield_computerized_1973} built the first
 working prototypes. For that, both \citeauthor*{cormack_representation_1963} and
 \citeauthor*{hounsfield_computerized_1973} received the Nobel Prize in Medicine in 1979.
 
@@ -85,26 +84,27 @@ continuously differentiable. Precisely this study of differentiable basis functi
 topic of this thesis.
 
 \citeauthor*{lewitt_multidimensional_1990} introduced a family of spherically-symmetric basis
-functions often referred to as \textit{blobs}. It received a lot of attention in the tomographic
-space, as it overcomes quite a few limitations of the pixel and voxel basis functions. Among others,
-it is continuously differentiable. Another interesting set of basis functions is not as common in
-the tomographic space: Basis-Splines (or usually only B-Splines). B-Splines are mostly known from
-function approximation. There exists a closed form solution for a continuous approximation of
-signals using B-Splines~\cite{unser_fast_1991}. This thesis follows the approach first laid out by
-\citeauthor*{momey_new_2011} in \cite{momey_new_2011}. A lot of the properties of B-Splines are
-still relevant, as e.g.\ they tend to spherically symmetric functions, but preserve a compact
-support. Further, they are --- up to a certain degree --- continuously differential.
+functions often referred to as \textit{blobs} in~\cite{lewitt_multidimensional_1990}. It received a
+lot of attention in the tomographic space, as it overcomes quite a few limitations of the pixel and
+voxel basis functions. Among others, it is continuously differentiable. Another interesting set of
+basis functions is not as common in the tomographic space: Basis-Splines (or usually only
+B-Splines). B-Splines are mostly known from function approximation. There exists a closed form
+solution for a continuous approximation of signals using B-Splines~\cite{unser_fast_1991}. This
+thesis follows the approach first laid out by \citeauthor*{momey_new_2011} in \cite{momey_new_2011}.
+A lot of the properties of B-Splines are still relevant, as e.g.\ they tend to spherically symmetric
+functions, but preserve a compact support. Further, they are --- up to a certain degree ---
+continuously differential.
 
-Once the problem domain is discretized using another basis function apart from the pixel or
-voxel basis function, another issue need to be solved. A considerable amount of method exists to
-compute the line integral. However, most methods assume the pixel or voxel basis function. Hence,
-they have to be extended to use other basis functions.
+Once the problem domain is discretized using another basis function apart from the pixel or voxel
+basis function, another issue needs to be solved. A considerable amount of methods exist to compute
+the line integral. However, most methods assume the pixel or voxel basis function. Hence, they have
+to be extended to use other basis functions.
 
 The last two points are the main contribution of this thesis. The approximation of the line integral
 relying on differentiable basis functions rather than the pixel or voxel basis functions are
 implemented in elsa. This implicitly includes a discretization of the signal in the new basis
 functions. However, it should be noted, that at no point in time the problem domain is transformed
-to a new basis functions.
+to a new basis function.
 
 \section{Outline}\label{sec:outline}
 
@@ -145,11 +145,11 @@ implementations of the line integral is conducted in \autoref{chap:experiments}.
 \section{Disclaimer}\label{sec:disclaimer}
 
 I want my research to be as open, reproducible and comprehensible as possible. Hence, the
-development of the source code I've written is open source, discussions (though most of the
+development of the source code I have written is open source, discussions (though most of the
 discussion was not online) can be found in the \href{https://gitlab.lrz.de/IP/elsa}{elsa GitLab
 	repository}. The \LaTeX{} source code of thesis can be found on my
 \href{https://github.com/ner0-m/ma-thesis-differential-basis-for-ct}{personal GitHub page}. To the
-best of my possibilities, I try to include the code I've used to generate all of my plots and
+best of my possibilities, I try to include the code I have used to generate all of my plots and
 graphs, I try to state dependencies and make building and using my work as easy as I can. But of
 course, I am aware, what is easy to me, might be cumbersome to the next, and impossible to the
 other.
