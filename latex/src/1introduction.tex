@@ -4,9 +4,9 @@ In \citeyear{rontgen_uber_1895} \citeauthor{rontgen_uber_1895} discovered X-rays
 different methods based on X-ray have been revolutionizing medical treatment. For the first time it
 was possible to inspect the human body non-intrusively, i.e.\ without cutting it open. It was used
 among others to detect metal objects in the body such as bullets~\cite{haygood_skeletal_1996}. But
-also new kinds of fractures could be detected and diagnosed. New bone diseases could be discovered
-such as Osteopoikilosis, or others such as skeletal tuberculosis~\cite{haygood_skeletal_1996} could
-be identified.
+also new kinds of fractures could be detected and diagnosed. New bone diseases such as
+Osteopoikilosis could be discovered, and others such as skeletal
+tuberculosis~\cite{haygood_skeletal_1996} could be identified.
 
 The next major step was the invention of \textit{X-ray attenuation computed tomography} (CT). The
 first prototypes were developed at EMI laboratories and resulted in a series of publications
@@ -25,7 +25,7 @@ reveal additional information~\cite{hahn_numerical_2012}. One way to measure pha
 X-rays is grating interferometer~\cite{pfeiffer_hard-x-ray_2008}, often referred to as
 \textit{grating-based}. Phase information can be indirectly measured, via the refraction of X-rays,
 instead of the attenuation. Specifically, the phase gradient perpendicular to the gratings can be
-measured, therefore, this method is often often called \textit{differential phase-contrast imaging}.
+measured, therefore, this method is often called \textit{differential phase-contrast imaging}.
 
 Additionally, the same grating-based setup yields further information about (ultra) small-angle
 scattering. Imaging modalities based on this property are referred to as \textit{X-ray dark-field
@@ -35,17 +35,17 @@ dark-field imaging is still a field of active research. Only recently, a system 
 incorporated such a grating-based setup into a clinical CT scanner~\cite{viermetz_dark-field_2022}.
 
 This is a part of the working context of the research group \textit{\gls{CIIP}} at the \gls{TUM}
-around my supervisor PD Dr.\ rer.\ nat.\ Tobias Lasser. Specifically, at the research group the
-open-source C++ framework \textit{elsa} is developed for use in tomographic reconstruction. One goal
-of elsa, is to provide open access to the research done at the group, plus it should improve the
-reproducibility of the work done. Therefore, support for imaging modalities such as phase-contrast
-or dark-field imaging enables the research group to increase the accessibility and reproducibility
-of their research. But --- like many other known frameworks --- elsa currently only supports X-ray
-attenuation CT\@. Due to the aforementioned accessibility and reproducibility reasons, there exists
-high interest to support both X-ray phase-contrast and dark-field imaging modalities in elsa. This
-support should include common, state-of-the-art and novel algorithms for tomographic reconstruction.
-Without common and current state-of-the-art algorithms, no proper evaluation and/or comparison to
-novel techniques can be made.
+around my supervisor PD Dr.\ rer.\ nat.\ Tobias Lasser. In particular, the open-source C++ framework
+\textit{elsa} is developed at the research group. Its main use is in the field of tomographic
+reconstruction. One goal of elsa is to provide open access to the research done at the group, plus
+it should improve the reproducibility of the work done. Therefore, support for imaging modalities
+such as phase-contrast or dark-field imaging enables the research group to increase the
+accessibility and reproducibility of their research. But --- like many other known frameworks ---
+elsa currently only supports X-ray attenuation CT\@. Due to the aforementioned accessibility and
+reproducibility reasons, there exists high interest to support both X-ray phase-contrast and
+dark-field imaging modalities in elsa. This support should include common, state-of-the-art and
+novel algorithms for tomographic reconstruction. Without common and current state-of-the-art
+algorithms, no proper evaluation and/or comparison to novel techniques can be made.
 
 Though, they are different modalities, they do have a common basis. All of the above mentioned
 imaging modalities can be sorted in the group of \textit{tomographic reconstruction}, which itself
@@ -136,8 +136,9 @@ analytical, iterative and regularized reconstruction algorithms.
 Moving away from a mathematical centered discussion, \autoref{part:practical} starts with a short
 introduction to the C++ framework elsa in \autoref{chap:elsa}. This is followed by a detailed
 discussion of aspects regarding the implementation of computation of the line integral, with a focus
-on other basis functions in \autoref{chap:projector}. Finally, a detailed evaluation of the new
-implementations of the line integral is conducted in \autoref{chap:experiments}.
+on other basis functions in \autoref{chap:projector}. Finally, by means of experiments, a detailed
+evaluation of the new implementations of the line integral is conducted in
+\autoref{chap:experiments}.
 
 \autoref{part:conclusion} completes the thesis with a summary of the newly implemented projectors in
 \autoref{chap:summary}, and an outlook for future work in \autoref{chap:future_work}.
@@ -156,8 +157,8 @@ other.
 
 Throughout the thesis, I specifically try to not mention any form of gender specific pronouns.
 Instead, mostly \textit{one} or sometimes \textit{they} is used instead. Wherever relevant, I try to
-use the gender-neutral form of wording. Please note though, that this is a best effort. Not only is
-English not my first language, but also the background, I grew up in and still live, and the
-socialization I underwent, are dominated by a mostly gender binary form of thinking. Although, I
-oppose these views and do my best to educate myself, I cannot deny, they influence my thinking and
-writing.
+use the gender-neutral form of wording to include all readers of whatever background. Please note
+though, that this is a best effort. Not only is English not my first language, but also the
+background, I grew up in and still live, and the socialization I underwent, are dominated by a
+mostly gender binary form of thinking. Although, I oppose these views and do my best to educate
+myself, I cannot deny, they influence my thinking and writing.

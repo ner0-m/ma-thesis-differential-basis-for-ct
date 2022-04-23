@@ -14,7 +14,7 @@ subscribed \(\mvec{x}_j\). Row vectors are specifically denoted with brackets su
 		\mvec{x}_2, \mvec{x}_3, \dots ]\).
 
 Given \(\mvec{x} \in \mathbb{R}\) and \(\mvec{y} \in \mathbb{R}\), then \(\abs{\mvec{x}}\) is the
-componentwise absolute value, \(\norm{\mvec{x}}\) is a no further specified norm,
+component wise absolute value, \(\norm{\mvec{x}}\) is a no further specified norm,
 \(\norm{\mvec{x}}_2\) the \(l_2\) or Euclidean norm, \(\norm{\mvec{x}}^2_2\) the squared \(l_2\)
 norm, and \(\langle \mvec{x}, \mvec{y} \rangle\) the scalar product. \(\mathscr{S}^n\) is the unit
 \(n\)-sphere defined as \(\mathscr{S}^n = \{\mvec{x} \in \mathbb{R}^n \colon \norm{\mvec{x}} = 1 \}\).
@@ -78,10 +78,10 @@ of scope, but the interested reader can look into~\cite{white_restoration_1992,a
 Hilbert spaces are complete vector spaces, where a scalar product \(\langle\cdot,\cdot\rangle\) is
 defined. Hence, they make sufficiently nice spaces to work in. For the purposes of this thesis,
 usually one can assume \(\mathcal{H}\) and \(\mathcal{K}\) to be subspaces of \(\mathbb{R}^n\), so
-no further studies on Hilber Spaces is conducted at this point.
+no further studies on Hilbert Spaces is conducted at this point.
 
 I want to point out a minor, but important detail. Different imaging modalities, which vary
-drastically in scope of physical properties, can be mathematically reduces to a common concept. This
+drastically in scope of physical properties, can be mathematically reduced to a common concept. This
 enables reasoning on common ground. Improvements in one field, can benefit other fields. Further, a
 common language can be used. This, I personally find very much fascinating and is one of my
 motivations to keep learning.
@@ -105,13 +105,13 @@ For an ill-posed inverse problem, either the inverse \(A^{-1}\) does not exist, 
 not lie in \(K\), or is not continuous (c.f.~\cite[Chapter~4]{natterer_mathematics_1986}). From a
 practical standpoint the first two properties can be solved quite easily. If no solution exists, one
 can substitute it by a different problem, e.g.\ the looking for the solution to the least squares
-problem. If multiple or infinitely many solutions exists, one can choose the one with minimal norm.
+problem. If multiple or infinitely many solutions exist, one can choose the one with minimal norm.
 However, if the third property is violated, the solutions to a system with two close measurements
 \(g\) and \(g^\epsilon\) need not be close.
 
 From a practical point this is quite important. Imagine two blurred images of the same scene, that
 only differ slightly from one another. If the stability criterion is violated, the solution to the
-inverse problem trying to deblur the images, needs not be close to each other. Hence, proper care
+inverse problem trying to deblur the images, needs not to be close to each other. Hence, proper care
 needs to be taken in the development of algorithms, that search for solutions for the inverse
 problem. See \citeauthor{hansen_discrete_2010}~\cite{hansen_discrete_2010} for some nice
 illustrative examples for each property.
@@ -167,18 +167,18 @@ prototypes of CT scanners.
 X-ray attenuation CT is an easy principle. The projections of the CT scanner are acquired using a
 simple setup. The object one wants to scan is between the X-ray source and the detector. Then for
 each projection a `photo' is taken, the object is rotated in relation to the source and detector,
-and then the next acquisitions is performed and so on. It is common to described a projection with
-an angle in two dimensions and two angles in three dimensions. This fully qualifies a single
-projection pose. A a further notice, it is of no importance for the reconstruction, if the object of
-interested is rotated or the source and detector are rotated. X-ray sources for common CT scanners
-are vacuum tubes, which convert electrical power to radiation. The detector consists of an array of
-pixels, which reacts sensitive to X-rays. For a detailed overview see
+and then the next acquisitions is performed and so on. It is common to describe a projection with an
+angle in two dimensions and two angles in three dimensions. This fully qualifies a single projection
+pose. A further notice, it is of no importance for the reconstruction, if the object of interest is
+rotated or the source and detector are rotated. X-ray sources for common CT scanners are vacuum
+tubes, which convert electrical power to radiation. The detector consists of an array of pixels,
+which reacts sensitive to X-rays. For a detailed overview see
 \citeauthor{buzug_computed_2008}~\cite[Chapter~2]{buzug_computed_2008}.
 
 The objective of tomographic reconstruction for X-ray attenuation CT, is the retrieval of the
 attenuation coefficient for the complete object of interest. To achieve this, numerous projections
 are necessary. Each projection is the X-ray shadow of the measured object.
-\autoref{fig:sinogram_example_abdomen} shows three different projections for such an object. In this
+\autoref{fig:sinogram_example_abdomen} shows three different projections of such an object. In this
 specific case, the object of interest was rotated relative to the X-ray source and detector. The
 graph on the right of each sub-image, shows the measured projections values. The higher this value
 is, the larger the attenuation (i.e.\ the darker the X-ray shadow) of the line hitting the
@@ -200,13 +200,12 @@ projection plane at this position.
 				\label{fig:sinogram_example_90_degree}
 			\end{subfigure}%
 		}}%
-	\caption{Three different projections of an object (an human abdomen in this case). In this
-                case the X-ray source would be on the far left and generating parallel X-rays. From
-                left to right: A projection from \(0^\circ\), \(45^\circ\) and \(90^\circ\). A
-                single projection is the X-ray shadow of the desired object. It is also the sum of
-                the attenuation coefficient of the integral along the infinite set of lines
-                perpendicular to the projection plane (the line showing the attenuation values on
-                the right).
+	\caption{Three different projections of an object (a human abdomen). In this case the X-ray
+		source would be on the far left and generating parallel X-rays. From left to right:
+		A projection from \(0^\circ\), \(45^\circ\) and \(90^\circ\). A single projection is
+		the X-ray shadow of the desired object. It is also the sum of the attenuation
+		coefficient of the integral along the infinite set of lines perpendicular to the
+		projection plane (the line showing the attenuation values on the right).
 	}\label{fig:sinogram_example_abdomen}
 \end{figure}
 
@@ -232,7 +231,7 @@ attenuation coefficient \(\mu\) and the distance traveled through the matter \(s
 
 Extending this model to accommodate changing or varying attenuation coefficients, one needs to
 replace the constant coefficient \(\mu\), by a function \(\mu: \mathbb{R}^2 \mapsto \mathbb{R}\)
-(for now, this is kept in the two-dimensios). Then the measured intensity is given by the
+(for now, this is kept in the two-dimensions). Then the measured intensity is given by the
 integral along the line the ray travels along \(L\) of the function \(\mu\), see
 \autoref{fig:x-ray_nonhomogeneous_attenuation} for an illustration.
 
@@ -289,8 +288,8 @@ vertical lines mark the projections taken in \autoref{fig:sinogram_example_abdom
 				\caption{}\label{fig:sinogram_abdomen_complete}
 			\end{subfigure}
 		}}
-	\caption{Examples of sinograms. The name originates from the pattern a single points draw in
-		the sinogram. This can be seen in
+	\caption{Examples of sinograms. The name originates from the pattern a single points creates
+		during the forward projection. This can be seen in
 		\subref{fig:sinogram_simple_phantom}--\subref{fig:sinogram_simple_complete}. The
 		sinogram for the abdomen \subref{fig:sinogram_abdomen_phantom} used throughout the
 		chapter can be seen in \subref{fig:sinogram_abdomen_complete}. The vertical lines
@@ -306,19 +305,19 @@ highlighted, that the line integral of a function is the basis of many imaging m
 
 Stepping back, to again a more practical approach. CT scanners evolved over time. Hence, there do
 exist many so-called \textit{generations} of CT scanners. The first generation of CT scanners, have
-a paralllel beam geometry (see \autoref{fig:parallel_beam_geometry}). Today, they are mostly
+a parallel beam geometry (see \autoref{fig:parallel_beam_geometry}). Today, they are mostly
 interesting because much of the theory is build around their principles. There, all rays are
 generated in parallel to each other and also traverse the scanned object in parallel. This is
 achieved by shifting the X-ray source and the detector perpendicular to the projection direction.
 
 Another, common setting is the fan-bean geometry as shown in \autoref{fig:fan_beam_geometry}. It is
 a two-dimensional setting, where the X-rays are emitted from a point-source and are not parallel to
-each other, but rather (as the name suggest) have a fan like pattern. Further, the detector is often
-curved. Other common geometry setups include inherently three-dimensional setup using a cone-like
-beam shape and a two-dimensional detector. Newer CT scanners, also rely on multiple sources. A
-detailed discussion is given in e.g.\ \cite{buzug_computed_2008}. Most of the geometric setups are
-introduced to either reduce the acquisition time or increase the spatial resolution of the
-reconstruction.
+each other, but rather (as the name suggests) have a fan like pattern. Further, the detector is
+often curved. Other common geometry setups include inherently three-dimensional setups using a
+cone-like beam shape and a two-dimensional detector. Newer CT scanners, also rely on multiple
+sources. A detailed discussion is given in e.g.\ \cite{buzug_computed_2008}. Most of the geometric
+setups are introduced to either reduce the acquisition time or increase the spatial resolution of
+the reconstruction.
 
 \begin{figure}
 	\centering
@@ -356,9 +355,9 @@ interferometry. It allows both the retrieval of the X-ray refraction and scatter
 (which can be used for dark-field imaging). The setup described in~\cite{pfeiffer_hard-x-ray_2008}
 enables the usage of conventional X-ray sources, which was previously not possible. Hence, the basic
 setup is similar to the one used in conventional X-ray attenuation CT, i.e.\ a X-ray source and
-detector and the object, one wishes to scan in between. Additionally, 3 gratings are placed in the
+detector, the object, one wishes to scan in between. Additionally, 3 gratings are placed in the
 setup: the \textit{source grating} G0, the \textit{phase-grating} G1 and the \textit{analyzer
-grating} G2. G0 is placed between the X-ray source and the object, the other two are placed between
+	grating} G2. G0 is placed between the X-ray source and the object, the other two are placed between
 the object and the detector. The source grating creates sufficiently high coherence, which allows
 for a periodic interference behind the phase grating. Using the analyzer grating allows for
 conventional X-ray detectors to be used. For a detailed discussion about the exact placement of the
@@ -490,12 +489,12 @@ integral. Though more complicated, they still share this common aspect.
 			\end{subfigure}
 		}}
 	\caption{Example reconstruction of a medical tooth sample that was captured using a
-                grating-based system. On the left, the reconstruction of the attenuation part of the
-                measured signal, on the right the reconstruction of the differential phase-contrast
-                data. The absorption has been windowed to values in the range of \([0, 0.33]\), and
-                for the phase-contrast image, an interval of \([-\frac{\pi}{8}, \frac{\pi}{8}]\) was
-                used as a window. Taken from~\cite{wieczorek_anisotropic_2017} with permission from
-                Tobias Lasser.}
+		grating-based system. On the left, the reconstruction of the attenuation part of the
+		measured signal, on the right the reconstruction of the differential phase-contrast
+		data. The absorption has been windowed to values in the range of \([0, 0.33]\), and
+		for the phase-contrast image, an interval of \([-\frac{\pi}{8}, \frac{\pi}{8}]\) was
+		used as a window. Taken from~\cite{wieczorek_anisotropic_2017} with permission from
+		Tobias Lasser.}
 	\label{fig:medical_tooth_sample}
 \end{figure}
 
@@ -610,7 +609,7 @@ spherically-symmetric basis functions, as is covered in \autoref{sec:blob_basis}
 	\textit{back-projection}. Compared to the \textit{forward projection} which is \(\radon f\).
 \end{definition}
 
-The backprojection is basically a smearing of the projection angles along the projection direction.
+The back-projection is basically a smearing of the projection angles along the projection direction.
 This is illustrated in \autoref{fig:backprojection_shepp_logan} on the left-hand side. For more and
 more back-projections, the image gets closer to the original signal. However, it stays a blurry. A
 sharper reconstruction can be achieved through different means. This is discussed in
@@ -691,9 +690,9 @@ lines in \(n\)-dimensional spaces. Hence, a variation of the Radon Transform is 
 	Given the projection direction \(\mvec{\theta} \in \mathscr{S}^{n-1}\) and \(\mvec{x} \in
 	\mathbb{R}^n\), then
 	\[ \xray f(\mvec{\theta}, \mvec{x}) = \int_{-\infty}^{+\infty} f(\mvec{x} + t \mvec{\theta}) \, \mathrm{d} t \]
-	is the \textit{X-ray Transform}. It is the integral over the straight line through
-	\(\mvec{x}\) with direction \(\mvec{\theta}\)
-	(c.f.~\cite{natterer_mathematics_1986,solmon_x-ray_1976}).
+        is the \textit{X-ray Transform}. It is the integral over the straight line through
+        \(\mvec{x}\) with direction \(\mvec{\theta}\)
+        (c.f.~\cite{natterer_mathematics_1986,solmon_x-ray_1976}).
 \end{definition}
 
 In the two-dimensional case, the Radon Transform and X-ray Transform are equivalent.
@@ -1141,7 +1140,7 @@ cost, as larger orders have an increased footprint and therefore increase the ne
 computation.
 
 In~\cite{horbelt_discretization_2002}, it was shown that the Radon transform of B-Splines are spline
-bikernel. \citeauthor*{entezari_box_2012} show in~\cite{entezari_box_2012} explicitly how (tensor
+bi-kernel. \citeauthor*{entezari_box_2012} show in~\cite{entezari_box_2012} explicitly how (tensor
 product) B-Splines act under the X-ray and Radon transform.~\cite{nilchian_differential_2012} shows
 how B-Splines act under the first derivative of the Radon transform.
 
@@ -1152,7 +1151,7 @@ angle \(\theta\), then it is:
 	\radon_\theta\beta^d(s) = \beta^d_{\sin\theta} * \beta^d_{\cos\theta}(s)
 \end{equation}
 Hence it is the convolution of two splines of different width (denoted by the subscript). These are
-referred to as spline bikernels. \citeauthor*{horbelt_discretization_2002} presents an explicit
+referred to as spline bi-kernels. \citeauthor*{horbelt_discretization_2002} presents an explicit
 formulation to compute it.
 
 To extend this to the \(3\)-dimensional setting, one can look into \textit{box splines}. (Tensor
@@ -1258,7 +1257,7 @@ filter. The Shepp-Logan filter includes a smoothing filter to deal better with n
 	\caption{Top row: reconstruction using \gls{FBP} with a different number of projection
 		angles. From left to right: \(32\), \(64\), \(128\) and \(512\) projection angles.
 		Bottom row: one the right filtered projection measurement, filtered with the ramp
-		filter and and the left, plot of the ramp and Shepp-Logan filter.
+		filter and the left, plot of the ramp and Shepp-Logan filter.
 	}\label{fig:filtered_backprojection_shepp_logan}
 \end{figure}
 
@@ -1364,7 +1363,7 @@ A common approach to handle ill-posed problems is to considered least squares pr
 	\[ A^T A \mvec{c} = A^T \mvec{m} \]
 \end{definition}
 Note here, that \(A\mvec{c}\) is considered the forward projection and \(A^T \mvec{m}\) is the
-backward projection. The least squares problem also already solves on the issues arrising from the
+backward projection. The least squares problem also already solves on the issues arising from the
 ill-posedness of a problem. If no solution exists, the corresponding least squares problem can solve
 it~\cite{hansen_discrete_2010}.
 
@@ -1435,7 +1434,7 @@ in~\cite[Chapter~6]{hansen_discrete_2010} to be very good.
 
 \subsection{Algebraic Reconstruction Technique}\label{subsec:algebraic_reconstruction_technique}
 
-The Algebraitc Reconstruction Technique (ART) was proposed by
+The Algebraic Reconstruction Technique (ART) was proposed by
 \citeauthor*{gordon_algebraic_1970}~\cite{gordon_algebraic_1970}. However, outside of tomography the
 method is often knows as Kaczmarz method~\cite{kaczmarz_approximate_1993}. Though, \gls{ART} is a
 slight modification of the original Kaczmarz method.

@@ -1,22 +1,23 @@
 \chapter{elsa}\label{chap:elsa}
 
-I want to dedicate a chapter to the C++ framework elsa~\cite{lasser_elsa_2019} developed at the
-\gls{CIIP} research group. As the practical part of my thesis is implemented for elsa, I feel that a
-short introduction is more than appropriate.
+I want to dedicate a chapter to the C++ framework \textit{elsa}~\cite{lasser_elsa_2019} developed at
+the \gls{CIIP} research group. As the practical part of my thesis is implemented for elsa, I feel
+that a short introduction is more than appropriate.
 
 elsa is a modern, flexible and open-source framework for tomographic reconstruction. I consider elsa
-to follow for three important principles. First, and possibly most importantly for the user side, it
-should be close the either mathematical notation, or at least mathematical concepts, second, it
-should be useful for the research done at the \gls{CIIP} research group and finally, it should be as
-easy as possible for other to reproduce results from the research. These different aspects have to
-be wagered against each other, as they might stand in conflict to each other.
+to follow three important principles. First, and possibly most importantly for the user side, it
+should be close the either mathematical notation and mathematical concepts. Second, it should be
+useful for the research done at the \gls{CIIP} research group. And finally, it should be as easy as
+possible for other to reproduce results from the research. These different aspects have to be
+wagered against each other, as they might stand in conflict to each other.
 
 elsa is able to handle general optimization problems similar to the form given in
-\autoref{eq:optimization_problem}. However, it can handle a little more general problems of the form
+\autoref{eq:optimization_problem}. However, it can handle an even more general problem state of the
+form:
 \begin{equation}\label{eq:complex_optimization_problem}
 	\argmin_{\mvec{c}} \quad T(A, \mvec{c}, \mvec{m}) + \sum_{k=1}^K \lambda_k R_k(\mvec{c})
 \end{equation}
-where \(T\) is the data fidelity term depending on the forward model \(A\), the solution
+where, \(T\) is the data fidelity term depending on the forward model \(A\), the solution
 \(\mvec{c}\), the measurements \(\mvec{m}\), \(K\) penalty or regularization terms depending on
 \(\mvec{c}\) and \(\lambda_k\) is a regularization parameter for the \(k\)th penalty term (compare
 \autoref{def:regularized_problem} with a single penalty term).
@@ -36,43 +37,46 @@ imaging modalities. However, their goal is not such a general approach. This gen
 the research at the \gls{CIIP} research group.
 
 From a software engineering standpoint, a lot of effort is put into reproducibility, maintenance and
-correctness, by following as numerous best practices as we can and see fit. This includes
-having an extensive unit testing suite (though, we can still improve there), a merge request based
-workflow, which heavily relies on continuous integration, and as much as possible, we follow modern
-C++ guidelines and rely on modern features from C++17. Further, to ease prototyping and improve
-accessibility Python bindings are provided as well.
+correctness, by following numerous best practices. This includes having an extensive unit testing
+suite (though, we can still improve there), a merge request based workflow, which heavily relies on
+continuous integration, we try to follow modern C++ guidelines, rely on modern features from newer
+standards such as C++17, and try to rely on important tools such as
+\textit{clang-tidy}~\cite{noauthor_clang-tidy_nodate} and
+\textit{AddressSanitizer}~\cite{noauthor_addresssanitizer_2021}. Further, to ease prototyping and
+improve accessibility Python bindings are provided as well.
 
-The general architecture is build in a couple of layers. At the bottom, all data handling is done
-by the \mintinline{cpp}{DataContainer} class. It is the one type to store and handle all
+The general architecture is build in a couple of layers. At the bottom, all data handling is done by
+the \mintinline{cpp}{DataContainer} class. It is the one type to store and handle all
 \(n\)-dimensional data in the framework. It handles storage for data accessible by the \gls{CPU} and
 the \gls{GPU} and transfers between those two. Further, it leverages expression templates to reduce
 the general memory footprint of applications. Above that, the mathematical concepts are implemented.
-This includes concepts for residuals, functionals (such as \(l_1\), \(l_2\), or the Huber norm) and
+These includes concepts for residuals, functionals (such as \(l_1\), \(l_2\), or the Huber norm) and
 linear operators (modeling both the forward models and operators such as scaling or finite
 differences). Finally, it also includes an abstraction for the different algorithms solving
 optimization problems.
 
-Currently, two different forward models are implemented for X-ray attenuation CT. Both have a
-\gls{CPU} and \gls{GPU} (specifically NVidia's CUDA) version available, as the forward and backward
-projection are usually the computationally most expensive. The specific implemented methods are
-referred to as Siddon's and Joseph's method, see the next \autoref{chap:projector} for details.
+Currently, two different approximations are implemented for the line integral forward models. Both
+have a \gls{CPU} and \gls{GPU} (specifically NVidia's CUDA) version available. As the forward and
+backward projection are usually the computationally most expensive. The specific implemented methods
+are referred to as Siddon's and Joseph's method. See \autoref{chap:projector} for details.
 
 I will refer the interested reader to
 \href{https://gitlab.lrz.de/IP/elsa/}{https://gitlab.lrz.de/IP/elsa/}. There, one can find guides to
-install and use elsa extensively, plus examples.
+install and use elsa extensively, including code examples.
 
 \chapter{Projector}\label{chap:projector}
 
 As shown in previous chapters, calculation of the system matrix coefficients is one of the key
 components of tomographic reconstruction. Thus, this has been an important part of research. The
-routines or algorithms, which calculate the matrix are frequently referred to as projectors. For the
-forward projection, the contribution of each voxel to each detector pixel is calculated. For the
-backward projection, the contribution of each detector pixel each a voxel is computed.
+routines or algorithms, which calculate the matrix are frequently referred to as
+\textit{projectors}. For the forward projection, the contribution of each voxel to each detector
+pixel is calculated. For the backward projection, the contribution of each detector pixel to each a
+voxel is computed.
 
 In the first part of this chapter, a detailed overview over existing research and implementations of
 projectors is given. Next details on the projector used for this thesis is given. This is followed
 by a detailed study of accuracy and performance of the new projector compared to other projection
-methods.
+methods in \autoref{chap:experiments}.
 
 \section{Types of Projectors}\label{sec:projector_types}
 
@@ -92,7 +96,7 @@ be assigned a value. The same operation can be performed for the back projection
 updating the value at the detector pixel, update the voxel value.
 
 Instead of projecting the voxel center and interpolating, one can project the complete voxel onto
-the projector plane. This approach was taken by~\cite{long_3d_2010, long_3d_2010-1} and is usually
+the projector plane. This approach was taken in~\cite{long_3d_2010, long_3d_2010-1} and is usually
 referred to as separable footprint. They use trapezoidal functions to approximate the footprint both
 accurately and efficiently. Hence, the contribution of voxels to the detector pixels is based on
 these trapezoidal functions. It as also been ported to \gls{GPU} as shown in~\cite{wu_gpu_2011,
@@ -107,26 +111,26 @@ hence the projection is simple and accurate.~\cite{momey_b-spline_2012} already 
 parallel-beam and cone-beam geometry.
 
 Similarly,~\cite{ziegler_efficient_2006} proposed a footprint approach for blobs. And it was
-improved and ported to the \gls{GPU} by~\cite{bippus_projector_2011}.~\cite{kohler_iterative_2011}
+improved and ported to the \gls{GPU} in~\cite{bippus_projector_2011}.~\cite{kohler_iterative_2011}
 describes a blob projector for phase-contrast CT\@.
 
 A shared problem of the voxel-based approaches, is the challenge of parallel implementations. During
 the forward projection, shared access to the projector pixels might be needed. Hence, mitigation
 strategies must be developed.
 
-A conceptually different approach compared to the voxel-based approach, is the \textit{ray-based}
-approach. There, the key idea is to trace rays through the volume. Note that the forward projection
-of this approach, is trivially parallelizable. Each ray can be traced independently through the
-volume.
+A conceptually different approach compared to the voxel-based or footprint approaches, is the
+\textit{ray-based} approach. There, the key idea is to trace rays through the volume. Note that the
+forward projection of this approach, is trivially parallelizable. Each ray can be traced
+independently through the volume.
 
-A classical ray-driven approach is presented in
-\citeauthor*{siddon_fast_1985}~\cite{siddon_fast_1985}, hence often referred to as Siddon's method.
-There, the exact path length of a ray traversing through a volume is calculated. I.e.\ the exact
-calculation of the line integral of a single ray through the volume. This is also illustrated in
-\autoref{fig:visualization_siddon_traversal}. More recent work like~\cite{jacobs_fast_1998,
-	christiaens_fast_1999, zhao_fast_2004, gao_fast_2012} improved on the Siddon's method,
-especially in efficiency and performance.~\cite{de_greef_accelerated_2009, xiao_efficient_2012}
-ported Siddon's methods to the \gls{GPU}\@.
+A classical ray-driven approach is presented by \citeauthor*{siddon_fast_1985}
+in~\cite{siddon_fast_1985}. Hence, it is often referred to as Siddon's method. There, the exact path
+length of a ray traversing through an image or volume is calculated. This is also illustrated in
+\autoref{fig:visualization_siddon_traversal}. More recent work
+like~\cite{jacobs_fast_1998,christiaens_fast_1999,zhao_fast_2004, gao_fast_2012} improved on the
+Siddon's method, especially in efficiency and
+performance.~\cite{de_greef_accelerated_2009,xiao_efficient_2012} ported Siddon's methods to the
+\gls{GPU}\@.
 
 \begin{figure}
 	\centering
@@ -140,20 +144,42 @@ ported Siddon's methods to the \gls{GPU}\@.
 		dots).}\label{fig:visualization_siddon_traversal}
 \end{figure}
 
-Another classic is presented in~\cite{joseph_improved_1982}. It assumes a smooth image and
-interpolates between neighboring voxels along the ray path. It does so by a slice-interpolation,
-i.e.\ the voxels perpendicular to the main ray direction are considered.~\cite{graetz_high_2020}
-proposed a branchless \gls{GPU} version of this approach.
+Another classic is presented in~\cite{joseph_improved_1982} by \citeauthor{joseph_improved_1982}. It
+is often referred to as Joseph's method. It assumes a smooth image and interpolates between
+neighboring voxels along the ray path. It does so by a slice-interpolation, i.e.\ the voxels
+perpendicular to the main ray direction are considered.~\cite{graetz_high_2020} proposed a
+branchless \gls{GPU} version of this approach.
 
 The backward projections of ray-driven approaches typically trace the ray from a detector pixel to
 the source and update all visited voxels based on the weights calculated as in the forward
-direction. And in the of Joseph's based methods, also voxels close by are also updated. Note again
-here, that parallelization is hindered by the possibility of shared write access to voxels.
+direction. And in the backward projection of the Joseph's based methods, voxels close by are also
+updated. Note again here, that parallelization is hindered by the possibility of shared write access
+to voxels.
 
 The Siddon's and Joseph's method are classic and common approaches for the forward and backward
-projection. However, they do suffer from certain artifacts. This is especially true for Siddon's
-method. Due to the interpolation of the Joseph's method, less artifacts appear there. Such artifacts
-can be seen in the experiment section of this thesis (\autoref{chap:experiments}).
+projection. However, they do suffer from certain high-frequency artifacts. This is especially true
+for Siddon's method. Due to the interpolation of the Joseph's method, less artifacts appear there.
+Such artifacts can be seen in the experiment section of this thesis (\autoref{chap:experiments}).
+
+An entirely different approach to both the voxel- and ray-driven methods is the
+\textit{distance-driven} approach proposed by \citeauthor*{de_man_distance-driven_2002} in
+~\cite{de_man_distance-driven_2002,de_man_distance-driven_2004}. There, the voxel boundaries and
+detector pixel boundaries are projected onto a common axis, then the overlap is used as a weight.
+This approach is still considered state-of-the-art, however, is suffers from inaccuracies for
+projections, which are close to \(45^\circ\). A branchless \gls{GPU} version was proposed
+in~\cite{liu_gpu-based_2017}. The distance-driven approach doesn't suffer from any high-frequency
+artifacts like Siddon's or Joseph's methods do.
+
+Projectors based on blobs have been studied for quite some time. Ray-driven approaches are based on
+algorithms presented in~\cite{matej_practical_1996,popescu_ray_2004}. But rather than assuming an
+infinitely thin ray, they assume a beam. Hence, they are somewhat similar to Joseph's projectors,
+that they have to visit neighboring voxels, as the support of blobs is larger than that of pixels.
+~\cite{levakhina_distance-driven_2010} proposed a variant of the distance-driven approach based on
+blobs.
+
+Another class of projectors computes the intersection area of multiple rays. Such methods, as
+presented in~\cite{ha_study_2015,ha_efficient_2016,ha_look-up_2018}, calculate the intersection
+between rays directed a detector boundary.
 
 Typically, iterative reconstruction algorithms expect that the forward and backward projectors are
 the adjoint of each other, i.e.\ they are \textit{matched} projector
@@ -166,27 +192,8 @@ for the forward projection than the back projection or wise-versa. Hence, one mi
 fastest for the forward projection and another for the back projection. However, iterative
 reconstruction algorithms usually expect the backward projection to be the adjoint of the forward
 projection. If this is not met, convergence might not be guaranteed.
-\citeauthor*{zeng_unmatched_2000}~\cite{zeng_unmatched_2000} describes continuous which unmatched
+\citeauthor*{zeng_unmatched_2000}~\cite{zeng_unmatched_2000} describes conditions, which unmatched
 detector pairs must meet.
-
-An entirely different approach to both the voxel- and ray-driven methods is the
-\textit{distance-driven} approach~\cite{de_man_distance-driven_2002, de_man_distance-driven_2004}.
-There, the voxel boundaries and detector pixel boundaries are projected onto a common axis, then the
-overlap is used as a weight. This approach is still state of the art, however, is suffers from
-inaccuracies for projections, which are close to \(45^\circ\). A branchless \gls{GPU} version was
-proposed in~\cite{liu_gpu-based_2017}. The distance-driven approach doesn't suffer from any
-high-frequency artifacts.
-
-Projectors based on blobs have been studied for quite some time. Ray-driven approaches are based on
-algorithms presented in~\cite{matej_practical_1996, popescu_ray_2004}. But rather than assuming an
-infinitely thin ray, they assume a beam. Hence, they are somewhat similar to Joseph's projectors,
-that they have to visit neighboring voxels, as the support of blobs is larger than that of pixels.
-~\cite{levakhina_distance-driven_2010} proposed a variant of the distance-driven approach based on
-blobs.
-
-Another area of projectors compute the intersection area of multiple rays. Such methods, as
-presented in~\cite{ha_study_2015, ha_efficient_2016, ha_look-up_2018}, calculate the intersection
-between rays directed a detector boundary.
 
 \section{Implementation of Differentiable Projection Operators}\label{sec:implementation}
 
@@ -258,7 +265,7 @@ enough to assume it (compare~\cite{momey_b-spline_2012, momey_spline_2015} for s
 is assumed that the B-Spline are spherically-symmetric, and therefore the evaluation (and using
 their separability) simplifies to
 \begin{equation}
-	\radon\beta^d(r) = \beta^d(r) \prod^{n - 1}_{k=1} \beta^d(0)
+	\radon\beta^d(r) \approx \beta^d(r) \prod^{n - 1}_{k=1} \beta^d(0)
 \end{equation}
 For both basis functions, a \gls{LUT} is computed first for the creation of the projector, and the
 for the actual projections the values are looked up.
@@ -280,9 +287,9 @@ use it as a projector.
 As already touched on in \autoref{sec:blob_basis} and \autoref{sec:bspline_basis} both basis
 functions provide a couple of important parameters. Especially, the blob basis function depends on
 the exact values used for \(m\), \(\alpha\) and \(a\). Regarding B-Splines, they only have the
-parameter regarding the order \(d\). For the projector based on B-Splines only cubic B-Splines are
-used. The rationale is given in \autoref{sec:bspline_basis}. The projector using the blob basis
-function is configurable, and the parameters can be passed to projector.
+parameter regarding the order \(d\). For the projector based on B-Splines, only cubic B-Splines are
+supported for now. The rationale is given in \autoref{sec:bspline_basis}. The projector using the
+blob basis function is configurable, and the parameters can be passed to projector.
 
 \chapter{Experiments}\label{chap:experiments}
 
@@ -292,16 +299,15 @@ chapter structured as follows: Before diving into the experiments itself, a quic
 different error metrics is given. This is followed by a series of experiments. These experiments
 include the forward projection of the projectors, and the reconstruction with 3 different phantoms.
 The phantoms vary in complexity to analyze different behaviors. Also, an experiment using synthetic
-noise is conducted. The final part of the analysis covers runtime performance aspects of the
-projectors.
+noise is conducted. The final part of the analysis covers runtime performance of the projectors.
 
 Reproducibility is important to me. Therefore, all experiments can be run with the main branch of
 elsa. Please check out the \href{https://gitlab.lrz.de/IP/elsa}{GitLab repository} to find
 instructions on how to build and run elsa. All experiments are based on the
 \textit{example\_argparse} in the \textit{example} folder of the repository.
 
-The experiments are run using elsa. Hence, some necessary details which hold for all the experiment
-setups given later on. The overall geometric setup elsa follows is as described in
+As the experiments are run using elsa. Hence, some necessary details which hold for all the
+experiment setups given later on. The overall geometric setup elsa follows is as described in
 \citeauthor{hartley_multiple_2003}~\cite{hartley_multiple_2003}. The CT projection geometry uses a
 cone beam geometry, with flat detector. Further, elsa is itself unitless. Therefore, all distances
 are given in relation to pixel sizes.
@@ -315,28 +321,30 @@ are taken into considerations here.
 \begin{definition}[Mean Squared Error]
 	One of the most famous error metrics: \textit{\gls{MSE}}. It is defined as the
 	squared differences of each pixel value, weighted with the total number of pixels
-	\[ MSE = \frac{1}{n} \sum_{i=1}^{n}(x_i - \hat{x}_i)^2\]
-	where \(x_i\) is each voxel of the reference image, \(\hat{x}_i\) each voxel of the comparison
-	image and \(n\) the total number of voxels in the image.
+	\[ MSE(\mvec{x}, \hat{\mvec{x}}) = \frac{1}{n} \sum_{i=1}^{n}(\mvec{x}_i - \hat{\mvec{x}}_i)^2\]
+	where \(\mvec{x}_i\) is each voxel of the reference image, \(\hat{\mvec{x}}_i\) each voxel
+	of the comparison image and \(n\) the total number of voxels in the image.
 \end{definition}
 
 Building on top of the \gls{MSE}, the \textit{\gls{RMSE}}, is the square root of the
 \gls{MSE}.
 \begin{definition}[Normalized Root Mean Squared Error]
-	The \textit{\glsfirst{RMSE}} is defined as
-	\[ RMSE = \sqrt{MSE(x, \hat{x}}) \]
-	where \(x\) is the reference image and \(\hat{x}\) the comparison image. Further, the
-	\textit{\glsfirst{NRMSE}} is defined as
-	\[ NRMSE = \frac{RMSD}{x_{max} - x_{min}} \]
-	with \(x_{min}\) and \(x_{max}\) are the minimum and maximum values of the reference image,
-	respectively.
+	The \textit{\gls{RMSE}} is defined as
+	\[ RMSE(\mvec{x}, \hat{\mvec{x}}) = \sqrt{MSE(\mvec{x}, \hat{\mvec{x}}}) \]
+	where \(\mvec{x}\) is the reference image and \(\hat{\mvec{x}}\) the comparison image.
+	Further, the \textit{\gls{NRMSE}} is defined as
+	\[ NRMSE(\mvec{x}, \hat{\mvec{x}}) = \frac{RMSD}{\mvec{x}_{max} - \mvec{x}_{min}} \]
+	with \(\mvec{x}_{min}\) and \(\mvec{x}_{max}\) are the minimum and maximum values of the
+	reference image, respectively.
 \end{definition}
 Another frequently used metric is the \textit{\gls{PSNR}}
 \begin{definition}[Peak Signal to Noise Ration]
 	The \textit{\glsfirst{PSNR}} is defined as
-	\[ PSNR = 10 \cdot \log_{10}\left( \frac{MAX}{\sqrt{MSE}} \right) \]
-	where \(MAX\) is the maximum possible range depending on the data type of the images
+	\[ PSNR(\mvec{x}, \hat{\mvec{x}}) = 10 \cdot \log_{10}\left( \frac{MAX(\mvec{x})}{\sqrt{MSE(\mvec{x}, \hat{\mvec{x}})}} \right) \]
+	where \(MAX(\mvec{x})\) is the maximum possible range depending on the data type of the
+	images.
 \end{definition}
+
 All the so far given metrics are based on the \gls{MSE}, i.e.\ they measure based on exact voxel by
 voxel values. They measure absolute errors and weight them depending on the exact method. However,
 they don't necessarily have much in common with the visual perception of humans. The
@@ -344,14 +352,21 @@ they don't necessarily have much in common with the visual perception of humans.
 Rather than a pixel to pixel relation, \gls{SSIM} use the relation of pixels in close proximity to
 each other. Plus some other important values important to the human perception.
 \begin{definition}[Structural Similarity Index Measure]
-	given by Given a reference image \(x\) and a comparison image \(\hat{x}\) then the
+	Given a reference image \(\mvec{x}\) and a comparison image \(\hat{\mvec{x}}\) then the
 	\textit{\glsfirst{SSIM}} is
-	\[ SSIM(x, \hat{x}) = \frac{\left(2 \mu_x \mu_{\hat{x}} + c_1\right) \left( 2
-			\sigma_{x, \hat{x}} + c_2 \right)}{\left(\mu_x^2
-			+ \mu_{\hat{x}}^2 + c_1 \right) \left( \sigma_x^2 + \sigma_{\hat{x}}^2 + c_2 \right)} \]
-	where \(\mu_x\) is the average of \(x\), \(\mu_{\hat{x}}\) is the average of \(\hat{x}\),
-	\(\sigma_x^2\) is the variance of \(x\), \(\sigma_{\hat{x}}^2\) is the variance of
-	\(\hat{x}\), and \(\sigma_{x, \hat{x}}\) is the covariance of \(x\) and \(\hat{x}\)
+	\[ SSIM(\mvec{x}, \hat{\mvec{x}}) =
+		\frac{
+			\left( \mu_{\mvec{x}} \mu_{\hat{\mvec{x}}} + c_1 \right)
+			\left( 2 \sigma_{\mvec{x}, \hat{\mvec{x}}} + c_2 \right)
+		}{
+			\left( \mu_{\mvec{x}}^2 + \mu_{\hat{\mvec{x}}}^2 + c_1 \right)
+			\left( \sigma_{\mvec{x}}^2 + \sigma_{\hat{\mvec{x}}}^2 + c_2 \right)
+		}
+	\]
+	where \(\mu_{\mvec{x}}\) is the average of \(\mvec{x}\), \(\mu_{\hat{\mvec{x}}}\) is the
+	average of \(\hat{\mvec{x}}\), \(\sigma_{\mvec{x}}^2\) is the variance of \(\mvec{x}\),
+	\(\sigma_{\hat{\mvec{x}}}^2\) is the variance of \(\hat{\mvec{x}}\), and \(\sigma_{\mvec{x},
+		\hat{\mvec{x}}}\) is the covariance of \(\mvec{x}\) and \(\hat{\mvec{x}}\)
 \end{definition}
 The promise that the value returned by \gls{SSIM} a value in the range \([0, 1]\), and if the value
 is closer to one, it is `better' for the human perception.
@@ -386,7 +401,7 @@ reconstruction task.
 
 For this section, the sinograms of the Shepp-Logan phantom~\cite{shepp_fourier_1974} (shown in
 \autoref{fig:overview_shepp_logan_phantom}) are compared. The sinogram is computed for each
-different projector method (The projector using blobs and B-Splines, Siddon's and Joseph's method).
+different projector method (the projector using blobs and B-Splines, Siddon's and Joseph's method).
 The projection is performed in \(2\)D. The resolution of the initial phantom is \(512 \times 512\)
 pixel. The sinogram is computed for in total \(768\) projection angles arranged equally spaced in a
 full circle around the object. The source is \(51200\) units away from the image center and the
@@ -473,36 +488,35 @@ parameters as discussed by~\cite{levakhina_three-dimensional_2014} are followed,
 		projector (left to right), with \(786\) different poses in a \(360\)° arc around the
 		phantom using fan-beam geometry. The blob parameters used are \(m=2\),
 		\(\alpha=10.83\) and \(a=2\). The B-Spline basis function used has order \(3\).%
-		\subref{fig:sino_diff_blob_siddon}-\subref{fig:sino_diff_bspline_joseph} Absolute
+		\subref{fig:sino_diff_blob_siddon}--\subref{fig:sino_diff_bspline_joseph} Absolute
 		difference of normalized sinograms between (from left to right), the blob based to
 		Siddon's and Joseph's projector, then the B-Spline based to Siddon's and Joseph's
 		projector. \subref{fig:sino_diff_blob_bspline} Absolute difference of normalized
 		difference between the sinogram for the Blob based and B-Spline based projector.%
 		\subref{fig:plot_sino_differences} Plot of cross sections at \(180\)° (i.e.\ the
 		center row) of sinograms. The intensity difference of the Blob based projector
-		compared to the others is clearly visible. \subref{fig:forward_shepp_logan_phantom} original
-		Shepp-Logan phantom used to create the sinograms}%
+		compared to the others is clearly visible. \subref{fig:forward_shepp_logan_phantom}
+		original Shepp-Logan phantom used to create the sinograms}%
 	\label{fig:sinogram_shepp_logan}
 \end{figure}
 
 Looking at \autoref{fig:sinogram_shepp_logan}, an overview of the forward projection for the
-different projectors is shown. As a first, an obvious observation: All of the forward projections
-are accatable. There exist differences (as it can be seen in the second and third row of
+different projectors is shown. A first obvious observation: All of the forward projections are
+acceptable. There exist differences (as it can be seen in the second and third row of
 \autoref{fig:sinogram_shepp_logan}), but one has to look more in-depth. Staying with the overview
 first and looking at the first row, one should note the extreme difference in displayed values. The
-projectors based on the blob basis functions is noticeably brigther. This is reconfirmed with the
+projectors based on the blob basis functions is noticeably brighter. This is reconfirmed with the
 plot in \autoref{fig:plot_sino_differences}. The plot shows a cross-section slice of the sinogram at
 \(180^\circ\). There it is clear, the blob based projector has a throughout higher intensity value.
 This also motivates the choice of absolute normalized differences. Focusing on the overall visible
 artifacts, one can see in the different images
 (\autoref{fig:sino_diff_blob_siddon}--\autoref{fig:sino_diff_bspline_joseph}), artifacts most
-notably in the differences to the Siddon's projector. The area around angles divadable by
-\(90^\circ\) contains clearly ring like artifacts especially in the boundary portion of the
+notable appear in the comparison to the Siddon's projector. The area around angles multiples of
+\(90^\circ\) exhibit clearly high-frequency artifacts. Especially, in the boundary portion of the
 sinogram. The blob and B-Spline based projectors compared to the Joseph's have the most visible
-difference at multiples of \(45^\circ\).
-Lastly looking at the difference between the blob and and B-Spline based projector in
-\autoref{fig:sino_diff_blob_bspline}, once can see clear differences in at multiples of
-\(45^\circ\).
+difference at multiples of \(45^\circ\). Lastly looking at the difference between the blob and
+B-Spline based projector in \autoref{fig:sino_diff_blob_bspline}, once can see clear differences in
+at multiples of \(45^\circ\).
 
 \begin{figure}
 	\centering
@@ -512,22 +526,22 @@ Lastly looking at the difference between the blob and and B-Spline based project
 			\begin{subfigure}{0.3125\textwidth}
 				\stackinset{c}{}{t}{-.2in}{\bfseries Blob Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_Blob_windowed.png}}
-				\caption{Blob based projector}\label{fig:sinogram_blob_center_crop}
+				\caption{}\label{fig:sinogram_blob_center_crop}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
 				\stackinset{c}{}{t}{-.2in}{\bfseries Cubic B-Spline Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_BSpline_windowed.png}}
-				\caption{B-Spline based projector}\label{fig:sinogram_bspline_center_crop}
+				\caption{}\label{fig:sinogram_bspline_center_crop}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
 				\stackinset{c}{}{t}{-.2in}{\bfseries Siddon's Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_Siddon_windowed.png}}
-				\caption{Siddon's projector}\label{fig:sinogram_siddon_center_crop}
+				\caption{}\label{fig:sinogram_siddon_center_crop}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
 				\stackinset{c}{}{t}{-.2in}{\bfseries Joseph's Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_Joseph_windowed.png}}
-				\caption{Joseph's projector}\label{fig:sinogram_joseph_center_crop}
+				\caption{}\label{fig:sinogram_joseph_center_crop}
 			\end{subfigure}%
 		}}
 
@@ -535,19 +549,19 @@ Lastly looking at the difference between the blob and and B-Spline based project
 			\rotatebox[x=-2.em, y=0em]{90}{\bfseries Abs.\ Normalized Difference\strut}
 			\begin{subfigure}{0.3125\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_difference_Blob_Siddon_windowed.png}
-				\caption{Difference Blob and Siddon}\label{fig:sinogram_difference_blob_siddon_crop}
+				\caption{}\label{fig:sinogram_difference_blob_siddon_crop}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_difference_Blob_Joseph_windowed.png}
-				\caption{Difference Blob and Joseph}\label{fig:sinogram_difference_blob_joseph_crop}
+				\caption{}\label{fig:sinogram_difference_blob_joseph_crop}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_difference_BSpline_Siddon_windowed.png}
-				\caption{Difference B-Spline and Siddon}\label{fig:sinogram_difference_bspline_siddon_crop}
+				\caption{}\label{fig:sinogram_difference_bspline_siddon_crop}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_difference_BSpline_Joseph_windowed.png}
-				\caption{Difference B-Spline and Joseph}\label{fig:sinogram_difference_bspline_joseph_crop}
+				\caption{}\label{fig:sinogram_difference_bspline_joseph_crop}
 			\end{subfigure}%
 		}}
 
@@ -564,7 +578,7 @@ Lastly looking at the difference between the blob and and B-Spline based project
 	\caption{\subref{fig:sinogram_blob_center_crop}--\subref{fig:sinogram_joseph_center_crop}
 		crop into the sinogram shown in \autoref{fig:sinogram_shepp_logan} (i.e.\ sinogram
 		created from a \(512 \times 512\) Shepp-Logan phantom using \(786\) projection poses
-		positioned in a full \(360^\circ\) circlular trajectory). The crop shows part of the
+		positioned in a full \(360^\circ\) circular trajectory). The crop shows part of the
 		projections of around \(180\)° to \(225\)°. The blob parameters used are \(m=2\),
 		\(\alpha=10.83\) and \(a=2\). The B-Spline basis function used has order \(3\).
 		\subref{fig:sinogram_difference_blob_siddon_crop}--\subref{fig:sinogram_difference_blob_bspline_crop}
@@ -577,7 +591,7 @@ Lastly looking at the difference between the blob and and B-Spline based project
 \end{figure}
 
 Taking a closer look in \autoref{fig:sinogram_shepp_logan_cropped}, a crop of the results from
-\autoref{fig:sinogram_shepp_logan} can be seen. Specifically, a crop that contains a protion of the
+\autoref{fig:sinogram_shepp_logan} can be seen. Specifically, a crop that contains a portion of the
 projections with angles \([180^\circ, 225^\circ]\). In this close up, the typical ring like
 artifacts
 of ray-driven projectors can be clearly seen in the forward projection of the Siddon's projector
@@ -655,9 +669,10 @@ projection angles before and after. The adjacent slices are shown in
 are present every \(90^\circ\), i.e.\ at \(45^\circ\), \(135^\circ\), \(225^\circ\), and
 \(315^\circ\). Note also, the brightness difference is notable again.
 
-After this found, I investigated further into the two-dimensional case, to see if similar behaviour
-can be seen. This might be connected to the artifacts seen in \autoref{fig:sino_diff_blob_bspline}.
-This seems to be somewhat true, however further investigation is necessary.
+After this discovery, I investigated further into the two-dimensional case, to see if similar
+behaviour can be seen. As already mentioned, \autoref{fig:sinogram_difference_blob_bspline_crop}
+shows clear artifacts, these might be from the same origin. This seems to be somewhat true, however
+further investigation is necessary.
 
 \begin{figure}
 	\centering
@@ -691,16 +706,16 @@ This seems to be somewhat true, however further investigation is necessary.
 
 After the forward projection, numerous experiments using synthetic data is presented. In total 3
 different phantoms are used, ranging from simple to complex. The first phantom is just a plain
-rectangle. The rectangle is centered in the image and the image has a constant value of \(1\) inside
-the rectangle, and \(0\) everywhere else. It is included as certain artifacts are spoted with ease
-in such an easy setting. The next phantom, is the Shepp-Logan phantom~\cite{shepp_fourier_1974}. It
-resembles a human head and is a standard test phantom. Due to its purely synthetic nature, it is
-simple to compute error measures for reconstructions. The last phantom used is a rather complex one.
-It is an example reconstruction of an human abdomen. However, the sinogram is generated from the
-original image and it will be compared to it. Therefore, it is still a synthetic test, though the
-complexity of the data resembles realistic medical data. All three phantoms are shown in
-\autoref{fig:experiment_overview_phantoms}. Please note, that for all cases, the inverse
-crime~\cite{wirgin_inverse_2004} is committed.
+rectangle. The rectangle is centered in the image and the has a constant value of \(1\) inside the
+rectangle, and \(0\) everywhere else. It is included as certain artifacts are spotted with ease in
+such a setting. The next phantom is the Shepp-Logan phantom~\cite{shepp_fourier_1974}. It resembles
+a human head and is a standard test phantom. Due to its purely synthetic nature, it is simple to
+compute error measures for reconstructions. The last phantom used is a rather complex one. It is an
+example reconstruction of an human abdomen. However, the sinogram is generated from the original
+image and it will be compared to it. Therefore, it is still a synthetic test, though the complexity
+of the data resembles realistic medical data. All three phantoms are shown in
+\autoref{fig:experiment_overview_phantoms}. Please note, that for all experiments in this section,
+the inverse crime~\cite{wirgin_inverse_2004} is committed.
 
 \begin{figure}
 	\centering
@@ -720,25 +735,23 @@ crime~\cite{wirgin_inverse_2004} is committed.
 		}}
 	\caption{Overview of the different phantoms used for the synthetic tests. From left to
 		right: Rectangular phantom, Shepp-Logan phantom, lateral cross-section human
-		abdoman. All phantoms are are displayed with a windowed to values in the range \([0,
+		abdomen. All phantoms are are displayed with a windowed to values in the range \([0,
 				1]\).}\label{fig:experiment_overview_phantoms}
 \end{figure}
 
-For all 3 phantoms the general setup is chosen to be the same. First in this section only
-two-dimensional reconstructiosn are performed. The resolution of the phantom is \(512 \times 512\)
-pixels. No additional noise was added. The sinogram is computed with each projector method and a
-total of \(512\) projection angles equally spaced in an \(180^\circ\) arc around the object. Note
-that the \(180^\circ\) projection angle is excluded, as it already does not provide additional
-information. The one-dimensional detector has a resolution of \(\lfloor 512 * \sqrt{2} \rfloor =
-724\)
+For all 3 phantoms the general setup is chosen to be the same. In this section only two-dimensional
+reconstructions are performed. The resolution of the phantom is \(512 \times 512\) pixels. No
+additional noise was added. The sinogram is computed with each projector method and a total of
+\(512\) projection angles equally spaced in an \(180^\circ\) arc around the object. Note that the
+\(180^\circ\) projection angle is excluded. The one-dimensional detector has a resolution of
+\(\lfloor 512 * \sqrt{2} \rfloor = 724\).
 
-As the reconstruction are performed using elsa, and elsa is itself unitless, distances are given in
-respect to the size of voxels.   The size of voxels is \(1\) for all
-dimensions. The distance from the simulated X-ray source is \(51200\) units away from the rotation
-center (i.e. the center of the volume), and the principal point of the detector is \(512\) units
-away.
+As the reconstructions are performed using elsa, and elsa is itself unitless, distances are given in
+respect to the size of voxels.   The size of voxels is \(1\) for all dimensions. The distance from
+the simulated X-ray source is \(51200\) units away from the rotation center (i.e. the center of the
+volume), and the principal point of the detector is \(512\) units away.
 
-The iterative reconstruction algorithm is \gls{FISTA}. The reoncsurctions for the rectangle and
+The iterative reconstruction algorithm is \gls{FISTA}. The reconstructions for the rectangle and
 Shepp-Logan phantom are run each for \(50\) iterations, and \(300\) iterations for the medical
 phantom with the default regularization parameter of \(0.5\). This default regularization parameter
 yielded among the best results.
@@ -757,25 +770,25 @@ In the following sections, the experiments for each phantom are presented and di
 			\begin{subfigure}{0.3125\textwidth}
 				\stackinset{c}{}{t}{-.2in}{\bfseries Blob Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_cropped_windowed_Blob.png}}
-				\caption{Blob based projector}%
+				\caption{}%
 				\label{fig:rectangle_recon_artifacts_blob}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
 				\stackinset{c}{}{t}{-.2in}{\bfseries Cubic B-Spline Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_cropped_windowed_BSpline.png}}
-				\caption{B-Spline based projector}%
+				\caption{}%
 				\label{fig:rectangle_recon_artifacts_bspline}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
 				\stackinset{c}{}{t}{-.2in}{\bfseries Siddon's Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_cropped_windowed_Siddon.png}}
-				\caption{Siddon's projector}%
+				\caption{}%
 				\label{fig:rectangle_recon_artifacts_siddon}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
 				\stackinset{c}{}{t}{-.2in}{\bfseries Joseph's Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_cropped_windowed_Joseph.png}}
-				\caption{Joseph's projector}%
+				\caption{}%
 				\label{fig:rectangle_recon_artifacts_joseph}
 			\end{subfigure}%
 		}}
@@ -784,22 +797,22 @@ In the following sections, the experiments for each phantom are presented and di
 			\rotatebox[x=-2em, y=0em]{90}{\bfseries Abs.\ Normalized Difference\strut}
 			\begin{subfigure}{0.3125\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_difference_cropped_windowed_Blob.png}
-				\caption{Blob based projector}%
+				\caption{}%
 				\label{fig:rectangle_recon_difference_blob}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_difference_cropped_windowed_BSpline.png}
-				\caption{B-Spline based projector}%
+				\caption{}%
 				\label{fig:rectangle_recon_difference_bspline}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_difference_cropped_windowed_Siddon.png}
-				\caption{Siddon's projector}%
+				\caption{}%
 				\label{fig:rectangle_recon_difference_siddon}
 			\end{subfigure}%
 			\begin{subfigure}{0.3125\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_difference_cropped_windowed_Joseph.png}
-				\caption{Joseph's projector}%
+				\caption{}%
 				\label{fig:rectangle_recon_difference_joseph}
 			\end{subfigure}%
 		}}
@@ -808,21 +821,21 @@ In the following sections, the experiments for each phantom are presented and di
 		\makebox[1.3\textwidth]{%
 			\begin{subfigure}[b]{0.3125\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dphantom_rectangle.png}
-				\caption{Rectangular phantom}%
+				\caption{}%
 				\label{fig:rectangle_recon_phantom}
 			\end{subfigure}%
 		}}
 	\caption{\subref{fig:rectangle_recon_artifacts_blob}--\subref{fig:rectangle_recon_artifacts_joseph}
-                crop of top left corner of the reconstruction rectangle with different projectors.
-                The reconstruction is performed using \(50\) iterations using \gls{FISTA}. The blob
-                basis function use \(m=2\), \(\alpha=10.83\) and \(a=2\) and cubic B-Splines are
-                used as basis function for the projectors
+		crop of top left corner of the reconstruction rectangle with different projectors.
+		The reconstruction is performed using \(50\) iterations using \gls{FISTA}. The blob
+		basis function use \(m=2\), \(\alpha=10.83\) and \(a=2\) and cubic B-Splines are
+		used.
 		\subref{fig:rectangle_recon_difference_blob}--\subref{fig:rectangle_recon_difference_joseph}
 		absolute normalized difference of reconstructed image and the phantom in
 		\subref{fig:rectangle_recon_phantom}. In order from left to right and top down, the
 		differences of the reconstruction using the Blob based, B-Spline, Siddon's and
 		Joseph's projector and the original phantom. The window for each image is given on
-		the right side for each image spearately \subref{fig:rectangle_recon_phantom}
+		the right side for each image separately \subref{fig:rectangle_recon_phantom}
 		Rectangular phantom with marked region denoting the cropped region of the images in
 		\subref{fig:rectangle_recon_artifacts_blob}--\subref{fig:rectangle_recon_difference_joseph}
 	}%
@@ -857,8 +870,9 @@ based projector compared to the Siddon's and Joseph's projector.
 The metrics discussed in \autoref{sec:error_measurements} for the reconstruction are shown in
 \autoref{tab:error_metric_rectangle}. All \(l_2\) based norms (i.e. \gls{MSE}, \gls{NRMSE} and
 \gls{PSNR}) are lower for the projectors based on Siddon's and Joseph's method. But all of them are
-quite close to each other (around \(1e-4\) for \gls{MSE}). Notably they are all in the same order of
-magnitude. \gls{SSIM} is similar as well for all, only the Siddon's method falls behind by a bit.
+quite close to each other (around \num{1e-4} for \gls{MSE}). Notably, they are all in the same order
+of magnitude. A similar observation can be made for \gls{SSIM}, only the Siddon's method falls
+behind by a bit.
 
 \subsection{Shepp-Logan Phantom}
 
@@ -918,26 +932,27 @@ magnitude. \gls{SSIM} is similar as well for all, only the Siddon's method falls
 		}}
 
 	\caption{\subref{fig:reconstruction_shepp_logan_blob}--\subref{fig:reconstruction_shepp_logan_joseph}
-                Reconstruction of the Shepp-Logan phantom using the (from left to right) the
-                projectors using the blob and B-Spline basis function followed by the projector
-                based on the Siddon's and Joseph's method. The reconstruction is performed using
-                \(50\) iterations of \gls{FISTA}. The parameters for the blob basis function are
-                \(m=2\), \(\alpha=10.83\) and \(a=2\) and cubic B-Splines are used as basis
-                function.
+		Reconstruction of the Shepp-Logan phantom using the (from left to right) the
+		projectors using the blob and B-Spline basis function followed by the projector
+		based on the Siddon's and Joseph's method. The reconstruction is performed using
+		\(50\) iterations of \gls{FISTA}. The parameters for the blob basis function are
+		\(m=2\), \(\alpha=10.83\) and \(a=2\) and cubic B-Splines are used as basis
+		function.
 		\subref{fig:reconstruction_shepp_logan_cropped_blob}--\subref{fig:reconstruction_shepp_logan_joseph}
 		crop into the difference of each reconstruction with the original phantom, the same
 		order of projectors is given. The window is given for each image individually.
 		\subref{fig:rectangle_shepp_logan_phantom} the original phantom including a red
-		rectangle indicating the croped region.
+		rectangle indicating the cropped region.
 	}%
 	\label{fig:reconstruction_shepp_logan}
 \end{figure}
 
 The reconstruction for the Shepp-Logan phantom is shown in figure
 \autoref{fig:reconstruction_shepp_logan}. The top row shows the final reconstruction, the middle row
-a crop into the difference image, and the bottom shows the region cropped into. For the first two
-rows the reconstruction are performed using (from left to right) the projector using the blob basis
-function, the B-Spline basis function, the Siddon's method and the Joseph's method.
+a crop into the difference image, and the bottom shows complete phantom with cropped region marked.
+For the first two rows the reconstruction are performed using (from left to right) the projector
+using the blob basis function, the B-Spline basis function, the Siddon's method and the Joseph's
+method.
 
 As expected, the Siddon's method shows clear ring artifacts (best seen in
 \autoref{fig:reconstruction_shepp_logan_siddon}). They are also present in the Joseph's method, but
@@ -961,12 +976,12 @@ sign of ring artifacts. Neither in the first row, nor in the cropped difference 
 	\label{tab:error_metric_shepp_logan}
 \end{table}
 
-The metrics (listed in \autoref{tab:error_metric_shepp_logan}). Interestingly, the visually worst
-reconstruction (Siddon's one), performs best regarding \(l_2\) based metrics (i.e.\ \gls{MSE},
-\gls{NRMSE} and \gls{PSNR}). However, the visual perception is backed up by the \gls{SSIM}. The
-Siddon's method performs quite a bit worse there (around \(8\%\) compared to both the blob and
-B-Spline one), and both the blob and B-Spline based projector can outperform the Joseph's projector.
-Though against the later one, it is a small difference.
+The metrics for the reconstruction are listed in \autoref{tab:error_metric_shepp_logan}.
+Interestingly, the visually worst reconstruction (Siddon's one), performs best regarding \(l_2\)
+based metrics (i.e.\ \gls{MSE}, \gls{NRMSE} and \gls{PSNR}). However, the visual perception is
+backed up by the \gls{SSIM}. The Siddon's method performs quite a bit worse (around \(8\%\)
+compared to both the blob and B-Spline one), and both the blob and B-Spline based projector can
+outperform the Joseph's projector. Though against the later one, it is a small difference.
 
 \subsection{Human Abdomen}
 
@@ -1026,27 +1041,28 @@ Though against the later one, it is a small difference.
 		}}
 
 	\caption{\subref{fig:reconstruction_medical_blob}--\subref{fig:reconstruction_medical_joseph}
-                Reconstruction of the medical phantom using the different projectors as a basis. It
-                is performed using \(300\) iterations of \gls{FISTA}. From left, to right: the
-                projector based on the blob basis, B-Spline basis, Siddon's method and finally
-                Joseph's method. The parameters for the blob basis function are \(m=2\),
-                \(\alpha=10.83\) and \(a=2\) and cubic B-Splines are used as basis function. The
-                second row
-		(\subref{fig:reconstruction_medical_blob}--\subref{fig:reconstruction_medical_joseph})
+		Reconstruction of the medical phantom using the different projectors as a basis. It
+		is performed using \(300\) iterations of \gls{FISTA}. From left, to right: the
+		projector based on the blob basis, B-Spline basis, Siddon's method and finally
+		Joseph's method. The parameters for the blob basis function are \(m=2\),
+		\(\alpha=10.83\) and \(a=2\) and cubic B-Splines are used as basis function. The
+		second row
+		\subref{fig:reconstruction_medical_blob}--\subref{fig:reconstruction_medical_joseph}
 		shows a crop into the difference image to the phantom data. The reconstructed image
 		used the same projector as the reconstruction in the row above.
 		\subref{fig:medical_phantom_marked} the original phantom including a red rectangle
-		indicating the croped region.
+		indicating the cropped region.
 	}%
 	\label{fig:reconstruction_medical}
 \end{figure}
 
-The final phantom taken into account is the reconstruction of the human abdomen. The reoncsurctions
+The final phantom taken into account is the reconstruction of the human abdomen. The reconstruction
 is shown in \autoref{fig:reconstruction_medical}. After the \(300\) solver iterations, all
 reconstruction look decent. However, no great difference can be seen on this scale. Looking at the
 cropped images in the second row of \autoref{fig:reconstruction_medical}, one can see that the new
-projectors a cleaner compared especially to Siddon's based projector. Interestingly, the window
-interval is a touch, but notibly higher for both the blob and B-Spline basis functions.
+projectors are cleaner compared especially to Siddon's based projector. Interestingly, the window
+interval is a touch, but notably higher for both the blob and B-Spline basis functions. For such a
+complex phantom, the difference seem to vanish.
 
 \begin{table}[h]%
 	\centering
@@ -1065,20 +1081,23 @@ interval is a touch, but notibly higher for both the blob and B-Spline basis fun
 	\label{tab:error_metric_medical}
 \end{table}
 
-Interestingly, the \gls{SSIM} (right-most column in \autoref{tab:error_metric_medical}) for the blob
-based projector is significantly lower compared to the other methods. The \(l_2\) based norms only
-show a slightly worse performance of the blob based projector. This behaviour is consistent and ran
-multiple times to ensure the correctness of this result.
+The \gls{SSIM} (right-most column in \autoref{tab:error_metric_medical}) for the blob based
+projector is significantly lower compared to the other methods. The \(l_2\) based norms only show a
+slightly worse performance of the blob based projector. This behaviour is consistent over multiple
+runs of this experiment. Apart from this, the metric for the other methods also indicate less
+influence of the exact forward model. However, the cubic B-Spline based projector still manages to
+consistently outperform both the Siddon's and Joseph's projector in regards to all metrics used.
 
 \subsection{Behavior in the Presence of Noise}
 
 Another interesting case is a detailed experiment with noisy data. The medical sample already
-provided a sample including noise. But there it is ingrained in the phantom and hence can not be
-analyzed independently. For this, the same overall setup was used as for the Shepp-Logan phantom in
-the previous section, but additionally \(1\%\) of Gaussian noise is added to the sinogram before the
-reconstruction process starts. I.e\ the mean of the Gaussian is \(0\) and the standard deviation is
-set to be \(1\%\) of the value range of the sinogram. Further, the reconstruction is run for \(150\)
-iterations, instead of \(50\), all the other parameters are set exactly as in the above case.
+provided a sample including noise. But there, it is ingrained in the phantom and hence can not be
+analyzed independently. For this experiment, the same overall setup was used as for the Shepp-Logan
+phantom in the previous section, but additionally \(1\%\) of Gaussian noise is added to the sinogram
+before the reconstruction process starts. I.e.\ the mean of the Gaussian is \(0\) and the standard
+deviation is set to be \(1\%\) of the value range of the sinogram. Further, the reconstruction is
+run for \(150\) iterations, instead of \(50\). All the other parameters are set exactly as in the
+above case.
 
 \begin{figure}
 	\centering
@@ -1135,24 +1154,24 @@ iterations, instead of \(50\), all the other parameters are set exactly as in th
 		}}
 
 	\caption{\subref{fig:reconstruction_noise_blob}--\subref{fig:reconstruction_noise_joseph}
-                Reconstruction of the Shepp-Logan phantom, when \(1\%\) of Gaussian noise is added
-                to the sinogram. \(150\) iterations of \gls{FISTA} are used for the reconstruction.
-                From left, to right: the projector based on the blob basis, B-Spline basis, Siddon's
-                method and finally Joseph's method. The parameters for the blob basis function are
-                \(m=2\), \(\alpha=10.83\) and \(a=2\) and cubic B-Splines are used as basis
-                function. The second row
-		(\subref{fig:reconstruction_noise_cropped_blob}--\subref{fig:reconstruction_medical_cropped_joseph})
+		Reconstruction of the Shepp-Logan phantom, when \(1\%\) of Gaussian noise is added
+		to the sinogram. \(150\) iterations of \gls{FISTA} are used for the reconstruction.
+		From left, to right: the projector based on the blob basis, B-Spline basis, Siddon's
+		method and finally Joseph's method. The parameters for the blob basis function are
+		\(m=2\), \(\alpha=10.83\) and \(a=2\) and cubic B-Splines are used as basis
+		function. The second row
+		\subref{fig:reconstruction_noise_cropped_blob}--\subref{fig:reconstruction_medical_cropped_joseph}
 		shows a crop into the difference image to the phantom data. The reconstructed image
 		used the same projector as the reconstruction in the row above.
 		\subref{fig:phantom_noise_marked} the original phantom including a red rectangle
-		indicating the croped region.
+		indicating the cropped region.
 	}%
 	\label{fig:reconstruction_noise}
 \end{figure}
 
-Both the blob and B-Spline based projectors handle gaussian noise nicely, as it can be seen in
+Both the blob and B-Spline based projectors handle Gaussian noise nicely, as it can be seen in
 \autoref{fig:reconstruction_noise}. They do show some for of artifacts, but that is to be expected
-in the presence of noise. The center elipses are quite clean and the top most circle shows some
+in the presence of noise. The center ellipses are quite clean and the top most circle shows some
 artifacts. However, it is quite a bit better controlled than the Siddon's and Joseph's method.
 
 \begin{table}[h]%
@@ -1172,25 +1191,34 @@ artifacts. However, it is quite a bit better controlled than the Siddon's and Jo
 	\label{tab:error_metric_noise}
 \end{table}
 
-This is also backed up by the error metrics given in \autoref{tab:error_metric_noise}. Both the
-blob and B-Spline basis function based projectors perform better according to the \gls{SSIM}. And
-with a decent lead ad that as well. Again they are both worse in the \gls{MSE} based metrics, but
-just a bit at that.
+This is also backed up by the error metrics given in \autoref{tab:error_metric_noise}. Both the blob
+and B-Spline basis function based projectors perform better according to the \gls{SSIM}. And with a
+decent lead as that as well. Again they are both worse in the \gls{MSE} based metrics, but just a
+bit at that.
 
 \section{Quality Summary}\label{sec:experiments_quality_projection}
 
 This section is a summary of the already discussed qualitative impression. As expected from the
-literature, Siddon's method performs the worst among the methods compared. It shows clear ring like
-artifacts in both the forward projection and the final reconstruction. In the forward projection is
-performs specifically poor at angles around each \(90^\circ\). Furthermore, it poorly handles noise.
-It should be noted however, that the Siddon's method performs equally well or sometimes better than
-the other methods if one only looks at the \(l_2\) based error metrics (\gls{MSE}, \gls{NRMSE} and
-\gls{PSNR}).
+literature, Siddon's method performs the worst among the methods compared. It shows clear
+high-frequency artifacts in both the forward projection and the final reconstruction. In the forward
+projection is performs specifically bad at angles around each \(90^\circ\). Furthermore, it poorly
+handles noise. It should be noted however, that the Siddon's method performs equally well or
+sometimes better than the other methods if one only looks at the \(l_2\) based error metrics
+(\gls{MSE}, \gls{NRMSE} and \gls{PSNR}).
 
 The Joseph's projector performs better. Is shows less artifacts in the forward projector, the
-reconstructions are cleaner and noise is handled better. Thourghout the tests, it performs basically
+reconstructions are cleaner and noise is handled better. Throughout the tests, it performs basically
 identically in all \(l_2\) based error metrics, and beats the Siddon's method regarding the
 \gls{SSIM} in all experiments.
+
+Both the blob and B-Spline based projector outperform the Siddon's and Joseph's based projectors.
+The blob based projector does not have any visible artifacts in the forward projection. The B-Spline
+based projector exhibits artifacts for multiples of the \(45^\circ\) projection angle in the
+three-dimensional case. However, it seems to be the only affected projection angle. On the other
+hand, the blob base projector --- according to the error metrics --- has a significant drop in
+quality in the reconstruction of the human abdomen. This behaviour does not reflect the visual
+inspection. Further, both methods perform well in the presence of added noise to the forward
+projection.
 
 \section{Performance Overview}\label{sec:experiments_performance_projection}
 
@@ -1200,7 +1228,7 @@ The experiments run either the forward or the backward projector in a tight loop
 of times. For the benchmarking of the forward projection, the phantom is generated once and then
 reused for each iteration. For the backward projection, the sinogram is computed once and then
 reused. After each iterator the elapsed time is stored and the next iteration is started. To ensure
-both data and code is in cache, 2 warmup iterations are run. For both dimensions, only the size of
+both data and code is in cache, 2 warm-up iterations are run. For both dimensions, only the size of
 the original phantom changes. The number of projection positions is keep the same, to ensure only
 the phantom size induces changes in the runtime.
 
@@ -1210,14 +1238,14 @@ In the three-dimensional case, only \(64\) projection positions are used, the ph
 from \(32 \times 32 \times 32\) to \(64 \times 64 \times 64\) and only \(25\) iterations are run.
 
 The same parameters for the basis function are used as with the other experiments. Importantly for
-this section, both basis function have a support of \(2\).
+this section, both basis function have a support of \(2\) units.
 
-The experiments are run on an system with an AMD Ryzen 7 3700X with \(8\) cores, \(16\) threads. The
-experiments are performed an all \(16\) threads. The CPU has a base clock of \(3.6\) GHz, but is
-able to boost up to \(4.4\) GHz under load, under certain conditions. The system has \(16013\) MiB
-of main memory and the operating system is Linux based, running the '5.10.105-1-MANJARO` kernel. As
-much as possible background tasks are closed during the benchmarks and the machines is left running
-until finished without any user interaction.
+The experiments are run on a machine equipped with an AMD Ryzen 7 3700X with \(8\) cores, \(16\)
+threads. The experiments are performed an all \(16\) threads. The CPU has a base clock of \(3.6\)
+GHz, but is able to boost up to \(4.4\) GHz under load The system has \(16013\) MiB of main memory
+and the operating system is Linux based, running the '5.10.105-1-MANJARO` kernel. As much as
+possible background tasks are closed during the benchmarks and the machines is left running until
+finished without any user interaction.
 
 \begin{table}[h]%
 	\centering
@@ -1248,10 +1276,10 @@ The performance drop for the three-dimensional case is close to another \(6\) ti
 the number of visited voxels grows from \(5\) visited voxels to \(25\) in the three-dimensional
 case, this is only to be expected.
 
-In \autoref{fig:performance_2d_lineplot} the mean results and their standard deviations are ploted
-for the two-dimensional case, and in \autoref{fig:performance_3d_lineplot} the results for the
-three-dimensional case are plotted. Noticeably, the method's scale similarly as both the Siddon's
-and Joseph's method, but the performance drop can be seen there as well.
+In \autoref{fig:performance_2d_lineplot} the mean runtime and the standard deviations of each
+benchmark is plotted for the two-dimensional case and in \autoref{fig:performance_3d_lineplot} for
+the three-dimensional case are plotted. Noticeably, the method's scale similarly as both the
+Siddon's and Joseph's method, but the performance drop can be seen there as well.
 
 \begin{figure}
 	\centering
@@ -1271,7 +1299,7 @@ and Joseph's method, but the performance drop can be seen there as well.
 	\caption{Runtime in seconds for the 4 different projection methods, both for the forward
 		projection \subref{fig:performance_2d_lineplot_forward} and backward
 		projection \subref{fig:performance_2d_lineplot_backward}. Lightly shaded area around
-		the line plot show the tolerance interval based on the stdandard deviation of the
+		the line plot show the tolerance interval based on the standard deviation of the
 		samples for each size. Both axis use a base 2 logarithmic scale. Number of angles is
 		fixed to \(512\) for all experiments.}%
 	\label{fig:performance_2d_lineplot}
@@ -1295,7 +1323,7 @@ and Joseph's method, but the performance drop can be seen there as well.
 	\caption{Runtime seconds for the 4 different projection methods, both for the
 		three-dimensional forward projection \subref{fig:performance_2d_lineplot_forward}
 		and backward projection \subref{fig:performance_2d_lineplot_backward}. Lightly
-		shaded area around the line plot show the tolerance interval based on the stdandard
+		shaded area around the line plot show the tolerance interval based on the standard
 		deviation of the samples for each size. Both axis use a base 2 logarithmic scale.
 		Number of angles is fixed to \(512\) for all experiments.}%
 	\label{fig:performance_3d_lineplot}
@@ -1304,7 +1332,7 @@ and Joseph's method, but the performance drop can be seen there as well.
 \autoref{fig:performance_2d_violin_forward} and \autoref{fig:performance_2d_violin_backward}
 shows a detailed break down of the two-dimensional measurements from the previous plots. They are
 split into the forward and backward projection and each projector has an individual plot. The blob
-and B-Splien based projectors performance quite consistent compared to the Siddon's and Joseph's,
+and B-Spline based projectors performance quite consistent compared to the Siddon's and Joseph's,
 i.e.\ they have only few outliers.
 
 \begin{figure}
@@ -1334,17 +1362,25 @@ i.e.\ they have only few outliers.
 			\end{subfigure}%
 		}}
 
-	\caption{Violing plot for the forward projection of a selection of the sizes, individually
+	\caption{Violin plot for the forward projection of a selection of the sizes, individually
 		given for the different projectors. Plot for the blob based projector
 		\subref{fig:performance_2d_violin_forward_blob} B-Spline based
 		\subref{fig:performance_2d_violin_forward_bspline}, Siddon's
 		\subref{fig:performance_2d_violin_forward_siddons} and Joseph's
 		\subref{fig:performance_2d_violin_forward_joseph}. The median is given as the white
-		line, the thicker line is the interquantile range, the thin bars give the give the
+		line, the thicker line is the inter-quantile range, the thin bars give the give the
 		minimum and maximum respectively and the points outside of the minimum and maximum
 		are the outliers. \(y\)-axes is in logarithm scale.}%
 	\label{fig:performance_2d_violin_forward}
 \end{figure}
+
+Interestingly, the performance characteristics of most of the runs seem to lie between two extremes.
+As it can be seen in \autoref{fig:performance_2d_violin_forward}, for most sizes and methods
+regarding the forward projection. Only few of the distributions lie around the mean. This indicates
+a behaviour, were two cases are hit, in one, the projector finishes quickly, on the other it takes a
+while. No exact explanation for this behaviour can be given at this point. This is in contrast to
+the back-projection see in detail in \autoref{fig:performance_2d_violin_backward}. There the
+distribution of most sizes is around the median.
 
 \begin{figure}
 	\centering
@@ -1373,14 +1409,20 @@ i.e.\ they have only few outliers.
 			\end{subfigure}%
 		}}
 
-	\caption{Violing plot for the backward projection of a selection of the sizes, individually
+	\caption{Violin plot for the backward projection of a selection of the sizes, individually
 		given for the different projectors. Plot for the blob based projector
 		\subref{fig:performance_2d_violin_forward_blob} B-Spline based
 		\subref{fig:performance_2d_violin_forward_bspline}, Siddon's
 		\subref{fig:performance_2d_violin_forward_siddons} and Joseph's
 		\subref{fig:performance_2d_violin_forward_joseph}. The median is given as the white
-		line, the thicker line is the interquantile range, the thin bars give the give the
-		minimum and maximum respectively and the points outside of the minimum and maximum
-		are the outliers. \(y\)-axes is in logarithm scale.}%
+                line, the thicker line is the inter-quantile range, the thin bars give the give the
+                minimum and maximum respectively and the points outside of the minimum and maximum
+                are the outliers. \(y\)-axes is in logarithm scale.}%
 	\label{fig:performance_2d_violin_backward}
 \end{figure}
+
+Overall, the increased accuracy of the new projectors comes at a cost. In the two-dimensional
+settings this cost is worth considering in certain scenarios, where quality and accuracy is of great
+importance. However, the additional runtime performance for the three-dimensional case is huge. This
+is a factor, where multiple additional iterations of an solving algorithm can be run, which has a
+major effect on the quality of a reconstruction.

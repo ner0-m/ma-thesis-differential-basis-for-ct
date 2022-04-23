@@ -3,41 +3,46 @@
 This thesis provides an overview of the three important aspects of tomographic reconstruction, the
 forward model, the discretization and finding the solution.
 
-The forward model of X-ray attenuation CT was discussed, both a more practical or engineering
-focused view is presented and a more mathematical discussion is presented. Similarly, but with a
-little less detail this was discussed for differential phase-contrast CT\@. Also analytical and
-iterative reconstruciton algorithm are discussed. Many important steps for tomographic
-reconstruction are covered.
+The forward model of X-ray attenuation CT is discussed, both a practical and engineering focused
+view is presented followed by a mathematical centered discussion. Similarly, but with a little less
+detail, this was discussed for differential phase-contrast CT\@. Further, analytical and iterative
+reconstruction algorithm are discussed. Many important steps for tomographic reconstruction are
+covered.
 
-The discretization is discussed in depth. The family of spherically-symmetric basis functions --- so
-called blobs --- proposed by \citeauthor*{lewitt_multidimensional_1990} and B-Spline basis functions
-provide a better discretization of a given signal compared to the voxel basis function. Blob basis
-functions are quite well studied and well understood in the context of tomographic reconstruciton.
-Notably, they provide a closed form solution for the Radon Transform and are differentiable.
-However, they also are parameterized using \(3\) parameters, which can become rather complex to
-optimize.
+The discretization is discussed in depth. Specifically, the discretization via the series expansion
+is explained along side 3 different basis functions: the voxel, the family of spherically-symmetric
+(blob) and B-Spline basis functions. The blob basis function as proposed by
+\citeauthor*{lewitt_multidimensional_1990} and B-Spline basis functions provide a better
+discretization of a given signal compared to the voxel basis function. Blob basis functions are
+quite well studied and well understood in the context of tomographic reconstruction. Notably, they
+provide a closed form solution for the Radon Transform and are differentiable. However, they also
+are parameterized using \(3\) parameters, which can become rather complex to optimize.
 
-On the other hand, cubic B-Splines are relatively simple. They are also differentiable, but they are
-not closed under the X-ray transform and need approximation. Interestingly though, they have
-comparable accuracy with blobs, even thou they use an approximation. With regard to the future work,
-I'm exited to keep investigation this direction.
+On the other hand, cubic B-Splines are relatively simple. They are also differentiable, but they do
+not have a analytic solution for the X-ray transform and need approximation. Interestingly though,
+they still have comparable accuracy with blobs. And together with their simple nature, they are an
+interesting choice of basis function for tomographic reconstruction.
 
-The practical part of this thesis presents two new projectors and contributes them to the C++
-framework elsa. Both projectors use differential basis functions as a basis for the approximation of
-the Radon Transform. This is advantages in settings where not only the Radon Transform, but also its
-derivative is necessary. Such a application is differential phase-contrast CT\@.
+The practical part of this thesis implements two projectors and contributes them to the C++
+framework elsa. One is based on the blob basis function and the other on cubic B-Splines. Hence,
+both use differential basis function. This should enable the usage of these projectors in the
+context of differential phase-contrast CT\@.
 
-The forward projection of both projector is qualitative better than voxel based methods such as
+The forward projection of both projectors is qualitatively better than voxel based methods such as
 Siddon's or Joseph's method. In simple to medium complex synthetic phantoms, the new projectors do
-not exhibit of ring like artefacts. Not only that, but they also better reconstruction in cases
-where the measurements were noisy.
+not exhibit of high-frequency artifacts in the reconstruction as well. Not only that, but they also
+better reconstruction in cases where the measurements were noisy.  The B-Spline projector does show
+artifacts in certain scenarios and the blob based projector has a drop in the error metrics for the
+most complex synthetic phantom. Still, they both are superior choices, if accuracy is of high
+importance.
 
-From a computational standpoint, both projectors fall behind both the Siddon's and Joseph's method.
-This is especially true for the three-dimensional case. In the two-dimensional case there is around
-a six times performance penalty to use the new projectors. As, instead of \(1\) or \(2\) voxels (for
-the Siddon's or Joseph's respectively) \(5\) voxels are visited for both basis functions, this is
-what is to be expected. However, in the three-dimensional case, the penalty riced to around \(22\)
-times. As now around \(25\) voxels are visited for each voxel Siddon's method visits.
+From a computational standpoint, both projectors have considerably longer runtime than both the
+Siddon's and Joseph's method. This is especially true for the three-dimensional case. In the
+two-dimensional case there is around a six times performance penalty to use the new projectors. As,
+instead of \(1\) or \(2\) voxels (for the Siddon's or Joseph's respectively) \(5\) voxels are
+visited for both basis functions, this is what is to be expected. However, in the three-dimensional
+case, the penalty riced to around \(22\) times. As now around \(25\) voxels are visited for each
+voxel Siddon's method visits.
 
 \chapter{Future Work}\label{chap:future_work}
 
@@ -46,26 +51,28 @@ phase-contrast in elsa. Much of this work is dedicated to emphasize the importan
 phase-contrast, but due to the lacking support, no experiments could be run using the newly
 implemented methods.
 
-With this thesis a part of the forward model is already done. There are now projectors based on
+With this thesis, a part of the forward model is already done. There are now projectors based on
 differential basis functions. However, at least in elsa, the exact analytical formulations for the
-derivatives is not implemented yet. This most likely is the biggest amount of effort needed to get
-basis support. A new projector can easily be build around that with the code already present. This
-would provide a basic support. Other aspects of the reconstructions might need special handling or
-special care for the reconstruction of differential phase-contrast images.
+derivatives is not implemented yet. This most likely is the largest piece left. A new projector can
+easily be build around that with the code already present. This would provide a basic support. Other
+aspects of the reconstructions might need special handling or special care for the reconstruction of
+differential phase-contrast images. This might include specific reconstruction algorithms or pre-
+and post-processing.
 
 Another aspect, which this thesis did not touch on, is the signal extraction from grating-based
-imaging setups. As described in \autoref{sec:phasecontrast_ct}, can measure attenuation, phase-shift
-and scattering. There it is described that the attenuation is measured as a drop in average
-intensity during the stepping. The phase-shift as a shift of the signal, and scattering as a
-decreased amplitude. However, in a real measurement these three are mixed and are not easily split
-apart. Hence, reading a raw measurement from a grating-based system requires processing until the
-measured differential phase-contrast signal is extracted and can be reconstruction. To provide
-first-class support for differential phase-contrast, this needs to be dealt with in some way.
+imaging setups. As described in \autoref{sec:phasecontrast_ct}, grating-based setups can measure
+attenuation, phase-shift and scattering. There, it is described that the attenuation is measured as
+a drop in average intensity during the stepping. The phase-shift as a shift of the signal, and
+scattering as a decreased amplitude. However, in a real measurement these three are intermixed and
+not easily split apart. Hence, reading a raw measurement from a grating-based system requires
+processing until the differential phase-contrast signal is extracted and can be reconstructed. To
+provide first-class support for differential phase-contrast, this needs to be dealt with in some
+way.
 
-A topic not deeply discussed in this thesis is (anisotropic) X-ray dark-field tomography. The
-extraction of the phase-shift signal from the grating-based system is also important for
-(anisotropic) X-ray dark-field imaging. However, it is a extremely interesting topic and deserves
-much attention. Hopefully elsa will have proper support for it sooner rather than later.
+A topic only briefly touched on in this thesis, is (anisotropic) X-ray dark-field tomography. A
+similar processing step as for differential phase-contrast is necessary to retrieve the dark-field
+signal from the raw measurements. It is a extremely interesting topic and deserves much attention.
+Hopefully elsa will have proper support for it sooner rather than later.
 
 Another aspects, which concerns itself more with details of the projectors, is the exact
 implementation of the new projectors. The current implementation is ray-driven. Both
