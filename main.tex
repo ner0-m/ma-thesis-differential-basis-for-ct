@@ -38,57 +38,44 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Colors
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\definecolor{black}               {RGB}{  0,   0,  0}
-\definecolor{kelly_green}         {RGB}{ 76, 187, 23}
-\definecolor{international_orange}{RGB}{255,  79,  0}
-\definecolor{venetian_red}        {RGB}{200,   8, 21}
 
-\definecolor{amber}     {RGB}{255,191,  0}
-\definecolor{burgundy}  {RGB}{144,  0, 32}
-\definecolor{cardinal}     {RGB}{247, 118, 142}
-\definecolor{deep-azure}{RGB}{ 10, 50, 94}
-\definecolor{mahogany}  {RGB}{192, 64,  0}
-\definecolor{malory-red}{RGB}{192, 46, 16}
-\definecolor{sky}       {RGB}{ 62, 93,240}
-\definecolor{teal}      {RGB}{  0,128,128}
-\definecolor{tyrian}    {RGB}{102,  2, 60}
-\definecolor{yale}      {RGB}{ 70,130,180}
-
-\definecolor{quality-high}  {RGB}{ 70,130,180}
-\definecolor{quality-medium}{RGB}{255,191,  0}
-\definecolor{quality-low}   {RGB}{196, 30, 58}
+% IBM colorscheme, or part of it
+\definecolor{cerise}     {RGB}{220,  38, 127}% #DC267F
+\definecolor{malibu}     {RGB}{100, 143, 255}% #648fff
+\definecolor{cornflower} {RGB}{120,  94, 240}% #785EF0
+\definecolor{blazeorange}{RGB}{254,  97,   0}% #FE6100
 %
 % Colour for Part numbers
 %
 \renewcommand*{\partformat}{%
-	\textcolor{cardinal}{Part \thepart}\autodot\enskip%
+	\textcolor{cerise}{Part \thepart}\autodot\enskip%
 }
 
 %
 % Colour for section numbers
 %
 \renewcommand*{\sectionformat}{%
-	\textcolor{cardinal}{\thesection}\autodot\enskip%
+	\textcolor{cerise}{\thesection}\autodot\enskip%
 }
 
 %
 % Colour for subsection numbers
 %
 \renewcommand*{\subsectionformat}{%
-	\textcolor{cardinal}{\thesubsection}\autodot\enskip%
+	\textcolor{cerise}{\thesubsection}\autodot\enskip%
 }
 
 %
 % Colour for subsubsection numbers
 %
 \renewcommand*{\subsubsectionformat}{%
-	\textcolor{cardinal}{\thesubsubsection}\autodot\enskip%
+	\textcolor{cerise}{\thesubsubsection}\autodot\enskip%
 }
 
 %ornamet
 \newcommand{\ornament}{%
 	\begin{center}
-		\large\textcolor{cardinal}{\ding{70}}
+		\large\textcolor{cerise}{\ding{70}}
 	\end{center}
 }
 
@@ -146,9 +133,9 @@
 
 \usepackage[%
 	colorlinks = true,
-	citecolor  = cardinal,
-	linkcolor  = cardinal,
-	urlcolor   = cardinal,
+	citecolor  = cerise,
+	linkcolor  = cerise,
+	urlcolor   = cerise,
 	unicode = true,
 ]{hyperref}
 
@@ -175,7 +162,7 @@
 
 \declaretheoremstyle[
 	headpunct={},
-	headfont=\color{cardinal}\normalfont\bfseries,
+	headfont=\color{cerise}\normalfont\bfseries,
 	notefont=\itshape,
 	bodyfont=\normalfont,
 ]{definitioncolor}
@@ -221,14 +208,21 @@
 	url          = true,
 	giveninits   = true,
 	hyperref     = true,
+	backref      = true,
 	maxbibnames  = 99,
-	maxcitenames = 99,
+	maxcitenames = 3,
 	sortcites    = true,
 	style        = numeric,
 ]{biblatex}
 
 \input{bibliography-mimosis}
 \addbibresource{bibliography.bib}
+
+% This way, especially textual citations just look nicer :^)
+\renewcommand*{\citesetup}{%
+	\normalfont
+	\biburlsetup
+	\frenchspacing}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Fonts
@@ -265,6 +259,9 @@
 \newacronym{ISTA}{ISTA}{Iterative Shrinkage-Thresholding Algorithms}
 \newacronym{FISTA}{FISTA}{Fast Iterative Shrinkage-Thresholding Algorithm}
 \newacronym{FBP}{FBP}{Filtered Back-projection}
+\newacronym{TV}{TV}{Total Variation}
+\newacronym{CG}{CG}{Conjugate Gradient}
+\newacronym{ADMM}{ADMM}{Alternating Direction Method of Multipliers}
 \newacronym{CPU}{CPU}{Central Processing Unit}
 \newacronym{GPU}{GPU}{Graphics Processing Unit}
 \newacronym{LUT}{LUT}{Look-up Table}
@@ -322,6 +319,7 @@
 \newcommand*{\getAdvisor}{Advisor}
 \newcommand*{\getAuthor}{David Frank}
 \newcommand*{\getSubmissionDate}{15.06.2021}
+\newcommand*{\getSignatureDate}{25.04.2021}
 \newcommand*{\getSubmissionLocation}{Munich}
 
 

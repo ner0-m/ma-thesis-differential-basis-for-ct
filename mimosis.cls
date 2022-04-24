@@ -216,6 +216,6 @@
 
 % Large number for chapter
 \renewcommand*{\chapterformat}{%
-  \fontsize{50}{55}\selectfont\color{cardinal}\thechapter\autodot\enskip
+  \fontsize{50}{55}\selectfont\color{cerise}\thechapter\autodot\enskip
 }
 

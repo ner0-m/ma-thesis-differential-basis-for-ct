@@ -1,12 +1,13 @@
 \chapter{Motivation and Context}\label{chap:introduction}
 
-In \citeyear{rontgen_uber_1895} \citeauthor{rontgen_uber_1895} discovered X-rays. Since then
-different methods based on X-ray have been revolutionizing medical treatment. For the first time it
-was possible to inspect the human body non-intrusively, i.e.\ without cutting it open. It was used
-among others to detect metal objects in the body such as bullets~\cite{haygood_skeletal_1996}. But
-also new kinds of fractures could be detected and diagnosed. New bone diseases such as
-Osteopoikilosis could be discovered, and others such as skeletal
-tuberculosis~\cite{haygood_skeletal_1996} could be identified.
+In \citeyear{rontgen_uber_1895} \citeauthor{rontgen_uber_1895} discovered
+X-rays~\cite{rontgen_uber_1895} (see \cite{rontgen_new_1896} for the English translation). Since
+then different methods based on X-rays have been revolutionizing medical treatment. For the first
+time, it was possible to inspect the human body non-intrusively, i.e.\ without cutting it open. It
+was used among others to detect metal objects in the body such as
+bullets~\cite{haygood_skeletal_1996}. But also new kinds of fractures could be detected and
+diagnosed. New bone diseases such as Osteopoikilosis could be discovered, and others such as
+skeletal tuberculosis could be identified~\cite{haygood_skeletal_1996}.
 
 The next major step was the invention of \textit{X-ray attenuation computed tomography} (CT). The
 first prototypes were developed at EMI laboratories and resulted in a series of publications
@@ -22,7 +23,7 @@ distinguish.
 
 Phase-contrast X-ray imaging improves on this specific issues~\cite{lewis_medical_2004}. Plus it can
 reveal additional information~\cite{hahn_numerical_2012}. One way to measure phase-contrast for
-X-rays is grating interferometer~\cite{pfeiffer_hard-x-ray_2008}, often referred to as
+X-rays is grating interferometry~\cite{pfeiffer_hard-x-ray_2008}, often referred to as
 \textit{grating-based}. Phase information can be indirectly measured, via the refraction of X-rays,
 instead of the attenuation. Specifically, the phase gradient perpendicular to the gratings can be
 measured, therefore, this method is often called \textit{differential phase-contrast imaging}.
@@ -37,9 +38,9 @@ incorporated such a grating-based setup into a clinical CT scanner~\cite{viermet
 This is a part of the working context of the research group \textit{\gls{CIIP}} at the \gls{TUM}
 around my supervisor PD Dr.\ rer.\ nat.\ Tobias Lasser. In particular, the open-source C++ framework
 \textit{elsa} is developed at the research group. Its main use is in the field of tomographic
-reconstruction. One goal of elsa is to provide open access to the research done at the group, plus
-it should improve the reproducibility of the work done. Therefore, support for imaging modalities
-such as phase-contrast or dark-field imaging enables the research group to increase the
+reconstruction. One goal of elsa is to provide open access to the research conducted at the group,
+plus it should improve the reproducibility of the work done. Therefore, support for imaging
+modalities such as phase-contrast or dark-field imaging enables the research group to increase the
 accessibility and reproducibility of their research. But --- like many other known frameworks ---
 elsa currently only supports X-ray attenuation CT\@. Due to the aforementioned accessibility and
 reproducibility reasons, there exists high interest to support both X-ray phase-contrast and
@@ -47,26 +48,25 @@ dark-field imaging modalities in elsa. This support should include common, state
 novel algorithms for tomographic reconstruction. Without common and current state-of-the-art
 algorithms, no proper evaluation and/or comparison to novel techniques can be made.
 
-Though, they are different modalities, they do have a common basis. All of the above mentioned
+Though, they are different modalities, they do share a common basis. All of the above mentioned
 imaging modalities can be sorted in the group of \textit{tomographic reconstruction}, which itself
 is a subset of \textit{inverse problems}. The challenge for this specific class of problems is the
-reconstruction of a signal from a finite set of projections~\cite{herman_basis_2015}. The connection
+reconstruction of signals from a finite set of projections~\cite{herman_basis_2015}. The connection
 between the problem domain and the measurement domain is the so-called \textit{forward model}.
 
 The forward model for X-ray attenuation CT, differential phase-contrast CT and dark-field CT is
-based on the line integral. They assume X-rays traveling throughout some object in a straight line.
+based on the line integral. They assume X-rays traveling through some object in a straight line.
 Hence, some quantity (i.e.\ the attenuation coefficients of an object) can be integrated along the
 path of the X-ray. Such a quantity can be fully described by the infinite set of lines from
 different projection angles. This has been proven multiple times. However, most often it is
-attributed to \citeauthor*{radon_uber_1917} in \citeyear{radon_uber_1917} ~\cite{radon_uber_1917}.
-Therefore, the integral transform, which maps a function into its set of line integrals is referred
-to as the \textit{Radon Transform}. Other than \citeauthor*{radon_uber_1917},
-\citeauthor*{cormack_representation_1963}~\cite{cormack_representation_1963} rediscovered it without
-the knowledge of the work done by \citeauthor*{radon_uber_1917}.
+attributed to \textcite{radon_uber_1917} in \citeyear{radon_uber_1917}. Therefore, the integral
+transform, which maps a function into its set of line integrals is referred to as the \textit{Radon
+	Transform}. Other than \citeauthor*{radon_uber_1917}, \textcite*{cormack_representation_1963}
+rediscovered it without the knowledge of the work done by \citeauthor*{radon_uber_1917}.
 \citeauthor*{cormack_representation_1963} laid the theoretical foundation of modern CT scanners. And
-\citeauthor*{hounsfield_computerized_1973}~\cite{hounsfield_computerized_1973} built the first
-working prototypes. For that, both \citeauthor*{cormack_representation_1963} and
-\citeauthor*{hounsfield_computerized_1973} received the Nobel Prize in Medicine in 1979.
+\textcite{hounsfield_computerized_1973} built the first working prototypes. For that, both
+\citeauthor*{cormack_representation_1963} and \citeauthor*{hounsfield_computerized_1973} received
+the Nobel Prize in Medicine in 1979.
 
 To successfully reconstruct a signal from its projections, a couple of key steps need to be
 performed. First, the forward model has to be described precisely. Next, the problem needs to be
@@ -88,10 +88,10 @@ functions often referred to as \textit{blobs} in~\cite{lewitt_multidimensional_1
 lot of attention in the tomographic space, as it overcomes quite a few limitations of the pixel and
 voxel basis functions. Among others, it is continuously differentiable. Another interesting set of
 basis functions is not as common in the tomographic space: Basis-Splines (or usually only
-B-Splines). B-Splines are mostly known from function approximation. There exists a closed form
-solution for a continuous approximation of signals using B-Splines~\cite{unser_fast_1991}. This
-thesis follows the approach first laid out by \citeauthor*{momey_new_2011} in \cite{momey_new_2011}.
-A lot of the properties of B-Splines are still relevant, as e.g.\ they tend to spherically symmetric
+B-Splines). B-Splines are mostly known from function approximation. It exists a closed form solution
+for a continuous approximation of signals using B-Splines~\cite{unser_fast_1991}. This thesis
+follows the approach first laid out by \textcite{momey_new_2011}. A lot
+of the properties of B-Splines are still relevant, as e.g.\ they tend to spherically symmetric
 functions, but preserve a compact support. Further, they are --- up to a certain degree ---
 continuously differential.
 
@@ -103,7 +103,7 @@ to be extended to use other basis functions.
 The last two points are the main contribution of this thesis. The approximation of the line integral
 relying on differentiable basis functions rather than the pixel or voxel basis functions are
 implemented in elsa. This implicitly includes a discretization of the signal in the new basis
-functions. However, it should be noted, that at no point in time the problem domain is transformed
+functions. However, it should be noted, that at no point in time, the problem domain is transformed
 to a new basis function.
 
 \section{Outline}\label{sec:outline}
@@ -111,7 +111,7 @@ to a new basis function.
 As already mentioned, there are three steps involved to tomographic reconstruction on computers.
 There needs to be an understanding and description of the forward model. The problem needs to be
 discretized, and finally a solution needs to be computed. These parts are covered in
-\autoref{part:foundation}
+\autoref{part:foundation}.
 
 The discussion about the forward model is split into two parts. The first, given in
 \autoref{chap:imaging_modalities}, starts with a short introduction of the mathematical class of
