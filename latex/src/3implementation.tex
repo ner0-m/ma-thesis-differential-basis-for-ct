@@ -226,12 +226,12 @@ distance depends on the specific choice of basis function and their parameters. 
 
 \begin{figure}[h]
 	\centering
-	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
-			\begin{subfigure}{0.65\textwidth}
+	\makebox[\textwidth]{ \makebox[1.2\textwidth]{%
+			\begin{subfigure}{0.6\textwidth}
 				\includegraphics[width=\textwidth]{./figures/projectors_slice/slice_traversal.png}
 				\caption{}\label{fig:visu_slice_traver_a}%
 			\end{subfigure}%
-			\begin{subfigure}{0.65\textwidth}
+			\begin{subfigure}{0.6\textwidth}
 				\includegraphics[width=\textwidth]{./figures/projectors_slice/slice_traversal_clean.png}
 				\caption{}\label{fig:visu_slice_traver_b}%
 			\end{subfigure}
@@ -294,32 +294,32 @@ blob basis function is configurable, and the parameters can be passed to project
 
 After discussing many aspects of the tomographic reconstruction, and the presentation of the
 implementation of two projectors. The projectors are thoroughly tested and investigated. This
-chapter structured is as follows: Before diving into the experiments itself, a quick overview of the
-different error metrics is given. This is followed by a series of experiments. These experiments
-include the forward projection of the projectors, and the reconstruction with 3 different phantoms.
-The phantoms vary in complexity to analyze different behaviors. Also, an experiment using synthetic
-noise is conducted. The final part of the analysis covers runtime performance of the projectors.
+chapter structure is as follows: Before diving into the experiments itself, a quick overview of the
+different error metrics is given. This is followed by a series of experiments. They include the
+forward projection of the projectors, and the reconstruction with 3 different phantoms. The phantoms
+vary in complexity to analyze different behaviors. Also, an experiment using synthetic noise is
+conducted. The final part of the analysis covers runtime performance of the projectors.
 
 Reproducibility is important. Therefore, all experiments can be run with the main branch of
 elsa. Please check out the \href{https://gitlab.lrz.de/IP/elsa}{GitLab repository} to find
 instructions on how to build and run elsa. All experiments are based on the
 \textit{example\_argparse} in the \textit{example} folder of the repository.
 
-As all the experiments are run using elsa. Hence, some necessary details which hold for all the
-experiment setups are given later on. The overall geometric setup elsa follows is as described in
-\citeauthor{hartley_multiple_2003}~\cite{hartley_multiple_2003}. The CT projection geometry uses a
-cone beam geometry, with flat detector. Further, elsa is itself unitless. Therefore, all distances
-are given in relation to pixel sizes.
+As all the experiments are run using elsa, some necessary details should be mentioned, which hold
+for all the experiment setups. The overall geometric setup elsa follows as is described in
+\textcite{hartley_multiple_2003}. The CT projection geometry uses a cone beam geometry, with flat
+detector. Further, elsa is itself unitless. Therefore, all distances are given in relation to voxel
+sizes.
 
 \section{Error measurements}\label{sec:error_measurements}
 
 Error measurements are a delicate topic. They can fake a false sense of security. Metrics might
 indicate an improved result, however visually the result might be worse. Therefore, multiple error
-metrics are taken into considerations here.
+metrics are taken into consideration here.
 
 \begin{definition}[Mean Squared Error]
-	One of the most famous error metrics: \textit{\gls{MSE}}. It is defined as the
-	squared differences of each pixel value, weighted with the total number of pixels
+	One of the most famous error metrics is the \textit{\gls{MSE}}. It is defined as the
+	squared differences of each voxel value, weighted with the total number of voxels
 	\[ MSE(\mvec{x}, \hat{\mvec{x}}) = \frac{1}{n} \sum_{i=1}^{n}(\mvec{x}_i - \hat{\mvec{x}}_i)^2\]
 	where \(\mvec{x}_i\) is each voxel of the reference image, \(\hat{\mvec{x}}_i\) each voxel
 	of the comparison image and \(n\) the total number of voxels in the image.
@@ -344,11 +344,11 @@ Another frequently used metric is the \textit{\gls{PSNR}}
 	images.
 \end{definition}
 
-All the so far given metrics are based on the \gls{MSE}, i.e.\ they measure based on exact voxel by
-voxel values. They measure absolute errors and weight them depending on the exact method. However,
-they do not necessarily have much in common with the visual perception of humans. The
+All of the so far given metrics are based on the \gls{MSE}, i.e.\ they measure based on exact voxel
+by voxel values. They measure absolute errors and weight them depending on the exact method.
+However, they do not necessarily have much in common with the visual perception of humans. The
 \textit{\gls{SSIM}}~\cite{wang_image_2004,avanaki_exact_2009} is a perception-based approach. Rather
-than a pixel to pixel relation, \gls{SSIM} use the relation of pixels in close proximity to each
+than a voxel to voxel relation, \gls{SSIM} use the relation of voxels in close proximity to each
 other. Plus some other important values important to the human perception.
 \begin{definition}[Structural Similarity Index Measure]
 	Given a reference image \(\mvec{x}\) and a comparison image \(\hat{\mvec{x}}\) then the
@@ -367,12 +367,13 @@ other. Plus some other important values important to the human perception.
 	\(\sigma_{\hat{\mvec{x}}}^2\) is the variance of \(\hat{\mvec{x}}\), and \(\sigma_{\mvec{x},
 		\hat{\mvec{x}}}\) is the covariance of \(\mvec{x}\) and \(\hat{\mvec{x}}\)
 \end{definition}
-The promise that the value returned by \gls{SSIM} a value in the range \([0, 1]\), and if the value
-is closer to one, it is `better' for the human perception.
+The promise is that the value returned by \gls{SSIM} is a value in the range \([0, 1]\), and if the
+value is closer to one, it is `better' for the human perception.
 
 Throughout the experiment sections, all error metrics are calculated the same way. The error norms
 are computed using the scikit python package~\cite{van_der_walt_scikit-image_2014}. The snippet of
-python code in Listing \autoref{py:error_metric} illustrates this.
+python code in Listing \autoref{py:error_metric} illustrates this. The snippet does not show the
+loading of the phantom and reconstruction data.
 
 \begin{listing}[h]
 	\begin{minted}{python}
@@ -409,11 +410,13 @@ detector is \(512\) units away. The one-dimensional flat detector has a resoluti
 
 A similar setup was used for the three-dimensional forward projection. Apart from the difference in
 dimension, it uses a phantom with size \(256 \times 256 \times 256\) voxels. The detector is flat
-and a complete (i.e.\ \(360^\circ\)) circular trajectory around the object is used. The detector has
-a resolution of \(362 \times 362\) pixels. In total \(384\) equally spaced projection poses are
-acquired equivalent to a rotation around the \(y\)-axis, with the center of rotation being the
-center of the volume. The distance from the source to the center is \(25600\) units and the distance
-from the center of the volume to the principal point of the detector is \(256\) units.
+and has a resolution of \(362 \times 362\) pixels. A complete (i.e.\ \(360^\circ\)) circular
+trajectory around the object is used. I.e.\ in \(3\)d, two angles \(\theta\) and \(\varphi\) can
+fully describe projection positions. For a circular trajectory only \(\theta\) varies, and \(\varphi
+= 0^\circ\). In total \(384\) equally spaced projection poses are acquired equivalent to a rotation
+around the \(y\)-axis, with the center of rotation being the center of the volume. The distance from
+the source to the center is \(25600\) units and the distance from the center of the volume to the
+principal point of the detector is \(256\) units.
 
 The recommendations discussed in \autoref{chap:signal_representation} are followed for the
 parameters of the basis functions. The projector using B-Splines uses cubic B-Splines. And the blob
@@ -423,52 +426,52 @@ parameters as discussed by~\cite{levakhina_three-dimensional_2014} are followed,
 \begin{figure}
 	\centering
 
-	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+	\makebox[\textwidth]{ \makebox[1.2\textwidth]{%
 			\rotatebox[x=-3.75em, y=0em]{90}{\bfseries Forward projections\strut}
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\stackinset{c}{}{t}{-.2in}{\bfseries Blob Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_Blob_windowed.png}}
 				\subcaption{}\label{fig:sinogram_blob}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\stackinset{c}{}{t}{-.2in}{\bfseries Cubic B-Spline Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_BSpline_windowed.png}}
 				\subcaption{}\label{fig:sinogram_bspline}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\stackinset{c}{}{t}{-.2in}{\bfseries Siddon's Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_Siddon_windowed.png}}
 				\subcaption{}\label{fig:sinogram_siddon}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\stackinset{c}{}{t}{-.2in}{\bfseries Joseph's Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_Joseph_windowed.png}}
 				\subcaption{}\label{fig:sinogram_joseph}
 			\end{subfigure}%
 		}}
 
-	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+	\makebox[\textwidth]{ \makebox[1.2\textwidth]{%
 			\rotatebox[x=-2.5em, y=0em]{90}{\bfseries Abs.\ Normalized Difference\strut}
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_difference_Blob_Siddon_windowed.png}
 				\subcaption{}\label{fig:sino_diff_blob_siddon}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_difference_Blob_Joseph_windowed.png}
 				\subcaption{}\label{fig:sino_diff_blob_joseph}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_difference_BSpline_Siddon_windowed.png}
 				\subcaption{}\label{fig:sino_diff_bspline_siddon}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_difference_BSpline_Joseph_windowed.png}
 				\subcaption{}\label{fig:sino_diff_bspline_joseph}
 			\end{subfigure}%
 		}}
 
-	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
-			\begin{subfigure}[t]{0.275\textwidth}
+	\makebox[\textwidth]{ \makebox[1.2\textwidth]{%
+			\begin{subfigure}[t]{0.28\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_difference_Blob_BSpline_windowed.png}
 				\subcaption{Absolute normalized difference between Blob and cubic
 					B-Spline projector}\label{fig:sino_diff_blob_bspline}
@@ -492,7 +495,7 @@ parameters as discussed by~\cite{levakhina_three-dimensional_2014} are followed,
 		Siddon's and Joseph's projector, then the B-Spline based to Siddon's and Joseph's
 		projector. \subref{fig:sino_diff_blob_bspline} Absolute difference of normalized
 		difference between the sinogram for the Blob based and B-Spline based projector.%
-		\subref{fig:plot_sino_differences} Plot of cross sections at \(180\)° (i.e.\ the
+		\subref{fig:plot_sino_differences} Plot of cross-sections at \(180\)° (i.e.\ the
 		center row) of sinograms. The intensity difference of the Blob based projector
 		compared to the others is clearly visible. \subref{fig:forward_shepp_logan_phantom}
 		original Shepp-Logan phantom used to create the sinograms}%
@@ -505,7 +508,7 @@ acceptable. There exist differences (as it can be seen in the second and third r
 \autoref{fig:sinogram_shepp_logan}), but one has to look more in-depth. Staying with the overview
 first and looking at the first row, one should note the extreme difference in displayed values. The
 projectors based on the blob basis functions is noticeably brighter. This is reconfirmed with the
-plot in \autoref{fig:plot_sino_differences}. The plot shows a cross-section slice of the sinogram at
+plot in \autoref{fig:plot_sino_differences}. The plot shows a cross-section of the sinogram at
 \(180^\circ\). There it is clear, the blob based projector has a throughout higher intensity value.
 This also motivates the choice of absolute normalized differences. Focusing on the overall visible
 artifacts, one can see in the different images
@@ -513,63 +516,63 @@ artifacts, one can see in the different images
 notable appear in the comparison to the Siddon's projector. The area around angles multiples of
 \(90^\circ\) exhibit clearly high-frequency artifacts. Especially, in the boundary portion of the
 sinogram. The blob and B-Spline based projectors compared to the Joseph's have the most visible
-difference at multiples of \(45^\circ\). Lastly looking at the difference between the blob and
+difference at multiples of \(45^\circ\). Lastly, looking at the difference between the blob and
 B-Spline based projector in \autoref{fig:sino_diff_blob_bspline}, one can see clear differences in
 at multiples of \(45^\circ\).
 
 \begin{figure}
 	\centering
 
-	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+	\makebox[\textwidth]{ \makebox[1.2\textwidth]{%
 			\rotatebox[x=-3.5em, y=0em]{90}{\bfseries Forward projections\strut}
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\stackinset{c}{}{t}{-.2in}{\bfseries Blob Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_Blob_windowed.png}}
 				\caption{}\label{fig:sinogram_blob_center_crop}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\stackinset{c}{}{t}{-.2in}{\bfseries Cubic B-Spline Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_BSpline_windowed.png}}
 				\caption{}\label{fig:sinogram_bspline_center_crop}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\stackinset{c}{}{t}{-.2in}{\bfseries Siddon's Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_Siddon_windowed.png}}
 				\caption{}\label{fig:sinogram_siddon_center_crop}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\stackinset{c}{}{t}{-.2in}{\bfseries Joseph's Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_Joseph_windowed.png}}
 				\caption{}\label{fig:sinogram_joseph_center_crop}
 			\end{subfigure}%
 		}}
 
-	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+	\makebox[\textwidth]{ \makebox[1.2\textwidth]{%
 			\rotatebox[x=-2.em, y=0em]{90}{\bfseries Abs.\ Normalized Difference\strut}
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_difference_Blob_Siddon_windowed.png}
 				\caption{}\label{fig:sinogram_difference_blob_siddon_crop}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_difference_Blob_Joseph_windowed.png}
 				\caption{}\label{fig:sinogram_difference_blob_joseph_crop}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_difference_BSpline_Siddon_windowed.png}
 				\caption{}\label{fig:sinogram_difference_bspline_siddon_crop}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_difference_BSpline_Joseph_windowed.png}
 				\caption{}\label{fig:sinogram_difference_bspline_joseph_crop}
 			\end{subfigure}%
 		}}
 
-	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
-			\begin{subfigure}[t]{0.3125\textwidth}
+	\makebox[\textwidth]{ \makebox[1.2\textwidth]{%
+			\begin{subfigure}[t]{0.3\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_cropped_difference_Blob_BSpline_windowed.png}
 				\caption{Sinogram with marked region of crops}\label{fig:sinogram_difference_blob_bspline_crop}
 			\end{subfigure}
-			\begin{subfigure}[t]{0.30\textwidth}
+			\begin{subfigure}[t]{0.2875\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/forward_projection/2dsinogram_Blob_rectangle.png}
 				\caption{Sinogram with marked region of crops}\label{fig:sinogram_crop_overview}
 			\end{subfigure}%
@@ -676,18 +679,18 @@ further investigation is necessary.
 \begin{figure}
 	\centering
 
-	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
-			\begin{subfigure}{0.43\textwidth}
+	\makebox[\textwidth]{ \makebox[1.2\textwidth]{%
+			\begin{subfigure}{0.4\textwidth}
 				\stackinset{c}{}{t}{-.2in}{}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection_3d/3dsinogram_BSpline_47.png}}%
 				\label{fig:sinogram_bspline_3d_closeup1}
 			\end{subfigure}%
-			\begin{subfigure}{0.43\textwidth}
+			\begin{subfigure}{0.4\textwidth}
 				\stackinset{c}{}{t}{-.2in}{}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection_3d/3dsinogram_BSpline_48.png}}%
 				\label{fig:sinogram_bspline_3d_closeup2}
 			\end{subfigure}%
-			\begin{subfigure}{0.43\textwidth}
+			\begin{subfigure}{0.4\textwidth}
 				\stackinset{c}{}{t}{-.2in}{}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/forward_projection_3d/3dsinogram_BSpline_49.png}}%
 				\label{fig:sinogram_bspline_3d_closeup3}
@@ -718,19 +721,19 @@ the inverse crime~\cite{wirgin_inverse_2004} is committed.
 
 \begin{figure}
 	\centering
-	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+	\makebox[\textwidth]{ \makebox[1.2\textwidth]{%
 			\begin{subfigure}[t]{0.40\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/phantoms/rectangle_phantom.png}
 				\caption{Rectangular Phantom}\label{fig:overview_rectanglular_phantom}
-			\end{subfigure}%
+			\end{subfigure}
 			\begin{subfigure}[t]{0.40\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/phantoms/shepp_logan.png}
 				\caption{Shepp-Logan Phantom}\label{fig:overview_shepp_logan_phantom}
-			\end{subfigure}%
+			\end{subfigure}
 			\begin{subfigure}[t]{0.40\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/phantoms/abdomen_512_normalized.png}
 				\caption{Reconstruction of a lateral slice of human abdomen used as phantom}\label{fig:overview_medical_phantom}
-			\end{subfigure}%
+			\end{subfigure}
 		}}
 	\caption{Overview of the different phantoms used for the synthetic tests. From left to
 		right: Rectangular phantom, Shepp-Logan phantom, lateral cross-section human
@@ -766,27 +769,27 @@ In the following sections, the experiments for each phantom are presented and di
 
 \begin{figure}
 	\centering
-	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+	\makebox[\textwidth]{ \makebox[1.2\textwidth]{%
 			\rotatebox[x=-4.5em, y=0em]{90}{\bfseries Reconstruction \strut}
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\stackinset{c}{}{t}{-.2in}{\bfseries Blob Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_cropped_windowed_Blob.png}}
 				\caption{}%
 				\label{fig:rectangle_recon_artifacts_blob}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\stackinset{c}{}{t}{-.2in}{\bfseries Cubic B-Spline Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_cropped_windowed_BSpline.png}}
 				\caption{}%
 				\label{fig:rectangle_recon_artifacts_bspline}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\stackinset{c}{}{t}{-.2in}{\bfseries Siddon's Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_cropped_windowed_Siddon.png}}
 				\caption{}%
 				\label{fig:rectangle_recon_artifacts_siddon}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\stackinset{c}{}{t}{-.2in}{\bfseries Joseph's Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_cropped_windowed_Joseph.png}}
 				\caption{}%
@@ -794,33 +797,32 @@ In the following sections, the experiments for each phantom are presented and di
 			\end{subfigure}%
 		}}
 
-	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+	\makebox[\textwidth]{ \makebox[1.2\textwidth]{%
 			\rotatebox[x=-2em, y=0em]{90}{\bfseries Abs.\ Normalized Difference\strut}
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_difference_cropped_windowed_Blob.png}
 				\caption{}%
 				\label{fig:rectangle_recon_difference_blob}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_difference_cropped_windowed_BSpline.png}
 				\caption{}%
 				\label{fig:rectangle_recon_difference_bspline}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_difference_cropped_windowed_Siddon.png}
 				\caption{}%
 				\label{fig:rectangle_recon_difference_siddon}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dreconstruction_difference_cropped_windowed_Joseph.png}
 				\caption{}%
 				\label{fig:rectangle_recon_difference_joseph}
 			\end{subfigure}%
 		}}
 
-	\makebox[\textwidth]{
-		\makebox[1.3\textwidth]{%
-			\begin{subfigure}[b]{0.3125\textwidth}
+	\makebox[\textwidth]{\makebox[1.2\textwidth]{%
+			\begin{subfigure}[b]{0.3\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_rectangle/2dphantom_rectangle.png}
 				\caption{}%
 				\label{fig:rectangle_recon_phantom}
@@ -879,54 +881,52 @@ behind a bit.
 
 \begin{figure}
 	\centering
-	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+	\makebox[\textwidth]{\makebox[1.2\textwidth]{%
 			\rotatebox[x=-4.5em, y=0em]{90}{\bfseries Reconstruction\strut}
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\stackinset{c}{}{t}{-.2in}{\bfseries Blob Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dreconstruction_windowed_Blob.png}}
 				\caption{}\label{fig:reconstruction_shepp_logan_blob}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\stackinset{c}{}{t}{-.2in}{\bfseries Cubic B-Spline Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dreconstruction_windowed_BSpline.png}}
 				\caption{}\label{fig:reconstruction_shepp_logan_bspline}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\stackinset{c}{}{t}{-.2in}{\bfseries Siddon's Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dreconstruction_windowed_Siddon.png}}
 				\caption{}\label{fig:reconstruction_shepp_logan_siddon}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\stackinset{c}{}{t}{-.2in}{\bfseries Joseph's Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dreconstruction_windowed_Joseph.png}}
 				\caption{}\label{fig:reconstruction_shepp_logan_joseph}
 			\end{subfigure}%
 		}}
 
-	\makebox[\textwidth]{
-		\makebox[1.3\textwidth]{%
+	\makebox[\textwidth]{\makebox[1.2\textwidth]{%
 			\rotatebox[x=-2em, y=0em]{90}{\bfseries Abs.\ Normalized Difference\strut}
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dreconstruction_difference_cropped_windowed_Blob.png}
 				\caption{}\label{fig:reconstruction_shepp_logan_cropped_blob}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dreconstruction_difference_cropped_windowed_BSpline.png}
 				\caption{}\label{fig:reconstruction_shepp_logan_cropped_bspline}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dreconstruction_difference_cropped_windowed_Siddon.png}
 				\caption{}\label{fig:reconstruction_shepp_logan_cropped_siddon}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dreconstruction_difference_cropped_windowed_Joseph.png}
 				\caption{}\label{fig:reconstruction_shepp_logan_cropped_joseph}
 			\end{subfigure}%
 		}}
 
-	\makebox[\textwidth]{
-		\makebox[1.3\textwidth]{%
-			\begin{subfigure}[b]{0.3125\textwidth}
+	\makebox[\textwidth]{\makebox[1.2\textwidth]{%
+			\begin{subfigure}[b]{0.3\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_shepp_logan/2dphantom_rectangle.png}
 				\caption{}\label{fig:rectangle_shepp_logan_phantom}
 			\end{subfigure}
@@ -988,54 +988,52 @@ Joseph's projector. Though against the latter one, it is a small difference.
 
 \begin{figure}
 	\centering
-	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+	\makebox[\textwidth]{\makebox[1.2\textwidth]{%
 			\rotatebox[x=-4.5em, y=0em]{90}{\bfseries Reconstruction\strut}
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\stackinset{c}{}{t}{-.2in}{\bfseries Blob Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_medical/2dreconstruction_windowed_Blob.png}}
 				\caption{}\label{fig:reconstruction_medical_blob}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\stackinset{c}{}{t}{-.2in}{\bfseries Cubic B-Spline Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_medical/2dreconstruction_windowed_BSpline.png}}
 				\caption{}\label{fig:reconstruction_medical_bspline}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\stackinset{c}{}{t}{-.2in}{\bfseries Siddon's Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_medical/2dreconstruction_windowed_Siddon.png}}
 				\caption{}\label{fig:reconstruction_medical_siddon}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\stackinset{c}{}{t}{-.2in}{\bfseries Joseph's Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_medical/2dreconstruction_windowed_Joseph.png}}
 				\caption{}\label{fig:reconstruction_medical_joseph}
 			\end{subfigure}%
 		}}
 
-	\makebox[\textwidth]{
-		\makebox[1.3\textwidth]{%
+	\makebox[\textwidth]{\makebox[1.2\textwidth]{%
 			\rotatebox[x=-2em, y=0em]{90}{\bfseries Abs.\ Normalized Difference\strut}
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_medical/2dreconstruction_difference_cropped_windowed_Blob.png}
 				\caption{}\label{fig:reconstruction_medical_cropped_blob}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_medical/2dreconstruction_difference_cropped_windowed_BSpline.png}
 				\caption{}\label{fig:reconstruction_medical_cropped_bspline}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_medical/2dreconstruction_difference_cropped_windowed_Siddon.png}
 				\caption{}\label{fig:reconstruction_medical_cropped_siddon}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_medical/2dreconstruction_difference_cropped_windowed_Joseph.png}
 				\caption{}\label{fig:reconstruction_medical_cropped_joseph}
 			\end{subfigure}%
 		}}
 
-	\makebox[\textwidth]{
-		\makebox[1.3\textwidth]{%
-			\begin{subfigure}[b]{0.3125\textwidth}
+	\makebox[\textwidth]{\makebox[1.2\textwidth]{%
+			\begin{subfigure}[b]{0.3\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_medical/abdomen_512_normalized_rectangle.png}
 				\caption{}\label{fig:medical_phantom_marked}
 			\end{subfigure}
@@ -1102,53 +1100,51 @@ above case.
 
 \begin{figure}
 	\centering
-	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+	\makebox[\textwidth]{ \makebox[1.2\textwidth]{%
 			\rotatebox[x=-4.5em, y=0em]{90}{\bfseries Reconstruction\strut}
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\stackinset{c}{}{t}{-.2in}{\bfseries Blob Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_noise/2dreconstruction_windowed_Blob.png}}
 				\caption{}\label{fig:reconstruction_noise_blob}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\stackinset{c}{}{t}{-.2in}{\bfseries Cubic B-Spline Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_noise/2dreconstruction_windowed_BSpline.png}}
 				\caption{}\label{fig:reconstruction_noise_bspline}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\stackinset{c}{}{t}{-.2in}{\bfseries Siddon's Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_noise/2dreconstruction_windowed_Siddon.png}}
 				\caption{}\label{fig:reconstruction_noise_siddon}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\stackinset{c}{}{t}{-.2in}{\bfseries Joseph's Projector\strut}{%
 					\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_noise/2dreconstruction_windowed_Joseph.png}}
 				\caption{}\label{fig:reconstruction_noise_joseph}
 			\end{subfigure}%
 		}}
 
-	\makebox[\textwidth]{
-		\makebox[1.3\textwidth]{%
+	\makebox[\textwidth]{\makebox[1.2\textwidth]{%
 			\rotatebox[x=-2em, y=0em]{90}{\bfseries Abs.\ Normalized Difference\strut}
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_noise/2dreconstruction_difference_cropped_windowed_Blob.png}
 				\caption{}\label{fig:reconstruction_noise_cropped_blob}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_noise/2dreconstruction_difference_cropped_windowed_BSpline.png}
 				\caption{}\label{fig:reconstruction_noise_cropped_bspline}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_noise/2dreconstruction_difference_cropped_windowed_Siddon.png}
 				\caption{}\label{fig:reconstruction_noise_cropped_siddon}
 			\end{subfigure}%
-			\begin{subfigure}{0.3125\textwidth}
+			\begin{subfigure}{0.3\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_noise/2dreconstruction_difference_cropped_windowed_Joseph.png}
 				\caption{}\label{fig:reconstruction_noise_cropped_joseph}
 			\end{subfigure}%
 		}}
-	\makebox[\textwidth]{
-		\makebox[1.3\textwidth]{%
-			\begin{subfigure}[b]{0.3125\textwidth}
+	\makebox[\textwidth]{\makebox[1.2\textwidth]{%
+			\begin{subfigure}[b]{0.3\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/reconstruction_noise/2dphantom_rectangle.png}
 				\caption{}\label{fig:phantom_noise_marked}
 			\end{subfigure}
@@ -1286,13 +1282,13 @@ method, but the performance drop can be seen here as well.
 \begin{figure}
 	\centering
 
-	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+	\makebox[\textwidth]{ \makebox[1.2\textwidth]{%
 			% \rotatebox[origin=c]{90}{\bfseries Zoom into difference\strut}
-			\begin{subfigure}{0.65\textwidth}
+			\begin{subfigure}{0.6\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/perf_testing/plot_2d_line_forward.png}
 				\caption{Runtime for the \(2\)d-forward projection}\label{fig:performance_2d_lineplot_forward}
 			\end{subfigure}%
-			\begin{subfigure}{0.65\textwidth}
+			\begin{subfigure}{0.6\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/perf_testing/plot_2d_line_backward.png}
 				\caption{Runtime for the \(2\)d-backward projection}\label{fig:performance_2d_lineplot_backward}
 			\end{subfigure}%
@@ -1310,13 +1306,13 @@ method, but the performance drop can be seen here as well.
 \begin{figure}
 	\centering
 
-	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+	\makebox[\textwidth]{ \makebox[1.2\textwidth]{%
 			% \rotatebox[origin=c]{90}{\bfseries Zoom into difference\strut}
-			\begin{subfigure}{0.65\textwidth}
+			\begin{subfigure}{0.6\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/perf_testing/plot_3d_line_forward.png}
 				\caption{Runtime for the \(3\)d-forward projection}\label{fig:performance_3d_lineplot_forward}
 			\end{subfigure}%
-			\begin{subfigure}{0.65\textwidth}
+			\begin{subfigure}{0.6\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/perf_testing/plot_3d_line_backward.png}
 				\caption{Runtime for the \(3\)d-backward projection}\label{fig:performance_3d_lineplot_backward}
 			\end{subfigure}%
@@ -1340,25 +1336,25 @@ have only few outliers.
 \begin{figure}
 	\centering
 
-	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+	\makebox[\textwidth]{ \makebox[1.2\textwidth]{%
 			% \rotatebox[origin=c]{90}{\bfseries Zoom into difference\strut}
-			\begin{subfigure}{0.65\textwidth}
+			\begin{subfigure}{0.6\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/perf_testing/plot_2d_violin_forward_Blob.png}
 				\caption{}\label{fig:performance_2d_violin_forward_blob}
 			\end{subfigure}%
-			\begin{subfigure}{0.65\textwidth}
+			\begin{subfigure}{0.6\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/perf_testing/plot_2d_violin_forward_BSpline.png}
 				\caption{}\label{fig:performance_2d_violin_forward_bspline}
 			\end{subfigure}%
 		}}
 
-	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+	\makebox[\textwidth]{ \makebox[1.2\textwidth]{%
 			% \rotatebox[origin=c]{90}{\bfseries Zoom into difference\strut}
-			\begin{subfigure}{0.65\textwidth}
+			\begin{subfigure}{0.6\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/perf_testing/plot_2d_violin_forward_Siddon.png}
 				\caption{}\label{fig:performance_2d_violin_forward_siddons}
 			\end{subfigure}%
-			\begin{subfigure}{0.65\textwidth}
+			\begin{subfigure}{0.6\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/perf_testing/plot_2d_violin_forward_Joseph.png}
 				\caption{}\label{fig:performance_2d_violin_forward_joseph}
 			\end{subfigure}%
@@ -1387,25 +1383,25 @@ distribution of most sizes is around the median.
 \begin{figure}
 	\centering
 
-	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+	\makebox[\textwidth]{ \makebox[1.2\textwidth]{%
 			% \rotatebox[origin=c]{90}{\bfseries Zoom into difference\strut}
-			\begin{subfigure}{0.65\textwidth}
+			\begin{subfigure}{0.6\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/perf_testing/plot_2d_violin_backward_Blob.png}
 				\caption{}\label{fig:performance_2d_violin_backward_blob}
 			\end{subfigure}%
-			\begin{subfigure}{0.65\textwidth}
+			\begin{subfigure}{0.6\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/perf_testing/plot_2d_violin_backward_BSpline.png}
 				\caption{}\label{fig:performance_2d_violin_backward_bspline}
 			\end{subfigure}%
 		}}
 
-	\makebox[\textwidth]{ \makebox[1.3\textwidth]{%
+	\makebox[\textwidth]{ \makebox[1.2\textwidth]{%
 			% \rotatebox[origin=c]{90}{\bfseries Zoom into difference\strut}
-			\begin{subfigure}{0.65\textwidth}
+			\begin{subfigure}{0.6\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/perf_testing/plot_2d_violin_backward_Siddon.png}
 				\caption{}\label{fig:performance_2d_violin_backward_siddon}
 			\end{subfigure}%
-			\begin{subfigure}{0.65\textwidth}
+			\begin{subfigure}{0.6\textwidth}
 				\includegraphics[width=\textwidth]{./figures/experiments/perf_testing/plot_2d_violin_backward_Joseph.png}
 				\caption{}\label{fig:performance_2d_violin_backward_joseph}
 			\end{subfigure}%
