@@ -74,18 +74,17 @@ similar processing step as for differential phase-contrast is necessary to retri
 signal from the raw measurements. It is a extremely interesting topic and deserves much attention.
 Hopefully elsa will have proper support for it sooner rather than later.
 
-Another aspects, which concerns itself more with details of the projectors, is the exact
+Other aspects, which concerns itself more with details of the projectors, include the exact
 implementation of the new projectors. The current implementation is ray-driven. Both
-\citeauthor*{kohler_iterative_2011} in~\cite{kohler_iterative_2011} and
-\citeauthor*{momey_spline_2015} in~\cite{momey_spline_2015} propose footprint based methods for blob
-and B-Spline basis functions respectively. Based on the improvements of footprint based methods over
-ray-driven methods using the voxel-basis functions provides (c.f.\ \cite{long_3d_2010}), the
-footprints based method could increase the accuracy and/or improve performance of the projectors.
-Another interesting investigation would be the blob based distance driven method, as it is proposed
-by \citeauthor*{levakhina_distance-driven_2010}~\cite{levakhina_distance-driven_2010}.
+\textcite*{kohler_iterative_2011} and \textcite*{momey_spline_2015} propose footprint based methods
+for blob and B-Spline basis functions respectively. Based on the improvements of footprint based
+methods over ray-driven methods using the voxel-basis functions provides (c.f.~\cite{long_3d_2010}),
+the footprints based method could increase the accuracy and/or improve performance of the
+projectors. Another interesting investigation would be the blob based distance driven method, as it
+is proposed by \textcite*{levakhina_distance-driven_2010}.
 
 As one can imagine the runtime performance of the newly implemented projectors can be improved. For
-one, the current code allocates memory each iteration, which is a high cost and might even make
+one, the current code allocates memory during each iteration, which is a high cost and might even
 reduce the runtime by around \(30\%\) to \(50\%\). Please note, that these numbers are only based on
 some preliminary profiling conducted. Another lacking feature is GPU support. Tomographic
 reconstruction is a prime example for the performance GPU's bring to the table. And so the
